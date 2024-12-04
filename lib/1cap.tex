@@ -1,0 +1,869 @@
+\newpage
+
+    \chapter[GENERALIDADES]{\Large GENERALIDADES}
+\label{chap1:generalidades}
+\justify %%justificar los párrafos
+
+Los sistemas de comunicación ópticos desempeñan un papel fundamental en la infraestructura de las redes de telecomunicaciones modernas, proporcionando una capacidad de transmisión de datos de alta velocidad y un rendimiento confiable. En esta sección, se exploran las generalidades de los sistemas de comunicación ópticos, abordando tanto como los fenómenos de propagación inherentes a la transmisión óptica, como las redes de \acrfull{mlr}. Asimismo, se examina el uso de las reglas de Golomb, una herramienta teórica con aplicaciones potenciales en la optimización de la asignación de canales desiguales en estos sistemas. A través de esta exploración detallada, se busca proporcionar una comprensión integral de los principios y tecnologías fundamentales que sustentan los sistemas de comunicación ópticos modernos. En este capítulo, se abordan los conceptos y generalidades de los sistemas de comunicación ópticos, fenómenos de propagación, velocidad de transmisión de línea mixta y \textit{reglas de Golomb}.
+
+
+\section{SISTEMAS WDM}
+
+El crecimiento de enlaces de telecomunicaciones de alta capacidad y la limitación de velocidad de los enlaces de una sola longitud de onda resultaron en el aumento definitivo del uso de la \acrfull{wdm}, en redes avanzadas de fibra óptica. Esta tecnología permite que dos o más señales ópticas con diferentes longitudes de onda se combinan y se transmiten simultáneamente en la misma dirección a través de una fibra óptica \cite{Keiser}.  % A review of WDM Technology and aplplications !!!
+
+
+%IMAGEN RED WDM ----> 3. SeminarReport_OTDM !!!
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.8\textwidth]{img/WDMRed.png}
+                \caption{Red WDM \cite{Hakani}.} 
+                \label{fig:WDMRed}
+            \end{figure}
+
+En la Figura \ref{fig:WDMRed}  \cite{Hakani}, se muestra la implementación de un enlace \acrshort{wdm}. En la transmisión, hay varias fuentes de luz moduladas de forma independiente, cada una emitiendo señales a diferentes longitudes de onda. Por esta razón, es necesario un multiplexor para combinar estas salidas ópticas en una sola fibra. En el lado del receptor, se requiere de un demultiplexor que separe estas señales ópticas en canales para el procesamiento de señales. El desafío de diseño básico es que el multiplexor proporcione una ruta de baja pérdida desde cada fuente óptica hasta la salida del multiplexor. Cabe resaltar que, los canales de longitud de onda o frecuencias ópticas deben encontrarse adecuadamente espaciados, con el fin de evitar interferencias entre canales \cite{Hakani}.  % 3. SeminarReport_OTDM !!!
+
+%Dado que las señales ópticas que se combinan generalmente no emiten una cantidad significativa de potencia óptica fuera del ancho espectral del canal designado, los factores de interferencia entre canales son relativamente poco importantes en el extremo transmisor.
+
+%La tecnología WDM es independiente de la tasa y el formato, y puede admitir cualquier combinación de tasas de interfaz. OC-n, donde OC significa canal óptico y n indica cuántos canales pueden ser multiplexados. OC-n proporciona una velocidad de datos de n x 51.84 Mbps. Es decir que, OC-3 proporciona 155.52 Mbps, OC-12 proporciona 622.08 Mbps, OC-48 proporciona 2.488 Gbps, u OC-192 proporciona 9.953 Gbps. %en la misma fibra al mismo tiempo. % 3. SeminarReport_OTDM
+
+Los sistemas \acrshort{wdm} presentaron una mejora en el aprovechamiento del ancho de banda y un aumento en la capacidad de transmisión de datos, cuando se habla de redes de comunicación óptica, al permitir la transmisión simultánea de múltiples canales de datos. En esta técnica de multiplexación los canales ópticos se encuentren generalmente espaciados a 100 GHz (0.8 nm), lo que facilita la implementación de una mayor cantidad de canales en el enlace óptico. Sin embargo, el incremento de canales es proporcinal a la reducción en el espaciado de canales, lo que deriva en complicaciones en relación a los fenómenos no lineales. Debido a limitaciones en la tecnología, surgieron dos esquemas derivados de \acrshort{wdm}, denominados: \acrfull{cwdm} y \acrfull{dwdm}, los cuales, abordaron el aumento en la demanda de ancho de bandas \cite{itu2020recommendation}. %Análisis del desempeño de formatos de modulación avanzados en presencia del efecto FWM.pdf% !!!
+
+\subsection{CWDM}
+Según las recomendación ITU-T G.694.2, \acrfull{cwdm} se caracteriza por un espacio más ancho entre canales, por poseer un menor consumo de energía y por ende, un menor costo en comparación con otras técnicas como \acrshort{dwdm}. Los sistemas \acrshort{cwdm} ofrecen soluciones económicas al emplear láseres ópticos que no requieren refrigeración, presentar tolerancias menos estrictas en la selección de longitudes de onda e implementar filtros pasabanda más amplios. Estos sistemas son versátiles y pueden utilizarse en redes metropolitanas de transporte, así como plataforma integrada para una variedad de servicios, clientes y protocolos \cite{ITU2003}.  %UIT-T Rec. G.694.2 !!!
+La Figura \ref{fig:CWDMexample}, expone el principio de una red \acrfull{cwdm}. 
+
+%IMAGEN CWDM extraída de https://www.pandacomdirekt.com/technologies/detail/dwdm.html !!!
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/cwdm.jpg}
+        \caption{\acrshort{cwdm}, recuperada de \cite{pandaD}.}
+        \label{fig:CWDMexample}
+    \end{figure}
+
+Los sistemas \acrshort{cwdm} ofrecen hasta un máximo de 18 longitudes de onda, las cuales están definidas dentro del rango de 1270 nm a 1610 nm, con un espaciado de frecuencia equivalente a 2.5 THz (20 nm), como se observa en la Figura \ref{fig:CWDMexample}. Por lo tanto, \acrshort{cwdm} resulta adecuado para velocidades de transmisión de datos más bajas, así como para redes de corto y mediano alcance, como campus universitarios. Además, es apto para aplicaciones no amplificadas y puede ser potencialmente utilizado en la infraestructura de acceso de un \acrfull{isp} \cite{Escallon2024}. %Escallon 2008!!!
+
+Según lo mencionado, los sistemas \acrshort{cwdm} presentan características que posibilitan el uso de componentes ópticos más simples y, en consecuencia, menos costosos que los utilizados en los sistemas \acrshort{dwdm}. Sin embargo, no pueden ser empleados para distancias largas, debido a que, no hay un espaciamiento de canales adecuado que permita la amplificación de la señal, imposibilitando el uso de amplifacadores; según lo indica la recomendación \cite{itu2020recommendation}. %Análisis del desempeño de formatos de modulación avanzados en presencia del efecto FWM.pdf !!!
+
+
+
+\subsection{DWDM}
+
+Según se define en la recomendación ITU-T G.671, se establece que la tecnología de \acrfull{dwdm} se distingue por tener un espaciado de canal más estrecho en comparación con \acrshort{cwdm}. Por lo general, los transmisores empleados en aplicaciones de \acrshort{dwdm} requieren de un mecanismo de control para permitirles cumplir con los requisitos de estabilidad de frecuencia de la aplicación, a diferencia de los transmisores \acrshort{cwdm}, que generalmente no están controlados en este aspecto \cite{ITU2020}.  %recomendacion ITU DWDM (9)
+La Figura \ref{fig:DWDMexample}, expone el principio de una red \acrfull{dwdm}. 
+
+Por otra parte, \acrshort{dwdm} opera en rangos de longitudes de onda que oscilan entre los 1530 nm y 1565 nm en la banda C, o entre los 1565 nm y 1625 nm en la banda L, y típicamente admite un número de canales de transmisión que va desde 40 hasta 80, como se observa en la Figura \ref{fig:DWDMexample}. Aunque \acrshort{dwdm} generalmente implica mayores costos en comparación con \acrshort{cwdm}, proporciona una mayor distancia de transmisión \cite{Gaby2022}. %monografia Análisis a nivel de simulación del desempeño en la migración de una red óptica SLR-DWDM a una red óptica MLR-DWDM implementando diferentes arquitecturas de red de banda ancha FTTX.pdf
+
+%IMAGEN CWDM extraída de https://www.pandacomdirekt.com/technologies/detail/dwdm.html
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/dwdm.jpg}
+        \caption{\acrshort{dwdm}, recuperada de \cite{pandaD}.}
+        \label{fig:DWDMexample}
+    \end{figure}
+
+Existe una restricción importante en las redes \acrshort{dwdm}, relacionada con la ventana de transmisión limitada disponible en la fibra óptica, con un espectro de 35 nm en la banda C y de 95 nm en la banda L. Fuera de este rango espectral, los amplificadores no pueden operar y la comunicación óptica en \acrshort{dwdm} se ve seriamente afectada. En síntesis, la velocidad máxima de datos por longitud de onda se ve afectada y el sistema se vuelve más susceptible a los efectos no lineales, cuando el espaciado de los canales ópticos presenta una mínima separación de frecuencia entre las señales multiplexadas en la fibra. Cuanto menor sea este espaciado, el sistema se vuelve más susceptible a los efectos no lineales relacionados a las comunicaciones ópticas \cite{Tatiana}.  %A MONOGRAFÍA análisis del desempeño de formatos de modulación avanzados en presencia del efecto FWM.pdf 
+Por otro lado, es posible que, al implementar una asignación de espaciados de frecuencia deigual entre los canales ópticos, se pueda reducir la diafonía y mejorar la eficiencia espectral de las señales, lo que permite una transmisión más eficiente de datos dentro del espectro disponible. Esta estrategia ofrece flexibilidad para adaptarse a las condiciones específicas de la red y maximizar su rendimiento en términos de capacidad de transmisión y alcance.
+
+
+
+
+\begin{comment}
+\begin{table}[htbp]
+    \centering
+    \caption{Comparación entre CWDM y DWDM}
+    \label{tab:comparacion_cwdm_dwdm}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Parámetro} & \textbf{CWDM} & \textbf{DWDM} & \textbf{Unidad} \\
+    \hline
+    \hline
+        Número de canales & 16 - 80 & 80 - 160 &  \\
+    \hline
+        Espaciado entre canales & 20 nm (2500 GHz) & 0.8 nm (100 GHz) &  \\
+    \hline
+        Capacidad por canal & 2.5 Gbps & 10 - 40 Gbps &  \\
+    \hline
+        Distancia & Hasta 80 km & Cientos de km & km \\
+    \hline
+        Amplificación óptica & Ninguna & EDFA &  \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\end{comment}
+
+
+
+
+
+
+
+
+
+\section{REDES DE ACCESO}
+ 
+La industria de las telecomunicaciones ha experimentado un crecimiento sin precedentes con el surgimiento de las tecnologías de la información. Las redes de telecomunicaciones, diseñadas originalmente para el tráfico de voz, se han visto desafiadas por la creciente demanda de servicios de datos en los hogares modernos. El desarrollo de tecnologías como fibra óptica ha permitido a los operadores de telecomunicaciones satisfacer esta demanda creciente. Sin embargo, el rápido avance de los servicios de datos y la necesidad de innovación continúa presionando a las empresas de telecomunicaciones a actualizar sus redes de acceso para mantenerse al día con las expectativas de los usuarios \cite{Munir2020}.  % 4. 4. Traffic and bandwidth forecasting model for FTTX
+
+La implementación de redes de fibra óptica, junto con las diversas soluciones que abarcan las partes activas de la red, el despliegue y funcionamiento, la gestión, facturación y control de suscriptores, representa un gran cambio para los operadores. Además, superar la competencia de las soluciones basadas en cable coaxial o cobre es un desafío significativo. Las tecnologías de cobre y coaxial continúan evolucionando, aprovechando cada vez más el ancho de banda disponible \cite{Escallon2018}. % 5. Evaluacion del desempeño Tesis Magistral Escallón
+
+Las \acrfull{pon} han emergido como una solución fundamental para la implementación de redes de acceso de última milla, garantizando su viabilidad a largo plazo; ofreciendo altas tasas de datos, calidad de servicios superior y una confiabilidad mejorada \cite{Huda2015}. %A New Method for Monitoring GPON Based on Optical 
+Al desplegarse en arquitecturas \acrfull{fttx}, \acrshort{pon} ofrece una gama de ventajas, desde servicios de Internet de alta velocidad hasta acceso triple-play de alta calidad, todo ello de manera económica y eficiente en términos energéticos \cite{Usman2020}.  % 2.1 FTTx PON TEXTO INTROD.
+Los sistemas \acrshort{pon} están diseñados para satisfacer los requisitos de las redes de acceso, respaldando despliegues rentables y tasas pico de usuario de alta gama \cite{Ramaswami2010}. 
+% 0. Optical Networks
+
+%%% FTTX
+\subsection{Tecnología FTTx}
+
+\acrfull{fttx} es un término genérico para cualquier banda ancha que utiliza la arquitectura de red de fibra óptica para reemplazar todo o parte del habitual bucle local de metal utilizado en la última milla de las telecomunicaciones. El acrónimo \acrshort{fttx} es ampliamente conocido, donde la "x" denota distintos destinos \cite{Escallon2018}. % 5. Evaluacion del desempeño Tesis Magistral Escallón
+
+\begin{comment}
+    Por su amplia gama de aplicaciones, es la solución más conocida en servicios de Internet de alta velocidad para hogares, empresas y escuelas;  % 2.1 FTTx PON
+la fibra óptica, en comparación con las tecnologías de cobre, ofrece una mayor capacidad de transmisión y una mayor distancia de alcance. La infraestructura de FTTH (fibra hasta el hogar) presenta la mayor viabilidad en futuros anchos de banda de acceso más altos. Además de brindar soporte para mayores velocidades de transmisión, FTTH también disminuye la necesidad de nodos remotos activos en la red, como suele depender la tecnología de acceso de banda ancha DSL.  % 0. Optical Networks
+
+Las redes de acceso basadas en fibra pueden categorizarse según el grado de penetración de fibra como: fibra hasta el nodo (FTTN), fibra hasta la acera/gabinete (FTTC), fibra hasta el edificio (FTTB) y fibra hasta el hogar (FTTH). Las últimas tres categorías se conocen conjuntamente como FTTx.  % 0. Optical Networks
+
+\end{comment}
+
+Las redes de acceso basadas en fibra pueden categorizarse según el grado de penetración de fibra, dependiendo de la distancia entre el tramo de fibra y el usuario final, los más importantes son \cite{Escallon2018}:  % 5. Evaluacion del desempeño Tesis Magistral Escallón
+
+\begin{itemize}
+    \item \textbf{Fibra hasta el Vecindario (\textit{Fiber to the Neighborhood}) (FTTN):} Se emplea fibra óptica hasta un gabinete que sirve a un vecindario. Los clientes se conectan a este gabinete mediante cable coaxial o cableado de par trenzado. El área atendida por el gabinete suele tener un radio de menos de 1.500 metros y puede incluir varios cientos de clientes. Si el gabinete atiende un área de menos de 300 metros de radio, se denomina fibra hasta la acera. 
+    
+    \item \textbf{Fibra hasta la Acera (\textit{Fiber to the Curb}) (FTTC):} Es un método de servicios de banda ancha de alta velocidad para negocios y hogares, donde se reduce la distancia en que viaja la conexión desde el equipo de la oficina central, hasta un conmutador de comunicación, o gabinete, que debe de estar ubicado dentro de los 300 metros de una empresa u hogar.
+   
+    \item \textbf{Fibra hasta el Edificio (\textit{Fiber to the Building}) (FTTB):} Es aplicado a propiedades con múltiples unidades residenciales o comerciales. La fibra óptica llega hasta el edificio, pero no hasta los suscriptores individuales. La señal se transmite en la distancia final mediante medios no ópticos, como par trenzado, cable coaxial, conexión inalámbrica o red eléctrica.
+
+    \item \textbf{Fibra hasta el Hogar (\textit{Fiber to the Home}) (FTTH):} Emplea la fibra óptica y sistemas de distribución adaptados para ofrecer servicios avanzados como Triple Play (telefonía, Internet de banda ancha y televisión) hasta los hogares y negocios.  
+\end{itemize}
+
+
+En la Figura \ref{fig:FTTx}, se presenta un esquema general de \acrshort{fttx} que permite visualizar graficamente lo anteriormente mencionado. Asimismo, a manera de resúmen,  en la Tabla \ref{table:FTTxDistance} se exponen los tipos de red \acrshort{fttx}, y su rango de distancia al usuario \cite{Escallon2018}. 
+ % 5. Evaluacion del desempeño Tesis Magistral Escallón
+
+%IMAGEN FTTx extraída de https://www.alliedtelesis.com/co/es/solutions/fttx
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/FTTx.PNG}
+        \caption{Esquema FTTX \cite{AlliedTelesisFTTx}.}
+        \label{fig:FTTx}
+    \end{figure}
+
+\begin{table}[h]  % 5. Evaluacion del desempeño Tesis Magistral Escallón
+    \centering
+    \begin{tabular}{| m{4cm} | m{11cm} |}
+    \hline
+    \textbf{FTTx} & \textbf{Distancia al usuario} \\ 
+    \hline
+        FTTN (Fiber-to-the-node) & Fibra hasta cabina situada en la calle de entre 1,5 a 3 km del usuario. \\ 
+    \hline
+        FTTC (Fiber-to-the-curb) & Fibra hasta la acera; la cabina se encuentra más próxima al usuario, a una distancia entre 300 y 600 metros. \\ 
+    \hline
+        FTTB (Fiber-to-the-building o Fiber-to-the-basement) & Fibra hasta el cuarto de distribución del edificio; luego, se llega hasta el usuario utilizando par de cobre. \\ 
+    \hline
+        FTTH (Fiber-to-the-home) & Fibra hasta el interior de la vivienda. \\ 
+    \hline
+    \end{tabular}
+    \caption{Tipos de Red \acrshort{fttx} y su distancia al usuario \cite{Escallon2018}.}
+    \label{table:FTTxDistance}
+\end{table} %CITAAAAAAAAAAAAAR
+
+
+Para el presente trabajo de grado se elige implementar a nivel de simulación una red de tipo \acrfull{ftth}, debido a que una de sus principales finalidades es evaluar el desempeño de la red en presencia del efecto de \acrfull{fwm}, un fenómeno no lineal propio de las transmisiones por fibra óptica.
+
+%%% PON
+\subsection{Red Óptica Pasiva (PON)}
+
+\begin{comment}
+    Las Redes Ópticas Pasivas (PON) representan una solución avanzada y eficiente para abordar la creciente demanda de ancho de banda en las telecomunicaciones. A diferencia de las redes tradicionales, las PON no tienen elementos activos en la ruta de la señal entre la terminal de línea óptica (OLT) y las unidades de red óptica (ONU). Este diseño simplificado reduce significativamente los costos de instalación y mantenimiento, además de mejorar la fiabilidad y la eficiencia energética. Las PON son especialmente adecuadas para proporcionar servicios de alta velocidad como internet, televisión y telefonía a hogares y empresas, convirtiéndose en una infraestructura clave para las futuras redes de acceso a Internet. Esta tecnología se destaca por su capacidad de ofrecer conexiones de banda ancha robustas y escalables, esenciales para satisfacer las necesidades crecientes de los usuarios en la era digital.
+\end{comment}
+
+
+Las \acrfull{pon} son redes de acceso óptico punto a multipunto que no contienen elementos activos en la ruta de la señal desde la fuente hasta el destino. Todas las transmisiones se realizan entre una \acrfull{olt} y una \acrfull{onu}, principalmente a través de un divisor óptico o splitter \cite{Cobos2011}. % 6.Design of a Passive Optical Network
+
+En la Figura \ref{fig:PON}, se presenta una topología típica de \acrshort{pon} con los diferentes elementos de la red.
+
+%IMAGEN FTTx extraída de 2.2 A New Method for Monitoring GPON Based on Optical Coding
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/PON.PNG}
+        \caption{Arquitectura PON \cite{Huda2015}.}
+        \label{fig:PON}
+    \end{figure}
+
+La \acrfull{olt} está ubicada en la \acrfull{co} y conecta la red de acceso óptica con la \acrfull{man} o \acrfull{wan}. Cada \acrfull{onu} rige su ubicación dependiendo de la asignación de la \acrfull{fttx}, proporcionando servicios de voz, datos y video de banda ancha a los suscriptores. De esta manera, una \acrshort{pon} reduce costos, el suministro de energía, la distribución de equipos y permite una utilización más óptima y eficiente de la infraestructura de fibra óptica \cite{Cobos2011}. %%A New Method for Monitoring GPON Based on Optical Coding 
+% 6.Design of a Passive Optical Network  DOS REFERENCIAS
+
+En general, una \acrshort{pon} está compuesta generalmente por \cite{Huda2015}:  %%A New Method for Monitoring GPON Based on Optical Coding % 6.Design of a Passive Optical Network  DOS REFERENCIAS
+\begin{itemize}
+    \item \textbf{\acrfull{olt}:} Se encuentra en la \acrfull{co}.  Actúa como el punto central de conexión para la red de acceso óptica, gestionando el tráfico de datos hacia y desde las \acrfull{onu}.
+
+    \item \textbf{\acrfull{odn}:}  Incluye una fibra de alimentación, un divisor/combinador en un \acrfull{rn} y fibras de distribución o derivación. Conecta el \acrshort{olt} al divisor/combinador óptico, transmitiendo los datos desde la \acrshort{co} hasta el \acrshort{rn}.
+
+    \item \textbf{Divisor/Combinador Óptico:} En una dirección, divide un haz de luz en varios haces, distribuyendo la señal a múltiples fibras ópticas. En la dirección opuesta, combina las señales de luz de varias fibras ópticas en una sola salida.
+
+    \item \textbf{\acrfull{onu}:} Ubicada en las instalaciones del cliente, que pueden ser residenciales o comerciales. Recibe y transmite datos hacia y desde el \acrshort{olt}, proporcionando servicios de voz, datos y video de banda ancha a los suscriptores.
+\end{itemize}
+
+Las \acrfull{pon} pueden representarse en topologías de árbol (como se puede ver en la Figura \ref{fig:PON}) o en estrella, pero también pueden soportar topologías como bus, anillo y configuraciones redundantes. El componente esencial para las redes ópticas pasivas es el divisor óptico, que permite, en una dirección, dividir un haz de luz en varios haces distribuidos a través de múltiples fibras ópticas y, en la otra dirección, combinar señales de luz de varias fibras ópticas en una sola salida \cite{Cobos2011}. % 6.Design of a Passive Optical Network  DOS REFERENCIAS
+
+La \acrfull{odn} en un despliegue de \acrfull{ftth}, está condicionada por la tecnología de acceso óptico utilizada. En este contexto, la implementación de un mecanismo para la asignación de canales desigual en redes \acrshort{pon} puede ser crucial para abordar el problema de la interferencia por \acrfull{fwm}. La \acrshort{fwm} puede surgir cuando múltiples señales ópticas coexisten en una fibra, generando nuevas frecuencias que pueden interferir con las señales existentes y degradar el rendimiento de la red. Al asignar canales desiguales en una red \acrshort{pon}, se puede reducir la probabilidad de que las señales coincidan en frecuencia, minimizando así el riesgo de \acrshort{fwm} y mejorando la calidad y confiabilidad del servicio de banda ancha \cite{Ramaswami2010}.% 0. Optical Networks
+
+
+
+
+
+%RELACIÓN DE PON CON EL PRESENTE TRABAJO
+
+
+
+\section{VELOCIDAD DE TRANSMISIÓN DE LÍNEA MIXTA}
+
+
+En los últimos años, debido al constante aumento en el volumen y la heterogeneidad del tráfico, las redes de telecomunicaciones han experimentado innovaciones significativas \cite{Iyer2017}.  %1. Investigation of launch power and regenerator placement effect on the design of mixed-line-rate (MLR) optical WDM networks
+Actualmente, la comunicación óptica basada en la \acrfull{wdm} es la tecnología dominante para satisfacer las diversas demandas de tráfico con requisitos de servicio heterogéneos. Para cumplir con estas demandas, las \acrfull{otn} heredadas de 10 Gbps han sido actualizadas a \acrshort{otn} de 40 Gbps y/o 100 Gbps. Estas diferentes tasas de transmisión deben coexistir sobre las rejillas de canales y sistemas de transmisión heredados. Por ello, un sistema \acrshort{wdm} de próxima generación necesita soportar \acrshort{mlr}. Las redes \acrshort{wdm} con implementación \acrshort{mlr} admiten velocidades de 10, 40 y 100 Gbps en diferentes longitudes de onda dentro de la misma fibra y ofrecen flexibilidad en el enrutamiento de las demandas de tráfico de manera rentable \cite{Bajpai2020}\cite{Chowdhury2012}. %Energy-efficient and spectral-efficient mixed line rate optical WDM networks: a comparison 
+%On the Design of Energy-Efficient Mixed-Line-Rate (MLR) Optical Networks 
+%DOS REFERENCIAS
+
+En una red \acrshort{mlr}, diferentes longitudes de onda en un enlace pueden llevar distintas tasas de transmisión coexistiendo en una misma fibra, como se observa en la Figura \ref{fig:MLR} \cite{Chowdhury2012}. %On the Design of Energy-Efficient Mixed-Line-Rate (MLR) Optical Networks
+Recurrir a las redes \acrshort{mlr} tiene varias ventajas, como evitar la provisión de conexiones de baja capacidad sobre lightpaths (caminos ópticos preestablecidos)  de alta capacidad, admitir protocolos de transporte multitarifa sin necesidad de esquemas de multiplexación complejos, y utilizar la combinación óptima de número y tasa de longitudes de onda en cada enlace para abordar tanto el tráfico como la asimetría de la red, reduciendo el costo al aprovechar la heterogeneidad en las transmisiones \cite{Singh2013}.%Next-Generation Variable-Line-Rate Optical WDM Networks: Issues and Challenges 
+La capacidad de las redes \acrshort{mlr} para elegir dinámicamente la tasa de línea apropiada según cada solicitud de tráfico relaja las limitaciones de diseño de la red \cite{Iyer2017}. %Investigation of launch power and regenerator placement effect on the design of mixed-line-rate (MLR) optical WDM networks 
+
+
+\begin{figure}[H]%Next-Generation Variable-Line-Rate Optical WDM Networks: Issues and Challenges
+    \centering
+    \includegraphics[width=1\textwidth]{img/MLR.PNG}
+    \caption{Esquema básico de una red \acrshort{mlr} \cite{Chowdhury2012}.}
+    \label{fig:MLR}
+\end{figure}
+
+
+Además, en la Figura \ref{fig:MLR}, se evidencia un elemento propio del esquema de una red \acrshort{mlr}, denominado \acrfull{oxc}. Un \acrshort{oxc}, como muestra la Figura \ref{fig:OXC}, contiene múltiples puertos de entrada y de salida, y realiza la conmutación de cualquier puerto de entrada con cualquier puerto de salida; tienen la capacidad de conversión de longitud de onda y la posibilidad de conmutar completamente flujos de datos en el dominio óptico. Es decir, son responsables de la conmutación completamente óptica, que consiste en llevar los datos desde una longitud de onda de un puerto de entrada hasta una longitud de onda en un puerto de salida \cite{Singh2013}. %DISEÑO DE MÉTODOS CROSS LAYER COGNITIVOS PARA REDES DE COMUNICACIÓN ÓPTICA DE RÁFAGAS (OBS)  Giovanny Lopez  
+
+\begin{figure}[H]%DISEÑO DE MÉTODOS CROSS LAYER COGNITIVOS PARA REDES DE COMUNICACIÓN ÓPTICA DE RÁFAGAS (OBS)  Giovanny Lopez
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/OXC.PNG}
+    \caption{Esquema general de un nodo \acrshort{oxc} \cite{GLopez2014}.}
+    \label{fig:OXC}
+\end{figure} 
+
+
+Actualmente, los \acrshort{oxc} son elementos fundamentales de las redes de telecomunicaciones, especialmente en el caso de las redes ópticas, permitiendo a los operadores gestionar sus redes y cubrir rigurosos objetivos de calidad y servicio; por lo que son funcionalmente requeridos. En estas redes la duración de una conexión se espera que sea del orden los segundos y las fases de establecimiento y liberación de recursos puede ser del orden los milisegundos. Esquematicamente hablando, existen tres tipos de \acrshort{oxc}, los cuales son \cite{GLopez2014}\cite{Gonzalo2010}:  %DISEÑO DE MÉTODOS CROSS LAYER COGNITIVOS PARA REDES DE COMUNICACIÓN ÓPTICA DE RÁFAGAS (OBS)  Giovanny Lopez
+%%6. G David Cardenas
+%DOOOS REFERENCIAAAAS
+
+\begin{itemize}
+    \item \textbf{Conmutación de Fibras:} Permite dirigir todas las longitudes de onda de una fibra de entrada a una de fibra de salida (diferente a la de entrada), conocida como conmutación de tipo espacial. En caso de alguna falla, se reencamina el tráfico de una fibra óptica hacia otra. No manipula portadoreas o longitudes de onda individuales, por lo que, ofrece una flexibilidad en términos de gestión de la red.
+
+    \item \textbf{Conmutación de Longitud de Onda:} Realiza la conmutación de longitudes de onda específicas, desde una fibra de entrada hacia múltiples fibras de salida, lo que se denomina multiplexación, o caso contrario, demultiplexación.
+
+    \item \textbf{Conversión de Longitudes de Onda:} Recibe longitudes de onda entrantes y las convierte a otra frecuencia óptica de salida. Es capaz no solo de operar a nivel de portadora, sino también de cambiar las longitudes de onda.
+
+\end{itemize}
+
+Un componente clave en los esquemas de \acrfull{MLR-PON} son los \acrfull{EDFA}. Estos amplificadores han sido optimizados para suministrar potencias de bombeo eficientes, lo que permite obtener ganancias de señal significativas. Operan en las bandas ópticas C y L y se implementan en tres modos distintos: copropagación, donde la fuente de bombeo se dirige unidireccionalmente en la misma dirección que la señal; contrapropagación, donde las longitudes de onda del bombeo y la señal se propagan en direcciones opuestas; y bidireccional, donde la propagación de la longitud de onda del bombeo se realiza en ambas direcciones \cite{Tatiana}.
+
+Por otra parte, según \cite{Massimino}%7. Portuguesiño Mariana Disponibidad MLR
+, en el contexto \acrshort{mlr}, en rutas largas con tráfico intenso y susceptibles a degradaciones ópticas, por ejemplo, se ven obligadas a utilizar los canales con tasas bajas, como se ilustra en la Figura \ref{fig:DispMLR} \cite{Massimino}. Desde el nodo 2 hasta el nodo 13, se permiten caminos de 10, 40 o 100 Gbps. Sin embargo, solo es posible el tráfico con una tasa de 10 Gbps. En este caso, el concepto de disponibilidad de tasa de transmisión se puede aplicar según las restricciones de calidad, interpuestas por los parámetros del \acrfull{opm}. Por ende, la mayoría de las rutas extensas con tráfico intenso se verán obligadas a utilizar canales de baja velocidad de bits. La incapacidad de emplear un único canal de alta velocidad en lugar de varios de menor velocidad priva al diseñador de red de aprovechar el descuento por volumen que ofrece dicho canal rápido \cite{nag2012}. %8. Optical_network_design_with_mixed_line_r
+
+\begin{figure}[H]%7. Portuguesiño Mariana Disponibidad MLR
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/Disponibilidad MLR.PNG}
+    \caption{Representación de la disponibilidad de tasas considerando restricciones de calidad \cite{Massimino}.}
+    \label{fig:DispMLR}
+\end{figure} 
+
+En el contexto de la asignación de canales en redes MLR WDM con espaciado desigual, el equilibrio entre la eficiencia espectral y la eficiencia energética se ve influenciado por degradaciones ópticas, como la \acrfull{fwm}. La reducción del espaciado entre canales puede aumentar la probabilidad de \acrshort{fwm}, un fenómeno no lineal en el cual la interacción entre diferentes señales ópticas genera nuevas frecuencias ópticas, creando interferencia entre los canales. Esta interferencia puede degradar el rendimiento del canal y sus \acrfull{opm}, requiriendo una mayor regeneración de señales para mantener la calidad de la transmisión. Como resultado, la optimización del espaciado de canal debe considerar cuidadosamente los efectos de \acrshort{fwm} para lograr un equilibrio óptimo entre la eficiencia espectral y la eficiencia energética en la red. En este sentido, un espaciado desigual entre canales puede mitigar los efectos de \acrshort{fwm} al proporcionar una separación más efectiva entre las frecuencias ópticas involucradas en el fenómeno, mejorando así el rendimiento global de la red \cite{Bajpai2020}\cite{Chowdhury2012}. %Energy-efficient and spectral-efficient mixed line rate optical WDM networks: a comparison 
+%On the Design of Energy-Efficient Mixed-Line-Rate (MLR) Optical Networks 
+%DOS REFERENCIAS 
+
+\begin{comment}
+    Para las redes heredadas existentes, la técnica de modulación preferida es la modulación por desplazamiento de amplitud no retorno a cero (NRZ-OOK), mientras que para tasas de línea más altas, es decir, 40G y 100G, se requieren la modulación por desplazamiento de fase diferencial NRZ (NRZ-DPSK) y la modulación de cuadratura por doble polarización (DP-QPSK)【8】. 
+    %5. Spectral and power efficiency investigation in single- and multi-line-rate optical wavelength division multiplexed (WDM) networks Sridhar Iyer
+
+Al reducir el (1) espaciado dentro de una sub-banda, o (2) el espaciado entre sub-bandas que operan a diferentes tasas de datos, se puede mejorar la eficiencia espectral. Sin embargo, debido a los altos niveles de deterioro de la capa física, la disminución del espaciado de las sub-bandas afecta negativamente el alcance de transmisión de los canales, lo que resulta en un mayor consumo de energía debido a la necesidad de un aumento en la regeneración de señales.  %5. Spectral and power efficiency investigation in single- and multi-line-rate optical wavelength division multiplexed (WDM) networks Sridhar Iyer
+
+
+Los efectos no lineales pueden reducirse con la gestión de la dispersión, el plan de canales, los formatos de modulación, la gestión de la potencia de entrada del canal. Por lo tanto, al diseñar futuras redes MLR, debemos considerar si la mezcla de tasas de transmisión tiene algún efecto perjudicial en el alcance y la capacidad de la red. %On the Design of Energy-Efficient Mixed-Line-Rate (MLR) Optical Networks
+
+El diseño de una red MLR puede optimizarse considerando varios parámetros, como el espaciado mínimo entre canales y sub-bandas que operan a diferentes velocidades de datos. Este enfoque implica que los canales se separen por una cantidad igual al espectro de su señal, junto con una banda de guarda, lo que resulta en una red más eficiente espectralmente. Sin embargo, la reducción del espaciado entre canales provoca efectos no lineales en la fibra, como la modulación de fase autoinducida (SPM), la modulación de fase cruzada (XPM) y la mezcla de cuatro ondas (FWM). %Energy-efficient and spectral-efficient mixed line rate optical WDM networks: a comparison 
+Estos efectos reducen el alcance de transmisión de las distintas tasas de transmisión en base a la BER (Bit Error Rate). Una red MLR ideal debería asegurar el máximo alcance de cada señal de tasa de transmisión, incluso cuando esté co-propagando con otras señales de diferentes tasas de transmisión. %On the Design of Energy-Efficient Mixed-Line-Rate (MLR) Optical Networks 
+Por lo que, plantear un espaciado de canales desigual con un aprovechamiento 
+
+\end{comment}
+
+%----------------------------------------------------------------------------------------------------
+
+\section{DEGRADACIONES ÓPTICAS}
+
+\begin{comment}
+    La Mezcla de Cuatro Ondas (FWM, por sus siglas en inglés \textit{Four Wave Mixing}) es un fenómeno no lineal que se manifiesta en sistemas de fibra óptica. Este efecto surge cuando dos o más señales ópticas, con frecuencias centrales diferentes, coexisten y se propagan a lo largo de una misma fibra.
+
+    El proceso de FWM implica la generación de nuevas componentes de frecuencia en la señal óptica original. Específicamente, se generan sumas y diferencias de las frecuencias originales, dando lugar a componentes espectrales adicionales. Este fenómeno puede introducir interferencias indeseadas entre los canales de comunicación en sistemas de multiplexación por división de longitud de onda (WDM), afectando negativamente la calidad de la señal y, en última instancia, la integridad de la transmisión de datos.
+\end{comment}
+
+El incremento exponencial del ancho de banda requerido por las redes en los últimos años ha generado una búsqueda continua de aumentar la capacidad de los sistemas de comunicación óptica. Los sistemas \acrshort{wdm} han demostrado ser muy eficientes en la transmisión de grandes cantidades de información, pero al sobrepasar ciertas velocidades de transmisión y trabajar con altas potencias, el canal de comunicación experimenta fenómenos ópticos. Es decir, a altas tasas de transmisión y con un espaciamiento estrecho entre canales, surgen efectos no lineales tanto elásticos como inelásticos. Por lo tanto, la planeación en el diseño de redes ópticas \acrshort{wdm} debe considerar estas degradaciones ópticas ligadas a efectos no lineales, cuya interacción con los efectos lineales dificulta la eficiencia en la planeación y operación de la red \cite{Glopez2011}\cite{GustavoMaster}. %Giovanni y Toledo Efectos no lineales en WDM
+% 3. Gustavo Gomez Maestría Mejora eficiencia espectral. 
+
+\subsection{Efectos Lineales} % =====================================================
+
+En términos generales, el efecto lineal en óptica, define a los fenómenos independientes de la intensidad. \cite{singh2007} %4. Algunos Efectos No Lineales 
+Es decir, las degradaciones lineales son independientes de la potencia de la señal y éstas, afectan a cada una de las longitudes de onda individualmente. \cite{Singh2013}
+Además, son constantes en el tiempo y no producen nuevas componentes en el dominio de la frecuencia.
+La Figura \ref{fig:EfectosLineales} \cite{GustavoMaster}, representa la clasificación de factores de tipo lineal de los impedimentos de propagación que experimenta una longitud de onda sobre la fibra óptica, como los son los efectos de dispersión (dispersión cromática, dispersión por modo de polarización) y los efectos de pérdidas (atenuación y ruido).
+
+\begin{figure}[H]%Gustavo Gomez Maestría Mejora en la Eficiencia Espectral Redes DWDM
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/EfectosLineales.PNG}
+    \caption{Fenómenos Lineales \cite{GustavoMaster}.}
+    \label{fig:EfectosLineales}
+\end{figure}
+
+\begin{itemize}
+    
+    \item \textbf{Efectos de Pérdidas}
+    
+    En el momento en que la señal transmitida, viaja a través de la fibra, ésta presenta disminuciones de potencia que ocurren debido a propiedades físicas del medio de transmisión. En \ref{eq:attenuation} se hace una representación matemática de las pérdidas en términos de potencia. 
+
+        \begin{equation}
+            P_T = P_O \exp(-\alpha L)
+            \label{eq:attenuation}
+        \end{equation}
+
+    Donde, \textbf{\ensuremath{P_T}} representa la potencia transmitida en Watts, \textbf{\ensuremath{P_O}} indica la potencia de la señal óptica a la entrada en Watts, \textbf{\(\alpha\)} indica la constante de atenuación en \( \text{dB/Km} \) y \textit{L} indica la longitud de la fibra óptica en Kilómetros \cite{Tatiana}. %Monografía Análisis del desempeño de Formatos de modulación. 
+
+    En cuanto a atenuación, es considerablemente uno de los parámetros más importantes a tener en cuenta, el cual, depende de un factor característico del medio físico. Este factor, varía según los métodos de fabricación y ofrece diferentes valores de atenuación. La atenuación está directamente relacionada con una disminución exponencial en la potencia de la señal transmitida en función de la distancia de transmisión, como se observa en la ecuación \ref{eq:attenuation} \cite{GustavoMaster}. %Gustavo Gomez Maestría Mejora en la Eficiencia Espectral Redes DWDM
+
+    \item \textbf{Efectos de Dispersión}
+
+    La dispersión es el término utilizado para cualquier efecto en el cual diferentes componentes de la señal transmitida viajan a diferentes velocidades en la fibra, llegando en tiempos distintos al receptor \cite{Ramaswami2010}. %Libro Optical Networks
+    En óptica, la dispersión es uno de los deterioros o daños físicos más influyentes. Este efecto induce distorsiones en la señal al ensanchar el pulso de luz mientras viaja a través del medio óptico, produciendo como consecuencia una mezcla con los pulsos adyacentes. La distorsión dificulta la recuperación de la señal en el receptor y limita el ancho de banda. En los sistemas \acrshort{wdm}, la dispersión se manifiesta en \acrfull{cd} y \acrfull{pmd} \cite{Escallon2008}. La Figura \ref{fig:Dispersion}, expone el principio de dispersión. 
+    
+    \begin{figure}[H] % Imagen extraída de https://blogs.cisco.com/sp/fiber-optics-part-3-fiber-dispersion-will-change-the-way-you-see-your-links          Busqueda Dispersion in optical fiber
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/Dispersion.PNG}
+        \caption{Principio de dispersión, recuperada de \cite{cisco2024fiberoptics}.}
+        \label{fig:Dispersion}
+    \end{figure}
+
+        \begin{itemize}
+            \item \textbf{\acrfull{cd}:} 
+                             
+                
+                Es generado cuando una fuente de luz genera señales con longitudes de onda cercanas entre sí, y debido a que el índice de refracción de la fibra está en función de la longitud de onda, estas longitudes de onda viajan por el medio óptico a diferentes velocidades. Lo que produce un ensanchamiento del pulso al final de la transimisión, generando lo que se denomina \acrfull{isi}. Por lo que, a mayor tasas de transmisión, mayor es el efecto de dispersión cromática. En sistemas \acrshort{wdm} que operan a 40 Gbps y más allá, se emplean distintas técnicas para compensar la \acrshort{cd} acumulada, como el uso de \acrfull{dcf} \cite{Singh2013}. %0. Next Generation WDM MLR 
+                
+                Por otra parte, es posible que la dispersión cromática aumente la \acrfull{fwm}, al amplificar las diferencias de fase entre las señales ópticas; o que la reduzca, al separar las señales ópticas en el dominio de la frecuencia. Por lo que, es importante considerar cuidadosamente su efecto en el diseño y la operación del sistema.
+            
+            \item \textbf{\acrfull{pmd}:}
+
+                La \acrfull{pmd} ocurre debido a las asimetrías en la geometría del núcleo de la fibra. Debido a esta asimetría, en una fibra monomodo, los dos modos de polarización ortogonales viajan con diferentes velocidades, lo que resulta en un \acrfull{dgd}. La dispersión máxima ocurre cuando los dos modos están igualmente excitados. A una alta tasa de bits, esto puede resultar en el ensanchamiento del pulso unos en otros. Por lo tanto, impone una limitación en el rendimiento de la red óptica de larga distancia que utiliza fibra monomodo.  %0. Next Generation WDM MLR 
+                El \acrshort{pmd} está demostrando ser un impedimento serio en sistemas de muy alta velocidad que operan a tasas de bits de 10 Gbps y más allá \cite{Ramaswami2010}. %Libro Optical Networks
+
+                
+        \end{itemize}
+
+    
+\end{itemize}
+
+
+
+\subsection{Efectos No Lineales} %=========================================================================================================
+
+Por otro lado, los efectos no lineales, a diferencia de los lineales, dependen de la intensidad de la señal. Los efectos no lineales presentes en la fibra óptica, ocurren debido a cambios en el índice de refracción del medio con respecto a la intensidad óptica, y a fenómenos de dispersión inelástica \cite{Singh2013}.
+%0. Next Generation WDM MLR
+La dependencia de la potencia al índice de refraccción, es responsable del efecto Kerr. También, al emplearse altos niveles de potencia, el fenómeno de dispersión inelástica puede inducir efectos estimulados, donde la intensidad de la luz dispersada crece exponencialmente si la potencia incidente excede un cierto valor umbral \cite{singh2007}\cite{Glopez2011}. 
+%4. Algunos Efectos No Lineales 
+%1. Giovanni y Toledo Efectos no lineales en WDM
+En el caso de los sistemas de \acrfull{wdm}, los efectos no lineales pueden volverse importantes incluso a potencias y tasas de bits moderadas \cite{Ramaswami2010}. %optical networks libro
+
+\begin{figure}[H]%1. Gustavo Gomez Maestría Mejora en la Eficiencia Espectral Redes DWDM
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/EfectosNoLineales.PNG}
+    \caption{Fenómenos No Lineales \cite{GustavoMaster}.}
+    \label{fig:EfectosNoLineales}
+\end{figure}
+
+En la Figura \ref{fig:EfectosNoLineales}, se exponen las dos causas principales de la presencia de efectos no lineales en la fibra óptica, y se describen a continuación \cite{Glopez2011}\cite{Singh2013}:
+%1. Giovanni y Toledo Efectos no lineales en WDM
+%0. Next Generation WDM MLR
+
+\begin{itemize}
+
+    \item \textbf{Efecto Scattering:} Para altos niveles de potencia, el fenómeno de dispersión inelástica puede inducir efectos estimulados, como \acrfull{sbs} y \acrfull{srs}. La dispersión de la intensidad de la luz crece exponencialmente si la potencia incidente excede un cierto valor umbral.
+
+    \item \textbf{Efecto Kerr:} La dependencia del índice de refracción con la intensidad es responsable de este efecto. Produce tres tipos diferentes de efectos: SPM, XPM y FWM, dependiendo del tipo de señal de entrada. 
+
+\end{itemize}
+
+\subsubsection{Efecto Scattering}
+
+Surge debido a la interacción de las ondas de luz con los fonones o vibraciones moleculares el medio óptico, y conducen a una disminución del nivel de potencia; las ondas se dispersan en la interacción con la fibra, generando una transferencia de energía \cite{Ramaswami2010}.  %Optical Networks Libro
+En la dispersión de Brillouin los fonones generados son coherentes y dan lugar a una onda acústica macroscópica en la fibra, mientras que, en la dispersión de Raman, los fonones ópticos son incoherentes y no se genera una onda macroscópica \cite{singh2007}. %4. Algunos Efectos No Lineales 
+Al haber una transferencia de energía hacia el medio, se denominan también fenómenos de tipo inelásticos.
+
+Los efectos de las distorsiones no lineales son relevantes conforme aumentan las tasas de transmisión de datos, las longitudes de transmisión, el número de longitudes de onda, los niveles de potencia óptica, y la reducción en el espaciado entre canales.  La combinación de una alta potencia óptica total y un gran número de canales con longitudes de onda estrechamente espaciadas es ideal para muchos tipos de efectos no lineales \cite{Singh2013}.%0. Next Generation WDM MLR
+
+%Aunque la potencia individual en cada canal puede estar por debajo de la necesaria para producir no linealidades, la potencia total sumada de todos los canales en un sistema WDM de múltiples longitudes de onda puede volverse significativa. La combinación de una alta potencia óptica total y un gran número de canales con longitudes de onda estrechamente espaciadas es ideal para muchos tipos de efectos no lineales.
+%0. Next Generation WDM MLR
+
+\begin{itemize}
+
+    \item \textbf{\acrfull{srs}}
+    
+
+    Se debe a la interacción de la onda de luz incidente frente a los modos de vibración de una molécula de sílice,  donde la energía es transferida de la onda de luz incidente hacia una onda de mayor longitud \cite{Singh2013}, como se observa en la Figura \ref{fig:SRS}. %0. Next Generation WDM MLR
+
+    \begin{figure}[H]   %5. INCIDENCIA_DE_LOS_PARAMETROS_QUE_AFECTAN Escallón.pdf 
+            \centering
+            \includegraphics[width=0.6\linewidth]{img/SRS.PNG}
+            \caption{Principio de la Dispersión Estimulada de Raman \cite{Escallon2008}.}
+            \label{fig:SRS}
+        \end{figure}
+
+    En general, la \acrshort{srs} genera transferencia de energía de los canales de mayor frecuencia a los canales de menor frecuencia. El límite de potencia debido a \acrshort{srs} es el nivel crítico, donde potencia incidente y la potencia dispersada presentan igual magnitud, y se define a partir del Coeficiente de Ganancia de Raman \cite{Escallon2008}. 
+        %5. INCIDENCIA_DE_LOS_PARAMETROS_QUE_AFECTAN Escallón.pdf 
+ 
+
+        
+    
+    \item \textbf{\acrfull{sbs}}
+
+    Puede ocurrir a menores niveles de potencia en comparacón con la \acrshort{srs}. Este efecto no lineal se presenta por la generación de una onda denominada Stokes, la cual, se propaga en dirección contraria a la dirección de propagación de la onda incidente \cite{Glopez2011}.    % 1. Giovanni y Toledo Efectos no lineales en WDM    
+    Es decir, convierte la luz que se propaga hacia adelante en una onda Stokes que se propaga hacia atrás, generando pérdidas significativas en la onda incidente. La \acrshort{sbs} crece a partir del ruido y limita la potencia máxima transmisible a través de la fibra; la Figura \ref{fig:SBS}, expone lo mencionado anteriormente.
+    % 6. Mitigating stimulated Brillouin scattering in multimode fibers with focused output via wavefront shaping IMAGENTAMBIEN
+
+        \begin{figure} [H] 
+            \centering
+            \includegraphics[width=0.7\linewidth]{img/SBS.PNG}
+            \caption{Esquema de Dispersión Brillouin Estimulada \cite{zhang2023}.}
+            \label{fig:SBS}
+        \end{figure}
+    
+\end{itemize}
+
+
+\subsubsection{Efecto Kerr}
+
+Se debe a la dependencia no lineal del índice de refracción respecto de la intensidad de la onda incidente \cite{guevara2018}. 
+%7. MODELADO DE LOS FENÓMENOS NO LINEALES GENERADOS POR EL EFECTO ELECTRO-ÓPTICO KERR EN UNA TRANSMISIÓN POR FIBRA ÓPTICA
+Es decir, son todos aquellos fenómenos donde se produce una variación del índice de refracción como consecuencia del aumento de la intensidad; donde no hay una trasferencia de energía dirigida al medio, por lo que se denominan también, efectos no lineales de tipo elástico. Entre estos fenómenos se encuentran la \acrfull{spm}, la \acrfull{xpm} y la \acrfull{fwm} \cite{Tatiana}. 
+
+La \acrfull{NLSE}, describe la propagación de onda a través de un núcleo de fibra a cierta distancia, expresada en términos de la presencia de fenómenos lineales y no lineales \cite{GustavoMaster}: 
+% Gustavo G, Mejora de la eficiencia espectral en redes DWDM a 40gbps
+
+\begin{equation} % Gustavo G, Mejora de la eficiencia espectral en redes DWDM a 40gbps
+\frac{\partial E}{\partial z} = -\frac{\alpha}{2} E \underbrace{ - j \frac{\beta_2}{2} \frac{\partial^2 E}{\partial T^2} }_{\text{Dispersión}} \underbrace{ + \frac{\beta_3}{6} \frac{\partial^3 E}{\partial T^3} }_{\text{Pendiente de dispersión}} \underbrace{ + j \gamma |E|^2 E }_{\text{No linealidades de Kerr}}
+\label{eq:GNLSE}
+\end{equation}
+
+La ecuación \ref{eq:GNLSE} representa la propagación de un campo óptico $E(z,t)$, el cual muestra la presencia de diferentes campos DWDM como las \acrfull{ASE}, generadas dentro de un fenómeno de Kerr que refleja la dependencia de la intensidad de la señal con el índice de refracción del medio y la eficiencia en la que se genera transferencia de energía, donde:
+% Formatos de modulación avanzados (Tesis Pelada) para FWM 
+% Gustavo G, Mejora de la eficiencia espectral en redes DWDM a 40gbps
+
+\begin{itemize}
+  \item $|E|^2$: Potencia del canal óptico.
+  \item $\gamma$: Coeficiente de no-linealidades de Kerr.
+  \item $\alpha (z)$: Atenuación.
+  \item $\beta_i$: Constante del modo de propagación en la frecuencia central.
+\end{itemize}
+
+Por otro lado, el índice de refracción de la fibra óptica depende de la potencia de la señal transportada y esta dependencia, y esta dependencia se expresa mediante la siguiente ecuación: 
+
+\begin{equation}
+n = n_0 + n_2 \frac{P_{in}}{A_{eff}}
+\end{equation}
+
+Donde, $n_0$ representa el Índice de refracción lineal, $n_2$ el Índice de refracción no lineal y $\frac{P_{in}}{A_{eff}}$ la Intensidad de la onda incidente, potencia sobre área efectiva \cite{guevara2018}\cite{GustavoMaster}. 
+% 8. MODELADO DE LOS FENÓMENOS NO LINEALES GENERADOS POR EL EFECTO ELECTRO-ÓPTICO KERR EN UNA TRANSMISIÓN POR FIBRA ÓPTICA
+
+Este efecto produce un ensanchamiento espectral del ancho del pulso. La contribución no lineal del índice de refracción genera un cambio de fase en la señal propagada de la forma: 
+    \begin{equation}
+    \phi_{NL} = \gamma P L_e,
+    \end{equation}
+    
+Donde se define el coeficiente no lineal \(\gamma\) mediante la ecuación \ref{eq:gamma}:
+    \begin{equation}
+    \label{eq:gamma}
+    \gamma = \frac{2 \pi f_p n_2}{c \cdot A_e}
+    \end{equation}
+
+ En donde \(c\) es la velocidad de la luz y \(f_p\) es la frecuencia del pulso. Además, la constante de propagación también se vuelve no lineal, dependiendo de la potencia aplicada: 
+    \begin{equation}
+    \label{eq:betaNL}
+    \beta_{NL} = \beta + \gamma P
+    \end{equation}
+
+La ecuación \ref{eq:betaNL}, representa el efecto Kerr, en donde una alta intensidad de la onda conlleva a un cambio en su constante de fase \cite{mojica2013modelamiento}. 
+% 7. vista del modelamiento (Tesis Similar)
+
+A continuación, se exponen los fenómenos no lineales ligados al efecto Kerr (\acrshort{spm}, \acrshort{xpm} y \acrshort{fwm}), realizando especial énfasis en el fenómeno \acrshort{fwm}, siendo el fenómeno base que ligado a la efectividad del algoritmo propuesto, para la asignación de canales con espaciado desigual en una arquitectura de red \acrshort{MLR-PON}.
+
+\begin{itemize}
+   
+    \item \textbf{\acrfull{spm}:}
+
+    En los sistemas de comunicación ópticos, se generan cambios de fase inducidos por la no linealidad del índice de refracción del medio óptico, con respecto a la intensidad de la señal. Es decir, este índice de refracción no lineal induce un desplazamiento de fase proporcional a la intensidad del pulso propagado. Por lo anterior, los efectos de SPM son mayormente pronunciados en sistemas que empleen altas potencias de transmisión \cite{GustavoMaster}.
+    % Gustavo G, Mejora de la eficiencia espectral en redes DWDM a 40gbps 
+
+    \begin{figure} [H]% Gustavo G, Mejora de la eficiencia espectral en redes DWDM a 40gbps
+        \centering
+        \includegraphics[width=0.6\linewidth]{img/SPM.PNG}
+        \caption{Efecto de \acrshort{spm} sobre un pulso propagado \cite{GustavoMaster}.} % Gustavo G, Mejora de la eficiencia espectral en redes DWDM a 40gbps
+        \label{fig:SPM}
+    \end{figure}
+    
+    En la Figura \ref{fig:SPM} \cite{GustavoMaster}, el pulso y sus componentes se ven afectadas por cambios de fase, dando lugar al fenómeno Chrip; que ocurre cuando en el láser, la longitud de onda de la luz emitida cambia durante la modulación. De esta forma, las diferentes partes del pulso sufren diferentes desplazamientos de fase, provocando que se modifiquen los efectos de la dispersión sobre el pulso \cite{Glopez2011}.
+    %1. Giovanni y Toledo Efectos no lineales en WDMR
+
+
+    \item \textbf{\acrfull{xpm}:}
+
+    Debido a la dependencia de la intensidad del índice de refracción, se origina un desplazamiento de fase que depende de la intensidad a medida que la señal es propagada a través del medio. Cuando existen más señales ópticas dentro de la fibra, como en el caso de WDM, el desplazamiento de fase no lineal de un señal no depende únicamente de su misma intensidad, sino también, de la intensidad de las demás señales. La característica espectral de XPM está ligada al espaciado entre canales y al coeficiente de dispersión \cite{Singh2013}. 
+       %0. Next Generation WDM MLR
+
+    Cuando dos o más señales se propagan simultáneamente, el impacto de \acrshort{xpm} es similar a \acrshort{spm} \cite{Glopez2011}. 
+        %1. Giovanni y Toledo Efectos no lineales en WDMR
+    Sin embargo, la distinción frente al fenómeno SPM, es que en la \acrfull{xpm}, los pulsos propagados poseen un espectro claramente separado, además, en XPM se desarrollan oscilaciones solo a un lado del pulso y el ensanchamento es asímetrico, a diferencia de SPM, en donde la fluctuación es evidenciada en ambos costados del pulso \cite{GustavoMaster}\cite{Tatiana}. 
+        % Gustavo G, Mejora de la eficiencia espectral en redes DWDM a 40gbps 
+        % pelada Análisis del desempeño de formatos de modulación avanzados en pre
+    Por lo anterior, se expone la Figura \ref{fig:XPM}, que describe el fenómeno XPM dentro del medio óptico, que emplea WDM para la transmisión de más de una señal de comunicación.
+   
+    \begin{figure} [H] %9. Analysis of performance limits in optical communications due to fber
+        \centering
+        \includegraphics[width=0.5\linewidth]{img/XPM.PNG}
+        \caption{Demostración del efecto \acrshort{xpm} en un sistema de comunicación óptico WDM \cite{korotkova2024analysis}.}
+        \label{fig:XPM}
+    \end{figure} 
+
+
+
+
+
+     \item \textbf{\acrfull{fwm}:}
+
+    En un sistema de \acrfull{wdm}, debido a la naturaleza no lineal del índice de refracción, cuando las señales a frecuencias \(f_i\), \(f_j\) y \(f_k\) se propagan en la fibra, la interacción no lineal generará nuevos componentes en las frecuencias \((f_i \pm f_j \mp f_k)\). Donde,    
+        \begin{equation}
+             f_{ijk} = f_i \pm f_j \mp f_k \quad (i, j \neq k).
+            \label{eq:frequencies}
+        \end{equation}
+    Como se observa en la Figura \ref{fig:FWM}, las componentes generadas por el fenómeno FWM se superponen con la portadora transmitida, lo que causa interferencia. El crosstalk debido a FWM es el efecto no lineal dominante en sistemas WDM que emplean \acrfull{dsf} para la maximizar el alcance \cite{Singh2013}.
+        %0. Next Generation WDM MLR 
+
+    \begin{figure} [H]% Gustavo G, Mejora de la eficiencia espectral en redes DWDM a 40gbps 
+        \centering
+        \includegraphics[width=0.6\linewidth]{img/FWM.PNG}
+        \caption{Principio de Mezcla de Cuarto Ondas \cite{GustavoMaster}.} % Gustavo G, Mejora de la eficiencia espectral en redes DWDM a 40gbps 
+        \label{fig:FWM}
+    \end{figure}
+
+    El efecto de FWM es independiente de la velocidad de bits y depende críticamente del espaciamiento entre canales y la dispersión de la fibra. Además, para garantizar la eficiencia máxima de la generación de nuevas frecuencias, es necesario que se cumpla la condición en la que las fases de las ondas involucradas en el proceso de FWM, estén alineadas. La Figura \ref{fig:FWMGraf} muestra el efecto de FWM para tres canales de comunicación, donde la condición anteriormente mencionada, se cumple \cite{singh2007}\cite{Glopez2011}. 
+        %4. Algunos Efectos no lineales
+        %1. Giovanni y Toledo Efectos no lineales en WDMR
+
+    \begin{figure} [H] %1. Giovanni y Toledo Efectos no lineales en WDMR
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/FWM Grafica.PNG}
+        \caption{Efecto de FWM en tres señales equidistantes \cite{Glopez2011}.} %1. Giovanni y Toledo Efectos no lineales en WDMR
+        \label{fig:FWMGraf}
+    \end{figure}
+
+    El efecto FWM limita el rendimiento de las redes de comunicaciones ópticas DWDM, puesto que, pueden producirse degradaciones en los canales de transmisión. Las longitudes de onda generadas coinciden con la longitud de la señal original, lo que da como resultado, una degradación de la \acrfull{osnr} y un aumento de la \acrfull{ber}. Cabe destacar, que una asignación de canales apropiada, disminuye los efectos de FWM \cite{singh2007}.
+        %4. Algunos Efectos no lineales 
+
+        %inicio cita
+    A continuación \cite{mojica2013modelamiento}, se considera un sistema WDM de \( n \) canales, donde el campo eléctrico se determina a partir de la ecuación \ref{eq:campoE}:
+        \begin{equation}
+            E(t, z) = \sum_{j=1}^n E_j \cos (\omega_j t - \beta_j z)
+            \label{eq:campoE}
+        \end{equation}  
+    Y se define al vector de polarización no lineal:
+        \begin{equation}
+            P_{NL} = \varepsilon_0 \chi^{3} E^3
+            \label{eq:PNL}
+        \end{equation}
+    Donde, $\chi^{3}$ define las susceptibilidades de Tercer Orden, propias del efecto Kerr. %Tesis Pelada Análisis del desempeño de formatos de modulación 
+    Por lo tanto, el vector de polarización no lineal estará descrito por la ecuación \ref{eq:PNLcomplete}:
+        \begin{equation}
+            P_{NL} = \varepsilon_0 \chi^{3} \sum_{i=1}^n \sum_{j=1}^n \sum_{k=1}^n E_i \cos (\omega_i t - \beta_i z) E_j \cos (\omega_j t - \beta_j z) E_k \cos (\omega_k t - \beta_k z)
+            \label{eq:PNLcomplete}
+        \end{equation}
+
+    La ecuación \ref{eq:PNLcomplete}, plantea la aparición del conjunto de términos, en los que las \(n\) frecuencias del sistema, se encuentran mezcladas de todas las maneras posibles. Por lo que, los nuevos campos obtenidos tendrán frecuencias de la forma \( \omega_i \pm \omega_j \pm \omega_k \), descrito en \ref{eq:frequencies}. Si la aparición de una nueva frecuencia coincide con en el valor de las tres frecuencias del sistema, generará diafonía.
+
+    En \cite{Mojica}, se aborda la solución de la ecuación \ref{eq:PNLcomplete} y se hace especial énfasis en los términos de la forma $\omega_i \pm \omega_j \pm \omega_k$ con $i,j \neq k$, lo cuales generan el efecto FWM:
+        \begin{equation}
+            \omega_{ijk} = \omega_i +\  \omega_j -\  \omega_k
+        \end{equation} 
+    Y se plantea el caso en donde únicamente hayan dos frecuencias distintas, y no tres; dando lugar a nuevas componentes que se describen en la ecuación                \ref{eq:FWMBeta}:
+            \begin{equation}
+            {2\omega_1 - \omega_2} \ \& \ { 2\omega_2 - \omega_1}
+            \label{eq:FWMBeta}
+        \end{equation}  
+        
+    En síntesis, cuando están presentes \(n\) canales, con \(n\) frecuencias distintas, el número de nuevas señales que podrán aparecer estará dado por la ecuación \ref{eq:FWMmin}:
+        \begin{equation}
+        NIM = \frac{1}{2}(M^3 - M^2)
+        \label{eq:FWMmin}
+        \end{equation}
+    
+    Donde,
+        \begin{itemize}
+          \item $N_{IM}$: Número máximo posible de componentes FWM generados.
+          \item $M$: Número de señales que se propagan en la fibra.
+        \end{itemize}
+
+        %fin cita MODELAMIENTO
+    
+    Lo que supone que, en cuanto más señales se abarquen en un sistema de comunicaciones óptico \acrshort{dwdm}, mayor es la incidencia del efecto FWM. La Tabla \ref{table:fwm} expone el número total de componentes FWM que pueden aparecer en un sistema \acrshort{dwdm}.  %1. Giovanni y Toledo Efectos no lineales en WDMR
+
+        \begin{table}[H]   %1. Giovanni y Toledo Efectos no lineales en WDMR 
+        \centering
+        \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Número de Señales (M)} & \textbf{Número total posible de componentes FWM generados (NIM)} \\ \hline
+            2 & 2 \\ \hline
+            3 & 9 \\ \hline
+            4 & 24 \\ \hline
+            8 & 224 \\ \hline
+            16 & 1920 \\ \hline
+            32 & 15872 \\ \hline
+            40 & 31200 \\ \hline
+            80 & 252800 \\ \hline
+            160 & 2035200 \\ \hline
+        \end{tabular}
+        \caption{Número de posibles componentes FWM para sistemas DWDM, adaptada de \cite{Glopez2011}.}
+        \label{table:fwm}
+        \end{table}
+        
+
+   La \acrfull{fwm} se convierte en un desafío significativo, especialmente en entornos donde se utilizan múltiples canales con frecuencias cercanas, como en sistemas de \acrfull{wdm} con canales igualmente espaciados. La supresión efectiva de la FWM es esencial para garantizar un rendimiento óptimo en las redes ópticas y maximizar la capacidad del sistema. En el contexto de este trabajo, la propuesta de un mecanismo dinámico para contrarrestar la FWM en una red \acrshort{MLR-PON}, busca abordar este desafío utilizando estrategias como la asignación de canales desigualmente espaciados y algoritmos optimizados para mitigar los efectos perjudiciales de la FWM.
+
+
+\end{itemize}%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+\section{REGLA DE GOLOMB}
+
+En los sistemas WDM, comunmente, los canales son asignados con frecuencias centrales equidistantes entre sí. En relación al tema principal de este trabajo, al aumentar el espaciamiento entre canales, se reduce la magnitud de las bandas laterales espectrales de señales FWM no deseadas, que interfieren con los canales previamente asignados. Sin embargo, aún existe la posibilidad de que las señales FWM interfieran en los canales WDM, deteriorando el sistema. Por otro lado, se han propuesto métodos para la asignación de canales desigualmente espaciados, con la finalidad de reducir el efecto FWM, no obstante, éstos han concluído con el aumento de los requisitos de ancho de banda, en comparación con la usual asignación equidistante. Por lo que, la utilización del ancho de banda juega un papel importante en los sistemas de comunicación \cite{Randhawa2009}.
+    %Optimum algorithm for WDM channel allocation for reducing four-wave mixing effects
+
+
+Las \emph{reglas de Golomb} pueden considerarse como un tipo especial de regla. Para que una regla sea Golomb, cada distancia entre dos números, o marcas, debe ser diferente de todas las demás. Si esto se cumple, entonces una regla dada es Golomb. Por ejemplo, si hay una marca en la posición 2 y otra en la posición 5, entonces ningún otro par de marcas debe estar separado por una distancia de 3. En general, las \emph{reglas de Golomb} se basan en conjuntos de enteros positivos que exhiben propiedades matemáticas particulares, siendo posible su aplicación en la resolución de problemas asociados con la interferencia de señales ópticas \cite{Apostolos}, dado que la diferencia entre cualquier par de números es distinta, las señales de diafonía FWM generadas no caerán en los canales portadores ya asignados \cite{Bansal2021}. %Optimal Golomb Ruler Sequences Generation for Optical WDM Systems: 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Definición de Regla Golomb.} % Definición de regla Golomb by g-Golomb Rulers de Martos
+
+Según \cite{Martos2021}, una \emph{regla de Golomb} es un conjunto de enteros $A = \{a_1, a_2, \ldots, a_m\}$, con la propiedad de que para cada número entero positivo $d$, existe a lo sumo una solución de la ecuación \ref{eq:defGolomb}:
+    \begin{equation}
+        d = a_i - a_j, \quad \text{para} \; i > j.
+        \label{eq:defGolomb}
+    \end{equation}
+
+Dada una regla de Golomb $A$, su número de elementos se denomina \emph{marcas} y la mayor distancia entre dos elementos de la regla se denomina \emph{longitud}, es denotado como $\ell(A)$; de tal forma que:
+    \begin{equation}
+        \ell(A) = \max A - \min A,
+        \label{eq:length}
+    \end{equation} % Definición de regla Golomb by g-Golomb Rulers de Martos
+Donde, $\max A := \max\{a_1, \ldots, a_m\}$ y $\min A := \min\{a_1, \ldots, a_m\}$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Reglas de Golomb Perfectas.} %Analysis of the Golomb Ruler and the Sidon Set Problems, and Determination of Large, Near-Optimal Golomb Rulers
+
+Según \cite{Apostolos}, la ecuación \ref{eq:golomb_distances} mide exactamente la distancia de un \emph{regla de Golomb} de \( n \) marcas. 
+    \begin{equation}
+        d = \frac{1}{2} n(n - 1)
+        \label{eq:golomb_distances}
+    \end{equation}
+Cuando estas distancias son exactamente los primeros enteros positivos, es posible determinar a la \emph{regla de Golomb} como perfecta. En la Figura \ref{fig:Golomb4}, expone la regla perfecta \(\{0, 1, 4, 6\}\), debido a que mide las distancias \(\{1, 2, 3, 4, 5, 6\}\). 
+
+    \begin{figure} [H] %A Comparative Study of Nature-Inspired MetaheuristicAlgorithms in Search of Near-to-optimal Golomb Rulers
+        \centering
+        \includegraphics[width=0.6\linewidth]{img/Golomb4.PNG}
+        \caption{Regla Golomb perfecta y óptima de cuatro marcas \cite{Bansal2019}.}
+        \label{fig:Golomb4}
+    \end{figure}
+
+Cabe destacar que para \( n > 4 \) no existen \emph{reglas de Golomb} perfectas. A continuación se exponen las cuatro únicas \emph{reglas de Golomb} perfectas \cite{Apostolos}. 
+
+    \begin{itemize}
+        \item \( (n = 1) \) \( \{0\} \)
+        \item \( (n = 2) \) \( \{0, 1\} \)
+        \item \( (n = 3) \) \( \{0, 1, 3\} \)
+        \item \( (n = 4) \) \( \{0, 1, 4, 6\} \)
+    \end{itemize}
+
+
+%Analysis of the Golomb Ruler and the Sidon Set Problems, and Determination of Large, Near-Optimal Golomb Rulers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Reglas de Golomb Óptimas.}
+
+Cuando \( n \) excede 4, no existen \emph{reglas de Golomb} perfectas. Considere el ejemplo de una regla de 6 marcas \((0, 1, 3, 8, 12, 18)\), como se muestra en la Figura \ref{fig:Golomb6}, que mide las distancias 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 17, 18 y tiene una longitud de 18. Como se observa en las distancias, los números 13, 14, 16 están ausentes, por lo tanto, no es una regla de Golomb perfecta.
+
+    \begin{figure} [H]
+        \centering
+        \includegraphics[width=0.7\linewidth]{img/Golomb6.PNG}
+        \caption{Regla Golomb cercana a óptima de 6 marcas \cite{Bansal2019}.}
+        \label{fig:Golomb6}
+    \end{figure}
+
+En este caso, lo mejor que se puede hacer es encontrar la \emph{regla de Golomb} más corta posible con \( n \) marcas, es decir, una \acrfull{ogr} \cite{Apostolos}. %Analysis of the Golomb Ruler and the Sidon Set Problems, and Determination of Large, Near-Optimal Golomb Rulers
+Se han encontrado \acrshort{ogr}s y se ha demostrado que son óptimas para hasta 28 marcas.  Actualmente, no hay una búsqueda en curso para una regla óptima de 29 marcas \cite{distributednet}. %poner https://www.distributed.net/Main_Page 
+
+El problema fundamental en el estudio de las \emph{reglas de Golomb} es encontrar las reglas más cortas para un cierto número de marcas; es decir, investigar la función \ref{eq:princFundaGolomb} \cite{Martos2021}: %Near-Optimal g-Golomb Rulers
+    \begin{equation}
+         G(n) := \min \{ \ell(A) : A \text{ es una regla de Golomb}, \, |A| = n \}   
+         \label{eq:princFundaGolomb}
+    \end{equation}
+Decimos que una \emph{regla de Golomb} de \( n \) marcas es óptima si tiene la longitud más corta posible. En \ref{eq:golomb_ruler_example} se tiene el un ejemplo de una regla de Golomb Óptima \( A \) con orden \( n = 15 \) y longitud \( \ell(A) = 151 \): 
+    \begin{equation}
+        A = \{0, 4, 20, 30, 57, 59, 62, 76, 100, 111, 123, 136, 144, 145, 151\}.
+        \label{eq:golomb_ruler_example}
+    \end{equation}
+
+Al final de la sección, es posible evidenciar la Tabla \ref{table:OGRs}, con el contenido de las 28 \acrshort{ogr}s encontradas hasta el momento.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Reglas g-Golomb.}
+
+Según \cite{Martos2021}, existe una generalización de las \emph{reglas de Golomb}, cuando las diferencias se repiten \(g\) veces), las cuales se denominan \emph{reglas g-Golomb}. Un conjunto de enteros \(A = \{a_1, a_2, \ldots, a_n\}\) es una \emph{reglas g-Golomb}, si la diferencia no nula de dos elementos se repite hasta \(g\) veces. %REGLAS g- Golomb MArtos
+
+El problema principal de las reglas de g-Golomb optimamente cortas es estimar la función \( G(g, n) \), donde:
+    \begin{equation}
+        G(g, n) := \min \{\ell(A) : |A| = n \text{ y } A \text{ es una regla de g-Golomb}\}. 
+        \label{eq:brrr}
+    \end{equation}
+Si \( g = 1 \) entonces \( G(1, n) = G(n) \) y para esta función hay hasta 27 valores exactos. En el siguiente ejemplo, los conjuntos \(A_1\) y \(A_2\) son reglas 2-Golomb y 3-Golomb, respectivamente. %REGLAS g- Golomb MArtos
+    \begin{equation}
+        A_1 = \{ 0, 2, 3, 7, 9, 12, 13 \}
+    \end{equation}
+    \begin{equation}
+        A_2 = \{ 0, 1, 2, 5, 8, 11, 13, 15, 19, 20 \}
+    \end{equation}
+%REGLAS g- Golomb MArtos
+
+
+
+
+
+En el contexto de este trabajo, es propuesto un mecanisco para la asignación de canales basado en el concepto de \acrfull{ogr}. La propuesta de un mecanismo dinámico, para contrarrestar la FWM en una red MLR-PON, se centra en la asignación de canales desigualmente espaciados como una estrategia clave para mitigar el efecto no lineal y mejorar la calidad de la transmisión en los sistemas WDM; sin inducir un costo adicional en términos de ancho de banda del canal.
+
+\begin{comment}
+    Sin embargo, los estudios han demostrado que las \emph{reglas de Golomb} representan una clase de problemas NP-completos. Para marcas de orden superior, la búsqueda exhaustiva por computadora de tales problemas es difícil. En la literatura, existen numerosos algoritmos para abordar el problema de las reglas de Golomb. Hasta la fecha, no se conoce un algoritmo eficiente para encontrar la regla de longitud más corta. 
+    %A Comparative Study of Nature-Inspired MetaheuristicAlgorithms in Search of Near-to-optimal Golomb Rulers
+\end{comment}
+
+\newpage
+{\fontsize{8}{10}\selectfont
+\begin{longtable}[htbp]{|p{5em}|p{5em}|p{28em}|}
+\caption{OGRs \cite{Pegg2004}\cite{Shearer1998}\cite{distributednet}.}
+\\
+\hline
+\textbf{Orden} & \textbf{Longitud} & \textbf{Marcas} \bigstrut\\
+\hline
+\centering 1 &  \centering 0 & {0}
+\bigstrut\\
+%... (rest of your table)
+\hline
+\centering 2	&\centering 1	&{0 1}
+\bigstrut\\
+\hline
+\centering 3	& \centering 3	&{0 1 3}
+\bigstrut\\
+\hline
+\centering 4	& \centering 6	&{0 1 4 6}
+\bigstrut\\
+\hline
+\centering 5	& \centering 11	&
+{0 1 4 9 11}\newline 
+{0 2 7 8 11}
+            
+\bigstrut\\
+\hline
+\centering 6	& \centering 17	&
+{0 1 4 10 12 17}\newline 
+{0 1 4 10 15 17}\newline 
+{0 1 8 11 13 17}\newline 
+{0 1 8 12 14 17}
+
+\bigstrut\\
+\hline
+\centering 7	& \centering 25	&
+{0 1 4 10 18 23 25}\newline 
+{0 1 7 11 20 23 25}\newline 
+{0 1 11 16 19 23 25}\newline 
+{0 2 3 10 16 21 25}\newline 
+{0 2 7 13 21 22 25}
+\bigstrut\\
+\hline
+\centering 8	& \centering 34	&0 1 4 9 15 22 32 34
+\bigstrut\\
+\hline
+\centering 9	& \centering 44	&0 1 5 12 25 27 35 41 44
+\bigstrut\\
+\hline
+\centering 10	& \centering 55	&0 1 6 10 23 26 34 41 53 55
+\bigstrut\\
+\hline
+\centering 11	& \centering 72 &	
+0 1 4 13 28 33 47 54 64 70 72\newline 
+0 1 9 19 24 31 52 56 58 69 72
+\bigstrut\\
+\hline
+\centering 12	& \centering 85	&0 2 6 24 29 40 43 55 68 75 76 85
+\bigstrut\\
+\hline
+\centering 13	& \centering 106	&0 2 5 25 37 43 59 70 85 89 98 99 106
+\bigstrut\\
+\hline
+\centering 14	& \centering 127	&0 4 6 20 35 52 59 77 78 86 89 99 122 127
+\bigstrut\\
+\hline
+\centering 15	& \centering 151	&0 4 20 30 57 59 62 76 100 111 123 136 144 145 151
+\bigstrut\\
+\hline
+\centering 16	& \centering 177	&0 1 4 11 26 32 56 68 76 115 117 134 150 163 168 177
+\bigstrut\\
+\hline
+\centering 17	& \centering 199	&0 5 7 17 52 56 67 80 81 100 122 138 159 165 168 191 199
+\bigstrut\\
+\hline
+\centering18	& \centering 216	&0 2 10 22 53 56 82 83 89 98 130 148 153 167 188 192 205 216
+\bigstrut\\
+\hline
+\centering 19	&\centering 246	&0 1 6 25 32 72 100 108 120 130 153 169 187 190 204 231 233 242 246
+\bigstrut\\
+\hline
+\centering 20	&\centering 283	&0 1 8 11 68 77 94 116 121 156 158 179 194 208 212 228 240 253 259 283
+\bigstrut\\
+\hline
+\centering 21	&\centering 333	&0 2 24 56 77 82 83 95 129 144 179 186 195 255 265 285 293 296 310 329 333
+\bigstrut\\
+\hline
+\centering 22	& \centering356	&0 1 9 14 43 70 106 122 124 128 159 179 204 223 253 263 270 291 330 341 353 356
+\bigstrut\\
+\hline
+\centering 23	&\centering 372	&0 3 7 17 61 66 91 99 114 159 171 199 200 226 235 246 277 316 329 348 350 366 372
+\bigstrut\\
+\hline
+\centering 24	& \centering425	&0 9 33 37 38 97 122 129 140 142 152 191 205 208 252 278 286 326 332 353 368 384 403 425
+\bigstrut\\
+\hline
+\centering 25	& \centering 480	&0 12 29 39 72 91 146 157 160 161 166 191 207 214 258 290 316 354 372 394 396 431 459 467 480
+\bigstrut\\
+\hline
+\centering 26	&\centering 492	&0 1 33 83 104 110 124 163 185 200 203 249 251 258 314 318 343 356 386 430 440 456 464 475 487 492
+\bigstrut\\
+\hline
+\centering 27	&\centering 553	&0 3 15 41 66 95 97 106 142 152 220 221 225 242 295 330 338 354 382 388 402 415 486 504 523 546 553
+\bigstrut\\
+\hline
+\centering 28	&\centering 585	&0 3 15 41 66 95 97 106 142 152 220 221 225 242 295 330 338 354 382 388 402 415 486 504 523 546 553 585
+\bigstrut\\
+\hline
+\end{longtable}
+\label{table:OGRs}
+}
+%Analysis of the Golomb Ruler and the Sidon Set Problems, and Determination of Large, Near-Optimal Golomb Rulers
+%https://www.distributed.net/Main_Page

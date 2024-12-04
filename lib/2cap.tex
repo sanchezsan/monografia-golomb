@@ -1,0 +1,1064 @@
+\chapter[MARCO METODOLÓGICO]{\Large DESEMPEÑO ÓPTICO, MARCO METODOLÓGICO Y ESCENARIO DE SIMULACIÓN}
+
+\label{chap2:marco}
+
+En este capítulo se presentan las herramientas para la realización del trabajo de grado, haciendo especialmente énfasis en el \acrfull{opm} y sus parámetros para el rendimiento de redes de comunicaciones ópticas. Así mismo, se definen las metodologías y herramientas de simulación, mediante las cuales, se hará el diseño del modelo de red y del mecanismo dinámico. 
+
+%=======================================
+
+\section{MONITOREO DE DESEMPEÑO ÓPTICO}
+
+%Los continuos avances en el campo de las comunicaciones ópticas, junto con las redes de telecomunicaciones, han llevado a un aumento en la complejidad de las redes, lo que ha generado desafíos significativos en la operación y gestión de las redes de comunicaciones ópticas. % 1. Machine Learning Techniques for Optical Performance Monitoring and Modulation Format Identification: A Survey
+
+EL \acrfull{opm} es la estimación y adquisición de diferentes parámetros físicos de las señales transmitidas a través de una red de comunicaciones óptica; evaluando en tiempo real el estado de los parámetros ópticos. En cuanto a funcionalidad, su propósito es garantizar el funcionamiento robusto y eficiente de la red, permitiendo la detección, diagnóstico y corrección de fallos, así como la optimización de recursos y la mejora de la calidad del servicio \cite{dong2016optical}. % 3. Optical Performance Monitoring: A Review of Current and Future Technologies 
+Es de vital importancia su consideración para la construcción de redes ópticas confiables \cite{ChenJummm}. % 2. From Optical Performance Monitoring to Optical Network Management: Research Progress and Challenges
+
+%MODIFICAR Y ARREGLAR CON RESPECTO AL TEMA DE LA TESIS 
+El \acrfull{opm} abarca una amplia gama de parámetros que deben ser monitoreados, clasificados en tres categorías, como se muestra en la \ref{fig:OPM}: % 2. From Optical Performance Monitoring to Optical Network Management: Research Progress and Challenges
+
+\begin{itemize}% 2. From Optical Performance Monitoring to Optical Network Management: Research Progress and Challenges
+    %COMPACTAR 
+    \item \textbf{Monitoreo de pérdida de señal}: Se refiere al monitoreo de fallos en componentes en línea y cortes de fibra que afectan a la señal óptica en la transmisión y recepción. Es necesario el monitoreo de los componentes activos de la red óptica (\acrshort{EDFA}, \acrshort{oxc}, entre otros), debido a su considerable probabilidad de fallo.   
+
+    %ARREGLAR 
+    \item \textbf{Monitoreo de alineación de señal}: Se refiere a la supervisión y control de los parámetros que aseguran que la señal óptica esté correctamente alineada y transmitida de manera eficiente; como la alineación de la longitud de onda de la señal, la posición del filtro y el pulso modulador para garantizar un funcionamiento adecuado.
+
+    %AGREGAR LOS PARÁMETROS OPM A UTILIZAR
+    \item \textbf{Monitoreo de calidad de señal}: Se refiere al monitoreo de una multitud de efectos perjudiciales que deben ser minimizados o controlados porque pueden afectar la integridad y el rendimiento de la señal óptica durante su transmisión. Este monitoreo se centra en identificar y supervisar el parámetro digital de \acrfull{ber}, y los parámetros análogos, tales como la \acrfull{osnr}, el Factor de Calidad Q, el Diagrama del Ojo, potencia óptica, entre otros.
+\end{itemize}
+\begin{figure}[H]% 2. From Optical Performance Monitoring to Optical Network Management: Research Progress and Challenges
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/OPM.png}
+    \caption{El amplio espectro del monitoreo del rendimiento óptico \cite{ChenJummm}.}
+    \label{fig:OPM}
+\end{figure}
+%==================================================================================
+
+\subsection{Parámetros de Desempeño Óptico}
+
+%citar Recom. ITU
+La recomendación ITU-T G.697 \cite{ITUG697} define la supervisión o monitoreo óptico útil en sistemas de \acrfull{dwdm}, en la gestión de fallos y degradaciones. A su vez, se abordan ciertos parámetros de relación óptica para la detección y diagnóstico de problemas en la red; estos parámetos son los siguientes: %citar Recom. ITU
+
+\subsubsection{Potencia Óptica.}
+
+
+La potencia óptica es uno de los parámetros fundamentales dentro del monitoreo en redes ópticas, particularmente en sistemas \acrshort{dwdm} \cite{dong2016optical}. %3. Optical Performance Monitoring: A Review of Current and Future Technologies 
+La potencia óptica puede disminuir considerablemente debido a efectos como la atenuación de la fibra y las pérdidas en conectores, empalmes, y acopladores, así como las rupturas en la fibra. Estos factores deben monitorearse para mantener un rendimiento estable del sistema. Además, en sistemas WDM, es esencial contar con información sobre la potencia de cada canal para asegurar una ecualización dinámica de la potencia a través de un mecanismo de retroalimentación, lo cual es crucial para garantizar un rendimiento estable \cite{GustavoMaster}. %Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+
+
+\subsubsection{Factor de Calidad (Factor Q).}%.........................
+
+El Factor de Calidad Q es utilizado para evaluar los efectos de degradaciones del canal. %3. Optical Performance Monitoring: A Review of Current and Future Technologies en sistemas ópticos 
+Se define como la relación entre la señal y la \acrfull{snr} en la entrada de un circuito de decisión de un receptor de señal digital. Este factor se calcula a partir de los niveles lógicos $\mu_0$ y $\mu_1$, junto con las desviaciones estándar $\sigma_0$ y $\sigma_1$, que describen la distribución del ruido gaussiano \cite{dong2016optical}. %3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+La expresión matemática del \textit{Factor Q} es:
+    \begin{equation}
+        Q = \frac{\mu_1 - \mu_0}{\sigma_0 + \sigma_1}
+    \end{equation}
+Para expresar el \textit{Factor Q} en decibelios, se utiliza la fórmula:
+    \begin{equation}
+        Q(\text{dB}) = 20 \cdot \log_{10}(Q)
+    \end{equation}  
+El Factor Q está fuertemente correlacionado con el \acrshort{ber}, por lo que su medición es muy eficaz para la gestión de fallos. El incremento de 1 dB en el \acrshort{osnr} es cercanamente equivalente a un incremento de 1 dB en el Factor Q \cite{willner2010optical}. %4. Optical performance monitoring: Perspectives and challenges
+
+
+
+\subsubsection{\acrfull{osnr}.}%..........................................................................................
+
+La \acrshort{osnr} evalúa la relación entre la potencia de la señal y la potencia del ruido en un canal óptico, normalizada en una ventana espectral de 0.1nm. La \acrshort{osnr} es crucial para evaluar la degradación de la señal óptica, que ocurre debido a varias atenuaciones durante la transmisión. Los factores que afectan la \acrshort{osnr} incluyen el ruido introducido por amplificadores ópticos \acrshort{EDFA}, las \acrfull{ASE} y el ruido acumulado a lo largo del trayecto de la fibra óptica. La \acrshort{osnr} se cuantifica mediante la siguiente fórmula \cite{GustavoMaster}: %3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+    \begin{equation}
+        OSNR = 10 \log \left( \frac{P_i}{N_i} \right) + 10 \log \left( \frac{B_m}{B_r} \right)
+    \end{equation}
+Donde:
+    \begin{itemize}
+        \item \(P_i\) es la potencia de la señal óptica del canal i-ésimo.
+        \item \(N_i\) es el valor promedio de la potencia de ruido acumulada.
+        \item \(B_m\) es el ancho de banda ocupado por el canal i-ésimo.
+        \item \(B_r\) es el ancho de banda óptico de referencia, generalmente 0.1nm. %3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+    \end{itemize}
+    
+Como se observa en la Figura \ref{fig:osnr}, en el monitoreo de la OSNR se analiza el espectro óptico de la señal detectada. Las mediciones convencionales de OSNR utilizan técnicas fuera de banda, es decir, el ruido se mide en el espectro ubicado entre los canales ópticos. No obstante, este método puede subestimar o sobrestimar el ruido debido a la diafonía de los canales, los filtros o los MUX/DEMUX a lo largo del camino óptico \cite{dong2016optical}.  %0. Optical performance monitoring 
+Asimismo, para realizar una correcta medición de la OSNR dentro del canal óptico, se deben tener en cuenta la sensibilidad del receptor y demás elementos para minimizar el error en la cuantificación del parámetro óptico OSNR. %3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+
+    \begin{figure} [H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/osnr.png}
+        \caption{Medición de la OSNR para un sistema DWDM \cite{GustavoMaster}.}
+        \label{fig:osnr}
+    \end{figure}%3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados 
+
+\subsubsection{\acrfull{ber}.}%...................................................................................................................
+
+La \acrshort{ber} es un parámetro importante que permite evaluar el rendimiento de los sistemas de comunicaciones, como lo son las redes ópticas \acrshort{dwdm}. Este parámetro representa fracción de bits que se reciben erróneamente con respecto al total de bits transmitidos durante un intervalo de tiempo determinado; se encuentra matemáticamente expresado como \cite{GustavoMaster}:
+    \begin{equation}
+       BER = \frac{k(\Delta t)}{K(\Delta t)}
+    \end{equation}
+Donde:
+    \begin{itemize}
+        \item \(k(\Delta t)\) es el número de bits erróneos en el intervalo de tiempo \(\Delta t\),
+        \item \(K(\Delta t)\) es el número total de bits transmitidos en ese mismo intervalo.
+    \end{itemize}
+    %3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+
+Asimismo, es empleado en la cuantificación de los errores que pueden ocurrir debido a varios factores como la atenuación de la señal, el ruido o la distorsión en el sistema de transmisión. Este parámetro presenta una relación directa con el Factor de Calidad Q y OSNR. El Factor Q está directamente relacionado con la calidad de la señal en el receptor y afecta el BER, lo que significa que un aumento en el factor Q resulta en una mejora en el BER. A su vez, la OSNR también tiene una relación directa con el BER, ya que un mayor OSNR implica una señal más fuerte en comparación con el ruido, lo que contribuye a una menor tasa de errores \cite{Escallon2008}.  % EscallonPregrado_Tesis_OPM_MetroWDM 
+
+El monitoreo BER como parámetro \acrshort{opm} ha sido tradicionalmente utilizado para caracterizar la calidad de un enlace óptico; una BER menor o igual a \(10^{-12}\) se encuentra dentro de los parámetros objetivo, según la ITU-T \cite{GustavoMaster}. %3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+No obstante, el BER es solo un número y no proporciona información sobre las contribuciones individuales de diferentes deterioros que causan la degradación del rendimiento del sistema \cite{dong2016optical}. %3. Optical Performance Monitoring: A Review of Current and Future Technologies 
+
+\subsubsection{Diagrama del ojo.} %.............................................................................................................................................
+
+El diagrama del ojo es una herramienta que permite analizar las formas de onda de los pulsos que se propagan en el canal de transmisión óptica, por lo que es empleable para el monitoreo del rendimiento óptico. A través de este diagrama, se pueden identificar fenómenos como la \acrfull{isi}, la \acrfull{cd} y la \acrfull{pmd}. Estos elementos son fundamentales para evaluar las distorsiones y el ruido que afectan la señal óptica, ayudando a deducir parámetros importantes de medición como OSNR, BER y el factor Q. %3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+
+        \begin{figure} [H] %3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+            \centering
+            \includegraphics[width=0.6\linewidth]{img/eyeDiagram.png}
+            \caption{Componentes del Diagrama del Ojo \cite{GustavoMaster}.}
+            \label{fig:eyeDiagram}
+        \end{figure}
+
+En la Figura \ref{fig:eyeDiagram}, se expone la composición de un diagrama del ojo, donde la apertura definida por la máscara de la región del centro, es determinada por la diferencia que existe entre los niveles de las marcas superior e inferior; siendo posible determinar las penalidades presentes en el sistema con respecto a un diagrama de referencia, dichas penalidades son descritas matemáticamente en la ecuación \ref{eq:penalidad}: %3. Gustavo Gomez Mejora de la eficiencia espectral en redes DWDM a 40gbps a través de los formatos de modulación avanzados
+
+    \begin{equation}
+        EOP = 10 \log \left( \frac{\text{EO}_{\text{ref}}}{\text{EO}_{\text{rec}}} \right)
+        \label{eq:penalidad}
+    \end{equation}
+
+
+En el contexto del trabajo de investigación, el \acrfull{opm} se constituye como una herramienta fundamental para evaluar la integridad de las señales ópticas en una red \acrshort{MLR-PON}, donde la interferencia y los fenómenos no lineales, como la  \acrfull{fwm}, pueden tener un impacto significativo. La integración de herramientas de OPM en una red \acrshort{MLR-PON} permite la identificación temprana de posibles puntos problemáticos, facilitando así la implementación de medidas correctivas. Esto resulta crucial en entornos dinámicos, donde las condiciones de la red pueden cambiar debido a factores ambientales, mantenimiento, o variaciones en la demanda del servicio \cite{Saif}. % 1. Machine Learning Techniques for Optical Performance Monitoring and Modulation Format Identification: A Survey
+
+%AQUÍ VOY
+%=============================================================================================================================================================================
+
+\section{HERRAMIENTA DE SIMULACIÓN}
+
+Resulta fundamental escoger una herramienta o software de simulación que permita monitorear y analizar eficazmente el comportamiento de la señal a través del canal óptico deseado. La herramienta debe posibilitar la recreación del funcionamiento de la red en un entorno lo más cercano posible a la realidad, facilitando la evaluación del rendimiento mediante la consideración de los parámetros del \acrfull{opm}. Asimismo, se evalúan características como licenciamiento, interfaz gráfica, integración con otras herramientas, complejidad de manejo, entre otras; con la finalidad de dar con el software de simulación ideal para el presente trabajo. 
+
+\subsection{OptSim}
+
+OptSim es un entorno intuitivo de modelado y simulación desarrollada por RSoft  y adquirida por Synopsys, que permite la evaluación del rendimiento y el diseño a nivel de transmisión de sistemas de comunicación óptica. El software dispone de una amplia librería de algoritmos de simulación, que incluye los múltiples componentes ópticos y optoelectrónicos más utilizados; clasificados en diversas categorías como transmisores, generadores de señales, fibras ópticas, multiplexores, demultiplexores, receptores, entre otros. 
+Es clave en el desarrollo y despliegue de infraestructura para redes de acceso, metropolitanas y de larga distancia, incluyendo equipos para \acrshort{dwdm}, amplificación óptica, configuraciones de redes totalmente ópticas y optimización de la transmisión de enlaces \cite{OptSim}.
+%https://la.mathworks.com/products/connections/product_detail/optsim.html
+
+    \begin{figure}[H] %https://www.synopsys.com/photonic-solutions/optsim/single-mode-network.html
+        \centering
+        \includegraphics[width=0.5\linewidth]{img/optsim.png}
+        \caption{Logo de la Herramienta OptSim, recuperada de \cite{Synopsys}.} %CITAR https://www.synopsys.com/photonic-solutions/optsim/single-mode-network.html
+        \label{fig:optsim}
+    \end{figure}
+
+Algunos de los aspectos más importante de la herramienta son los siguientes \cite{OptSim}:%https://la.mathworks.com/products/connections/product_detail/optsim.html
+
+\begin{itemize}
+    \item Análisis de rendimiento y amplia variedad de mediciones.
+    \item Máxima precisión y velocidad de simulación gracias al método de pasos divididos y a la optimización del algoritmo.
+    \item Gran flexibilidad para la especificación de componentes.
+    \item Interfaces con herramientas de terceros como MATLAB.
+    \item Curva de aprendizaje rápida y facilidad de uso.
+\end{itemize} %https://la.mathworks.com/products/connections/product_detail/optsim.html
+
+Además, OptSim es ideal para el diseño asistido por computadora de sistemas de comunicación óptica, incluyendo sistemas de comunicación óptica coherente, formatos de modulación avanzada, sistemas DWDM/CWDM con amplificación óptica como \acrshort{EDFA}, y simulación de la tecnología FTTx/PON .%\textbfhttps://www.synopsys.com/photonic-solutions/optsim/single-mode-network.html
+Cabe destacar que, es la única herramienta de diseño con motores que implementan tanto el paso dividido en el dominio del tiempo como en el dominio de la frecuencia, lo que permite simular cualquier arquitectura de enlace óptico con precisión y eficiencia \cite{Synopsys}. %https://www.synopsys.com/photonic-solutions/optsim/single-mode-network.html
+
+\subsection{OptiSystem}
+
+OptiSystem es un software de Optiwave creado para el diseño de sistemas ópticos. Cuenta con multiples componentes combinables para simular diversos resultados. Permite a los usuarios planificar, probar y simular cuidadosamente casi todos los tipos de enlaces ópticos dentro de la capa de transmisión. Asimismo, ofrece un diseño y planificación optimizados para la capa de transmisión de los sistemas de comunicación óptica, presentando análisis y escenarios de forma visual, desde componentes individuales hasta sistemas completos \cite{OptiSystem}.%https://optiwave.com/products/optisystem/
+
+\begin{figure}[H]%https://www.enlight-tec.com/optiwave
+    \centering
+    \includegraphics[width=0.3\linewidth]{img/OPTISYSTEM.png}
+    \caption{Logo de la herramienta OptiSystem, recuperada de \cite{Optiwave}. } %https://www.enlight-tec.com/optiwave
+    \label{fig:OptiSystem}
+\end{figure}
+
+En cuanto a características, la herramienta OptiSystem permite el diseño sistemas de comunicación óptica, incluyendo OTDM, CWDM, DWDM, PON. Asimismo, permite la generación de amplificadores y láseres EDFA, Raman, híbridos, láseres de fibra, entre otros. Del mismo modo, facilita el análisis de rendimiento del sistema, en cuanto a parámetros OPM, como diagrama de ojo, factor Q, BER, potencia de señal/OSNR, penalidades lineales y no lineales; como también, una convergencia co-simulación con la herramienta Matlab \cite{OptiSystem}. %https://optiwave.com/optisystem-overview/
+
+\subsection{OMNet++}
+
+OMNeT++ es una biblioteca y un marco de simulación extensible, modular y basado en componentes, principalmente para crear simuladores de red. %https://omnetpp.org/
+Esta herramienta proporciona una arquitectura de componentes para los modelos, los cuales, son programados en C++, y luego se ensamblan en componentes y modelos más grandes usando un lenguaje de alto nivel. Debido a su arquitectura modular, tanto el núcleo de simulación, como los modelos, se pueden integrar fácilmente en las aplicaciones. La Imagen \ref{fig:omnet}, expone el logo de la herramienta.  %https://omnetpp.org/intro/
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\linewidth]{img/omnet++1.png}
+    \caption{Logo de la herramienta Omnet++, recuperada de \cite{OMNeTpp}.}  %Extraído de https://omnetpp.org/
+    \label{fig:omnet}
+\end{figure}
+
+Los principales componentes de OMNeT++ son: biblioteca del núcleo de simulación (C++); lenguaje de descripción de topología con lenguaje de alto nivel; IDE de simulación basado en la plataforma Eclipse; interfaz de línea de comandos para la ejecución de simulaciones; utilidades, herramienta de creación de makefiles; documentación, simulaciones de ejemplo, etc \cite{OMNeTpp}. %https://omnetpp.org/intro/
+
+\subsection{MATLAB}
+
+MATLAB es un entorno de programación y un lenguaje de alto nivel utilizado para el cálculo numérico, la visualización de datos y la programación. Desarrollado por MathWorks, es ampliamente empleado en diversos campos; donde es posible el importe de datos, la definición de variables y la realización de cálculos mediante los elementos del entorno de escritorio de MATLAB \cite{MATLAB}.  %https://la.mathworks.com/products/matlab/getting-started.html
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{img/matlab.png} %https://www.eletimes.com/matlab-and-simulink-product-families-get-deep-learning-capabilities
+    \caption{Logo de la herramienta Matlab, recuperada de \cite{DeepLearning}.}
+    \label{fig:Matlab}
+\end{figure}
+
+La interfaz de la herramienta OptSim con MATLAB permite a los usuarios de OptSim ejecutar rutinas de MATLAB que interactúan completamente con la estructura de datos de OptSim, ya sea para preprocesamiento y posprocesamiento o para fines de cosimulación. Esta interfaz permite a los usuarios escribir nuevas rutinas de MATLAB para utilizar con la cosimulación de OptSim o reutilizar su propio código propietario de MATLAB \cite{MATLAB}. 
+% ttps://la.mathworks.com/products/connections/product_detail/optsim.html
+
+A modo de resumen, en la tabla \ref{tab:herramientas} es posible visualizar una tabla comparativa, que expone las características de las herramientas de simulación anteriormente descritas.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|>{\centering\arraybackslash}m{3.5cm}|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|}
+        \hline
+        \textbf{Características} & \textbf{OptSim} & \textbf{OptiSystem} & \textbf{Omnet++} & \textbf{MATLAB} \\ 
+        \hline
+        Licencia & Comercial & Comercial & Gratuita & Comercial \\ 
+        \hline
+        Interfaz Gráfica & Alta & Alta & Media & Alta \\ 
+        \hline
+        Integración con otras Herramientas & Sí & Sí & Sí & Sí \\ 
+        \hline
+        Complejidad de manejo & Media & Media & Media & Alta \\ 
+        \hline
+        Obtención del Software & Fácil & Media & Fácil & Media \\ 
+        \hline
+        Requisitos del Sistema & Windows y Linux & Windows & Windows y Unix & Windows, Linux, MAC OS y Unix \\
+        \hline
+    \end{tabular}
+    \caption{Comparativa de herramientas de simulación.}
+    \label{tab:herramientas}
+\end{table}
+
+Por lo anterior, de las herramientas de simulación presentadas en la tabla \ref{tab:herramientas}, se ha decidido escoger OptSim y MATLAB para el desarrollo del presente trabajo. De Optsim, se destaca su capacidad para simular de manera precisa el comportamiento físico y las interacciones ópticas en sistemas de comunicaciones, especialmente en redes DWDM. Además, la Universidad del Cauca cuenta con el licenciamiento correspondiente, lo que facilita el acceso a esta herramienta. Por otro lado, MATLAB ofrece una gran flexibilidad para la programación y análisis de algoritmos, y por su compatibilidad con Optsim, permite que el mecanismo dinámico a diseñar, pueda ser transferido y aplicado en la arquitectura de red simulada en OptSim. 
+
+%==============================================================================================================================================================================
+
+\section{METODOLOGÍA DE SIMULACIÓN}
+
+\begin{comment}
+    
+\end{comment}
+Se ha establecido la metodología de simulación por agentes, para el desarrollo e implementación del mecanismo de asignación de canales con espaciado desigual, basado en reglas de Golomb, dentro de una arquitectura de red \acrshort{MLR-PON}. Esta metodología permite modelar los componentes de la red \acrshort{MLR-PON} como agentes individuales, y simula su interacción tanto con el algoritmo de contrarresto, como sin él. Además, permite definir los comportamientos específicos para los agentes, como la generación de señales, la detección de interferencia y la aplicación del mecanismo propuesto; con la finalidad de evaluar el impacto del mecanismo en términos de la calidad de la señal; en cuanto a parámetros OPM, y la eficiencia en la asignación de canales; en cuanto a la reducción de la FWM. Es decir, realizando comparaciones entre los escenarios con y sin el mecanismo de contrarresto \cite{macal2005tutorial}. %000.Metodología Simulación por agentes 
+A continuación, se describen las etapas de la metodología de simulación por agentes: 
+
+\begin{itemize}
+    \item \textbf{Definición del Problema y Objetivo:} Se define el sistema a modelar y los problemas específicos que se desean resolver. También, determinan los objetivos de la simulación, incluyendo las preguntas que se espera responder y los resultados deseados.
+
+    \item \textbf{Modelado de Agentes:} Se identifican los diferentes tipos de agentes que interactuarán en la simulación, con sus características o atributos. Asimismo, se especifican las reglas que guían las acciones y decisiones de los agentes.
+
+    \item \textbf{Modelado del Entorno:} Se define el espacio en el cual los agentes operan. Esto incluye las condiciones iniciales, límites físicos, y cualquier recurso compartido. También, son descritas las reglas que rigen cómo los agentes interactúan con el entorno.
+
+    \item \textbf{Implementación del Modelo:} Se traduce el modelo conceptual en un modelo computacional. Asimismo, se realizan pruebas para asegurar que el modelo computacional funciona conforme a las especificaciones y reglas definidas.
+
+    \item \textbf{Validación del Modelo:} Se comparan los resultados de la simulación con las expectativas teóricas para asegurarse de que el modelo es válido. Si es necesario, se realizan ajustes en el modelo para mejorar la precisión de las simulaciones. 
+
+    \item \textbf{Experimentación y Recolección de Datos:} Se planifican y ejecutan casos de estudio utilizando el modelo de simulación para explorar diferentes escenarios y condiciones. Asimismo, se recopilan los datos de las simulaciones y se analizan para extraer conclusiones significativas.
+
+    \item \textbf{Interpretación de Resultados:} Son interpretados los resultados de los experimentos en relación con los objetivos del problema original. Se utilizan los resultados para tomar decisiones informadas sobre el sistema.
+
+    \item \textbf{Documentación y Presentación:} Se documenta todo el proceso de modelado, simulación y análisis; exponiendo los resultados obtenidos. Se prepara la presentación para exponer los hallazgos y las recomendaciones.
+\end{itemize}
+
+En la Figura \ref{fig:metodologia}, es posible visualizar las etapas representadas en un diagrama de flujo, para el desarrollo de las simulaciones del presenta trabajo.
+ 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/DiagramaFlujo.jpeg}
+    \caption{Diagrama de flujo de la metodología de simulación por agentes.}
+    \label{fig:metodologia}
+\end{figure}
+
+%_______________________________________________________________________________
+\subsection{Diseño y caracterización de la arquitectura de red a nivel de simulación}
+
+Partiendo de la metodología de simulación planteada, se procede a realizar el diseño y caracterización de la arquitectura de red, a nivel de simulación. Donde el enfoque debe estar orientado en la asignación de canales desigualmente espaciados. Para ello, se recurre a la recomendación ITU-T G.694.1 \cite{itu2020recommendation}, que presenta un plan de frecuencias para aplicaciones en redes \acrshort{dwdm}; el cual soporta diversos espaciamientos de canal que abarcan de 12,5 GHz, hasta los 100 GHz, y espaciamientos mayores (múltiplos enteros de 100 GHz). %0. Recomendación ITU G.694.1 https://es.scribd.com/document/312769071/ ITU-G-694-1
+
+Por lo anterior, es importante definir las frecuencias centrales nominales para los sistemas que emplean \acrshort{dwdm}, partiendo de la diversidad en el espaciamiento propuesto en la recomendación. Estas frecuencias permitidas para espaciamientos de canales de 12,5 GHz, 25 GHz, 50 GHz y 100 GHz, se definen de la siguiente manera: 
+
+\begin{align}
+    12.5 \, \text{[GHz]} &= 193.1 + n \times 0.0125 \, \text{[THz]} \\
+    25 \, \text{[GHz]} &= 193.1 + n \times 0.025 \, \text{[THz]} \\
+    50 \, \text{[GHz]} &= 193.1 + n \times 0.05 \, \text{[THz]} \\
+    100 \, \text{[GHz]} &= 193.1 + n \times 0.1 \, \text{[THz]}
+\end{align}
+
+
+Donde \( n \) es un entero positivo o negativo que incluye el 0; y 193,1 THz es la frecuencia referida para el plan de frecuencias. Estas frecuencias nominales, deben estar dentro de las bandas C y L, según la recomendación. Permitiendo así, un amplio espectro (rango de 1530 nm a 1625 nm) para el escenario de simulación  \cite{itu2020recommendation}. %0. Recomendación ITU G.694.1 https://es.scribd.com/document/312769071/ ITU-G-694-1 
+
+Por otra parte, la recomendación ITU-T G.697 \cite{itu2016recommendation}, define que para velocidades de hasta 10 Gbps, se emplee \acrshort{NRZ-OOK}, y \acrshort{RZ-OOK}, siendo esta última, más robusta frente a la dispersión. Por lo que, para la arquitectura de red, se define NRZ-OOK para la tasa de transmisión de 2,5 Gbps; y RZ-OOK pra la tasa de 10 Gbps. Asimismo, gracias a investigaciones preliminares, se define el formato avanzado \acrshort{RZ-DPSK} para las canales con velocidades de 40 Gbps, debido a su mayor eficiencia espectral y robustez, a altas tasas de transmisión.
+% 1. ITU-T G.69 DESCARGADA
+A su vez, para el planteamiento de escenario de simulación y casos de estudio, se tomará en cuenta la implementación de \cite{Tatiana}, donde los autores ubican los canales de mayor intensidad en los extremos de la red, debido a la alta probabilidad en la aparición de \acrfull{ICI}. Por consiguiente, los formatos de modulación definidos para las distintas tasas de transmisión son definidos en \ref{tab:FormatosModulación}.
+
+        \begin{table}[h!]
+            \centering
+            \begin{tabular}{|c|c|}
+                \hline
+                \textbf{Tasa de Transmisión [Gbps]} & \textbf{Formato de Modulación} \\ \hline
+                     2.5 & NRZ-OOK\\ \hline
+                     10 & RZ-OOK\\ \hline
+                     40 & RZ-DPSK\\ \hline
+            \end{tabular}
+            \caption{Formatos de modulación para las distintas tasas de transmisión.}
+            \label{tab:FormatosModulación}
+        \end{table}
+
+Para la caracterización general del modelado de red red \acrshort{dwdm} con aplicación \acrshort{mlr}, se definen tres secciones, con sus respectivos elementos comunes en los sistemas \acrshort{dwdm}; a nivel de simulación y para los formatos de modulación definidos. Estas tres secciones son: 
+
+\subsubsection*{Transmisor}
+
+La sección de transmisión emplea distintos componentes que permiten generar las señales apropiadas para su transmisión en direntes longitudes de onda. Las fuentes de luz se generan a través de láseres, los cuales emiten señales de manera constante en longitudes de onda específicas; permitiendo la multiplexación de canales en la fibra óptica. De igual manera, es primordial la modulación y codificación de estas señales con el componente correcto, para que la recepción respecto a la transmisión sea fiable. Éstos, y otros componentes de la sección de transmisión, a nivel de simulación, son especificados a continuación.
+
+\begin{itemize}
+    \item \textbf{\acrfull{mzm}: }Es un dispositivo optoelectrónico que utiliza una configuración de interferometría para modular la fase o amplitud de la luz en sistemas de comunicación óptica. Funciona dividiendo la luz en dos caminos ópticos, donde la aplicación de una señal eléctrica en uno o ambos brazos altera el índice de refracción, lo cual afecta la fase y permite la modulación de la señal al recombinarla. Esta modulación es esencial para controlar la intensidad y fase de la luz en aplicaciones de alta velocidad de datos. Además, permite transformar señales eléctricas en variaciones de fase óptica, utilizando la interferencia entre dos caminos ópticos para lograr modulación de intensidad o fase \cite{saleh_teich_2007}.
+
+    \item \textbf{Filtro Bessel: }Es uno de los diferentes tipos de filtros que existen, diseñado especialmente para preservar la forma de la señal en el dominio del tiempo, lo que garantiza una respuesta de fase lineal y un retardo de grupo constante dentro de la banda de paso. Esta característica lo hace adecuado en aplicaciones donde es fundamental mantener la integridad temporal de la señal, como en comunicaciones. A diferencia de otros filtros, el filtro Bessel ofrece una transición suave en frecuencia y minimiza la distorsión de fase, aunque su rechazo de frecuencia fuera de la banda de paso es menor comparado con otros filtros como el filtro de Butterworth o el filtro Chebyshev \cite{horlbeck1991}.
+
+    \item \textbf{Láser CW: }Un láser \acrfull{cw} es un tipo de láser que emite una radiación óptica de manera continua, es decir, sin interrupciones, a una frecuencia constante a lo largo del tiempo. Este tipo de láser mantiene una salida constante en términos de potencia y frecuencia, lo que lo diferencia de los láseres pulsados, que emiten luz en forma de pulsos breves. Su funcionamiento es posible gracias a un mecanismo de bombeo que proporciona energía al medio activo de manera continua, lo que permite que el láser emita sin interrupción \cite{new2007}. Los láseres \acrshort{cw} pueden operar en diferentes rangos espectrales, desde el ultravioleta hasta el infrarrojo, y pueden utilizar diversos medios activos como gases, cristales, semiconductores o fibras ópticas. Su estabilidad temporal y espectral los hace ideales para experimentos y aplicaciones que requieren precisión y consistencia en la emisión de luz \cite{new2007}.
+
+    Son análizados otros tipos de láser para la comunicación óptica, como el láser \acrfull{vcsel}, el cual es un tipo de láser semiconductor que emite luz perpendicular a la superficie de su chip, en lugar de hacerlo a lo largo de su plano. Esto permite un perfil compacto y eficiente, haciéndolo ideal para aplicaciones de comunicaciones ópticas de corto alcance \cite{huffaker2004}; siendo superado por el láser \acrshort{cw}, puesto que, es más adecuado para transmisiones de largas distancias, lo cuál es un requerimiento para la construcción de la red. Por otro parte, es considerado el láser \acrfull{dfb}, también de tipo semiconductor, que utiliza una estructura de rejilla incorporada en su medio activo para proporcionar una retroalimentación distribuida, produciendo una emisión en una longitud de onda precisa y altamente estable. De bastante utilidad en sistemas \acrshort{wdm}, permitiendo la transmisión en largas distancias y con alta selectividad espectral \cite{coldren2012}. Sin embargo, aunque en comparación con el láser \acrshort{cw}, ambos ofrecen estabilidad en la longitud de onda, el láser de \acrshort{cw} de onda continua, es una mejor ópción para señales que necesiten mantenerse estables en el tiempo sin modulación interna, a comparación del láser \acrshort{dfb}, que generalmente requiere moduladores externos para la transmisión continua y estable; que se logra de manera natural con el láser \acrshort{cw}. Por lo anterior, se define el láser \acrshort{cw} como la opción más viable en la construcción de la arquitectura de red con características \acrshort{MLR-PON}.
+    
+\end{itemize}
+
+\subsubsection*{Medio}
+
+La sección de medio o enlace, utiliza diferentes componentes para garantizar una transmisión confiable y eficiente de las señales ópticas en la fibra como medio físico. Los splitters dividen la señal óptica entre diferentes rutas, permitiendo que varias señales compartan el mismo medio físico. La fibra óptica actúa como el medio principal de transmisión, transportando señales en largas distancias con mínima pérdida. El amplificador EDFA refuerza la señal óptica cuando esta se atenúa, manteniendo su calidad a lo largo del enlace. Por último, la rejilla de compensación ideal corrige la dispersión, mejorando la precisión de la señal en la recepción. Por lo anterior, se presentan a continuación los elementos comunes en la sección de enlace o medio, de los sistemas \acrshort{dwdm}, a nivel de simulación.
+
+\begin{itemize}
+    \item \textbf{Splitters: }También denominados divisores, son elementos que integran los despliegues de las redes ópticas, por lo que, reparten la señal de cada fibra conectada. Dependiendo del diseño de la red, es posible plantar divisiones 1:\( n \), y viceversa. Es decir, que por cada entrada de fibra conectada al splitter, es posible la división de \( n \) usuarios requeridos\cite{BurbanoyF}. Cabe resaltar que, por cada división, es introducido un nivel de atenuación de 3 dB; esta atenuación depende de la longitud de onda y calidad de la fibra óptica, factores clave en el diseño de redes ópticas \cite{altechna2023}.
+    
+    \item \textbf{Fibra óptica: } La fibra óptica como medio físico, se clasifica en dos tipos específicos, monomodo (\textit{Single-mode}) y multimodo (\textit{Multi-mode}). La fibra óptica monomodo, se emplea para largas distancias y aplicaciones de alta velocidad; adecuado para altas velocidades de transmisión y largas distancias, debido a que, la señal viaja a través de la fibra en una sola trayectoria, minimizando las pérdidas y la distorsión. Este tipo de fibra tiene un núcleo extremadamente pequeño, en el orden de los micrómetros de diámetro. Debido a esto, solo puede transmitir una única señal de luz a la vez. Por otra parte, la fibra óptica multimodo, es más adecuada para distancias cortas, puesto que, las señales tienden a dispersarse más rápidamente en distancias largas. Este tipo de fibra tiene un núcleo más grande, lo que permite que múltiples señales de luz viajen por diferentes caminos dentro del núcleo; al viajar la señal en distintos modos, es susceptible a fenómenos de dispersión y distorsión \cite{G652de2016}. 
+
+    Por lo anterior, bajo las características y parámetros presentados en la recomendación ITU-T G.652 \cite{G652de2016}, se elige a nivel de simulación la fibra monomono SMF 28e, del fabricante Corning, con una longitud de onda de 1550 nm, con las siguientes características vistas en la tabla \ref{table:SMF28e}: 
+
+        \begin{table}[h!]  % ITU-T G.652 Corning SMF 28e
+            \centering
+            \begin{tabular}{|l|c|}
+                \hline
+                \textbf{Característica} & \textbf{Valor} \\ \hline
+                Atenuación a 1550 nm & $\leq$ 0.20 dB/km \\ \hline
+                Dispersión cromática (1550 nm) & 18 ps/(nm$\cdot$km) \\ \hline
+                Coeficiente de PMD & $\leq$ 0.06 ps/$\sqrt{\text{km}}$ \\ \hline
+                Diámetro del núcleo & 8.2 $\mu$m $\pm$ 0.4 $\mu$m \\ \hline
+            \end{tabular}
+            \caption{Características relevantes de la fibra óptica Corning SMF-28e \cite{Corning_SMF28e}.}
+            \label{table:SMF28e}
+        \end{table}
+
+    \item \textbf{Amplificador EDFA: } Los amplificadores \acrshort{EDFA} son dispositivos que utilizan fibra óptica dopada con erbio para amplificar unidireccionalmente señales de luz en comunicaciones ópticas. Funcionan mediante el proceso de amplificación, donde la fibra dopada con erbio se excita por una fuente de bombeo, liberando energía en forma de luz y amplificando la señal entrante \cite{Keiser2011}. Existen tres modos de configuración: preamplificación, cuando el EDFA se encuentra antes de la recepción; amplificador de línea, cuando el EDFA se sitúa entre los tramos de fibra; y amplificador de potencia, donde el EDFA después de una fuente óptica y antes de la fibra principal. Debido al requerimiento de la red, en cuanto a enlaces de largas distancias con diferentes tasas de transmisión, es necesaria la implementación de estos aplificadores, para la regeneración las amplitudes de las señales, permitiendo que estén en el rango de sensiblidad del receptor \cite{Zemanate2018}. Por ende, es necesario el análisis de estos tres modos de configuración los \acrfull{EDFA}, con la finalidad de determinar cuál se adapta mejor a las necesidades de la red.
+
+    \item \textbf{Rejilla de Compensación Ideal: }Es un tipo de rejilla en la fibra óptica que actúa como un filtro o reflector selectivo para ciertas longitudes de onda. Este dispositivo aprovecha variaciones periódicas en el índice de refracción de la fibra para reflejar o transmitir frecuencias específicas de luz, optimizando la eficiencia y precisión en aplicaciones como la compensación de dispersión y el control de señales en sistemas de comunicaciones ópticas \cite{Kashyap1999}. El concepto de compensación ideal es teórico, útil para lograr un rendimiento óptimo a nivel de simulación, un filtrado de longitud de onda en síntonía y sin pérdidas adicionales, facilitando así el análisis pertinente de las señales ópticas. A nivel físico, las rejillas de Bragg de fibra, se emplean como dispositivos que reflejan longitudes de onda específicas de la luz mediante variaciones periódicas en el índice de refracción en una sección de fibra óptica \cite{MunozCastro2023}. Por lo que, al igual que la terminología teórica, busca la compensación de dispersión y el filtrado de señales en redes \acrshort{dwdm}.
+\end{itemize}
+
+\subsubsection*{Receptor}
+
+Finalmente, la sección de recepción en un sistema \acrshort{dwdm} emplea diversos componentes para asegurar una transmisión confiable y eficiente de las señales ópticas. Los fotodiodos convierten la señal óptica en una señal eléctrica, mientras que el filtro eléctrico elimina el ruido y mejora la calidad de la señal. Además, el filtro óptico de coseno rizado reduce los efectos de distorsión en la señal, garantizando una recepción precisa y eficiente. A continuación, los elementos que conforman la sección de recepción en la arquitectura de red planteada, a nivel de simulación.
+
+\begin{itemize}
+    
+    \item \textbf{Fotodetector de tipo PIN: }Son empleados distintos tipos de fotodetectores para convertir la luz óptica en una señal eléctrica, dentro de los cuales, destacan el fotodiodo PIN y el fotodiodo APD. El primero, es un tipo de fotodetector compuesto por tres capas de material semiconductor; esta estructura permite que el fotodiodo convierta la luz incidente en corriente eléctrica mediante el efecto fotovoltaico \cite{sze2002semiconductor}. Por otra parte, los fotodiodos APD de avalancha, son dispositivos fotodetectores que operan bajo un alto voltaje inverso, lo que permite la amplificación interna de la señal mediante un proceso de avalancha. Cuando un fotón incide en el APD, se generan pares de electrones y huecos, que son acelerados en el campo eléctrico interno del dispositivo; esto mejora significativamente la sensibilidad del detector, haciéndolo ideal para aplicaciones de baja señal y comunicaciones ópticas de larga distancia . \cite{hamamatsu2021apd}. 
+
+    Los fotodiodos PIN se utilizan comúnmente en comunicaciones ópticas debido a su alta velocidad de respuesta y eficiencia en la conversión de luz en señal eléctrica, por lo que se prefiere emplear esta opción en busca de una arquitectura de red confiable, estable y con una menor complejidad de diseño.
+    
+    \item \textbf{Filtro Óptico de Coseno Rizado: }Éste es un tipo de filtro utilizado en sistemas de comunicación óptica para dar forma a la señal y reducir la \acrfull{isi}, mejorando así la calidad de la transmisión de datos. Este filtro tiene una respuesta en frecuencia con una forma característica de coseno rizado que incluye un parámetro de \textit{roll-off}, el cual controla la transición entre las bandas de paso y de parada. Al limitar el ancho de banda de la señal óptica, este filtro permite una transmisión más eficiente y precisa en enlaces de comunicación \acrshort{dwdm} de alta velocidad \cite{proakis2008digital}. Este filtrado se enfoca para dar forma a la señal óptica transmitida o recibida, buscando reducir el ancho de banda efectivo y mejorar la calidad de la señal. 
+    
+\end{itemize}
+
+Por lo anterior, en la tabla \ref{table:caractRED}, se muestran las características y parámetros de la arquitectura de red a implementar, a nivel de simulación:
+
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5} % Ajusta el espaciado vertical
+    \begin{tabular}{|>{\centering\arraybackslash}m{6cm}|>{\centering\arraybackslash}m{8cm}|}
+    \hline
+    \multicolumn{2}{|c|}{\textbf{CARACTERÍSTICAS GENERALES}} \\ \hline
+        \textbf{PARÁMETRO} & \textbf{VALORES} \\ \hline
+        Topología de red & Punto a multipunto \\ \hline
+        Tasas de Transmisión & 2.5, 10 y 40 Gbps \\ \hline
+        Tecnología de red & DWDM  \\ \hline
+        Banda de operación & Banda C y L (1530 - 1625 nm) \\ \hline
+        Canales OLT & 6, 10, 12 canales \\ \hline
+        Espaciamiento de canales ITU-T G.694.1 & 25, 50 y 100 GHz \\ \hline
+        Equipos de amplificación & EDFA \\ \hline
+        Técnica de compensación & Rejilla Compensación Ideal \\ \hline
+    \multicolumn{2}{|c|}{\textbf{CARACTERÍSTICAS DEL TRANSMISOR}} \\ \hline
+        Formatos de modulación & NRZ-OOK, RZ-OOK, y RZ-DPSK \\ \hline
+        Potencia Inicial del láser & 0 dBm \\ \hline
+        Tipo de láser & CW (\textit{continuous wave}) \\ \hline
+        Filtrado & Filtro Bessel \\ \hline
+    \multicolumn{2}{|c|}{\textbf{FIBRA ÓPTICA Corning SMF-28e de 1550 nm}} \\ \hline
+        Coeficiente de dispersión & 16 ps/nm/km \\ \hline
+        Coeficiente de atenuación & 0.19 dB/km \\ \hline
+    \multicolumn{2}{|c|}{\textbf{CARACTERÍSTICAS DEL RECEPTOR}} \\ \hline
+        Sensibilidad del Receptor & - 30 dBm \\ \hline
+        Filtrado & Filtro Bessel, Filtro óptico Coseno Rizado \\ \hline
+    \end{tabular}
+    \caption{Características y parámetros generales de la arquitectura de red, a nivel de simulación; adaptada de \cite{Tatiana}.}
+    \label{table:caractRED}
+\end{table}
+
+\subsection{Construcción de la arquitectura de red a nivel de simulación}
+
+Para la construcción, a nivel de simulación, de la arquitectura de red se tienen en cuenta las recomendaciones dictadas por la ITU-T. En cuanto al espaciamiento entre canales, la recomendación ITU-T G.694.1 \cite{itu2020recommendation}, dicta el plan de frecuencias para esta asignación en redes \acrshort{dwdm}. Relacionando el estándar a los requerimientos del proyecto, es necesario realizar una adaptación, tomando en cuenta que la red debe tener un enfoque en la asignación de canales desigualmente espaciados. Por lo tanto, se busca que la grilla espectral del escenario general de simulación presente una asignación de canales, que tome en cuenta el espaciado dictado por la estandarización de a 12.5, 25, 50 y 100 GHz, siempre y cuando se presente un espaciado que busque la desigualdad entre grillas. 
+
+Siguiendo la línea del estándar ITU-T \cite{ITU2016GSup39} \cite{ITUG697}, se toman en cuenta los parámetros ópticos que facilitan el análisis en el rendimiento de la red. Donde se tiene que, la \acrshort{ber} debe ser menor o igual a \(10^{-12}\), correspondiente a un Factor \( Q \approx \) 7.03 (16.94 dB); siendo estos valores los mínimos aceptable teóricamente hablando, en cuanto a parámetros \acrshort{opm}. Por todo lo anterior, se plantea un escenerio inicial de simulación que consta de 3 canales ópticos; canal 1, canal 2 y canal 3 con tasas de transmisión a 10 Gbps, 2.5 Gbps y 40 Gbps, respectivamente. Con esto, se busca reducir la interferencia entre canales adyacentes, dejando a los canales con mayor tasa de transmisión a los extremos, los cuales tienden a generar múltiples réplicas en el espectro óptico por su naturaleza de alta capacidad \cite{Gaby2022}.
+
+En consideración con los aspectos mecionados anteriormente, se genera el plan de frecuencias para el escenario de simulación inicial, donde los espaciamientos, 
+    \begin{align}
+        50 \, \text{[GHz]} &= 193.1 + n \times 0.05 \, \text{[THz]} \\
+        100 \, \text{[GHz]} &= 193.1 + n \times 0.1 \, \text{[THz]}
+    \end{align}
+    
+son aplicados en busca de un enfoque de asignación de canales desigualmente espaciados, según lo requiere el proyecto; y 193,1 THz es la frecuencia central referida para el plan de frecuencias, según la recomendación. Por lo que, la grilla espectral se plantea en la tabla \ref{tab:planFrec1}, de la siguiente forma:
+
+    \begin{table}[H] 
+            \centering
+            \begin{tabular}{|c|c|c|}
+                \hline
+                \textbf{Canal} & \textbf{Frecuencia Central [GHz]} & \textbf{Longitud de Onda [nm]}\\ \hline
+                     \textbf{CH1} & 193.05 & 1552.9265\\ \hline 
+                     \textbf{CH2} & 193.1 & 1552.5244\\ \hline
+                     \textbf{CH3} & 193.2 & 1551.7208\\ \hline
+            \end{tabular}
+            \caption{Plan de frecuencias del escenario de simulación inicial \cite{itu2020recommendation}.}
+            \label{tab:planFrec1}
+        \end{table}
+
+En vista de lo anterior, y en base a la topología general de una red \acrshort{MLR-PON}, son especificados los aspectos que conforman la arquitectura de red. 
+
+\subsubsection*{\acrfull{olt}:}
+
+Para definir las características generales de la transmisión en la \acrshort{olt}, se deben tener en claro diferentes aspectos para la construcción de la red, a nivel de simulación. En la Figura \ref{fig:LaserCW}, es posible ver la configuración establecida en cuanto a parámetros de simulación del láser \acrshort{cw}; donde el \acrfull{fwhm}, toma el valor de 1 MHz, en busca de un ancho estrecho para que el espectro de la señal se concentre en la frecuencia definida. Tambíen, es definida una potencia de transmisión del láser de 0 dBm, puesto que en \cite{GustavoMaster}, se establece que los efectos degradantes están relacionados con el incremento en los niveles de potencia del canal óptico. Los módulos que representan los láser \acrshort{cw} para la transmisión óptica, se visualizan en la arquitectura de red de la Figura \ref{fig:ArqRedInicial}.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\linewidth]{img//Cap2/LaserCW.PNG}
+            \caption{Parámetros de configuración del Láser \acrshort{cw}.}
+            \label{fig:LaserCW}
+        \end{figure}
+
+En las Figuras \ref{fig:CC}, se visualizan los componentes compuestos definidos para las modulaciones establecidas para las distintas tasas de transmisión. La composición de los módulos cubre los aspectos relacionados con la codificación y modulación de las señales transmitidas, por lo que es importante su correcta configuración. Las Figuras \ref{fig:Tx_RZ} y \ref{fig:Tx_NRZ} corresponen a las codificaciones \acrshort{NRZ} y \acrshort{RZ}, para las tasas de transmisión 2.5 y 10 Gbps, respectivamente; y que comparten la \acrfull{OOK}. La Figura \ref{fig:Tx_RZDPSK}, corresponde al componente compuesto construido para la \acrfull{RZ-DPSK}, para la tasa de 40 Gbps, donde el divisor eléctrico combina las señales del módulo generador de señales constantes y del generador de señales de onda. Crear y utilizar componentes compuestos en la herramienta Matlab permite una arquitectura de red más organizada.
+
+        \begin{figure}[H]
+            \centering
+            % Fila 1: Imagen 1
+            \begin{subfigure}{0.4\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap2/Tx_RZ.PNG}
+                \caption{Componente compuesto para RZ-OOK.}
+                \label{fig:Tx_RZ}
+            \end{subfigure}
+            % Fila 1: Imagen 2
+            \begin{subfigure}{0.35\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap2/Tx_NRZ.PNG}
+                \caption{Componente compuesto para NRZ-OOK.}
+                \label{fig:Tx_NRZ}
+            \end{subfigure}
+            
+            % Fila 2: Imagen 3
+            \begin{subfigure}{0.55\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap2/Tx_RZDPSK.PNG}
+                \caption{Componente compuesto para RZ-DPSK.}
+                \label{fig:Tx_RZDPSK}
+            \end{subfigure}
+            \caption{Módulos compuestos para la transmisión.}
+            \label{fig:CC}
+        \end{figure}
+
+
+En su composición general, los componentes compuestos presentan una fuente de datos, donde es definida la tasa de transmisión a emplear, por ende, el número de muestras por bit para la simulación. La configuración de este componente se visualiza en la Figura \ref{fig:DataSource}. 
+
+Además, se utilizan moduladores \acrshort{mzm} con el fin de controlar las amplitudes y fases de las señales ópticas. Los parámetros definidos del modulador se visualizan en la Figura \ref{fig:MZM}, donde la configuración se hace en concordancia con el driver de codificación correspondiente. Por ejemplo, para el driver de codificación \acrshort{RZ} se tiene un retorno a cero, siendo este valor el más bajo, y su nivel alto coherente debe ser 5; por lo que, el máximo voltaje de salida del modulador \acrshort{mzm}, será 5 voltios. Caso contrario, en el driver \acrshort{NRZ}, donde no existe un retorno a cero, y los niveles de éste se configuran en el rango de -2.5 y 2.5; y el valor máximo de voltaje transmitido del modulador \acrshort{mzm}, pasa a ser 2.5 V.
+ 
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\linewidth]{img//Cap2/DataSource.PNG}
+        \caption{Parámetros de configuración del \textit{Data Source}.}
+        \label{fig:DataSource}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\linewidth]{img/Cap2/Mod_MZ.PNG}
+        \caption{Parámetros de configuración del modulador \acrshort{mzm}.}
+        \label{fig:MZM}
+    \end{figure}
+
+Caracterización del transmisor o receptor:
+
+Puedes medir parámetros clave como potencia óptica de salida, tasa de error de bits (BER), ruido, distorsión y sensibilidad del receptor en condiciones ideales.
+Aísla problemas relacionados con los dispositivos activos (como moduladores o amplificadores) antes de probar el sistema completo.
+Validación de esquemas de modulación:
+
+Es ideal para validar esquemas de modulación como NRZ-OOK, RZ-OOK, DPSK, entre otros, sin que los resultados se vean influenciados por la dispersión, la atenuación u otros efectos del enlace físico.
+
+La configuración \textit{Back to Back}, de la arquitectura de red \ref{fig:ArqRedInicial}, permite la validación y análisis del rendimiento del sistema sin un enlace físico significativo, y en condiciones controladas. Por ejemplo, facilita la validación de los esquemas de modulación implementados, como también, la caracterización inicial de los parámetros \acrshort{opm}. 
+
+
+
+
+\subsubsection*{\acrfull{odn}:}%------------------------------------------------------->
+Con la finalidad de plantear distintos escenarios de simulación, es importante definir una distancia de fibra óptica variable dentro de las recomendaciones de la ITU-T, que nos permita doblegar el rendimiento del sistema e indagar sobre los posibles fenómenos no lineales relacionados con \acrfull{fwm}. Por lo que, se tendrán variaciones en la distancia del enlace dentro del rango de 60 a 100 Km. No obstante, para transmisiones ópticas de largas distancias, es necesario emplear técnicas de compensación, debido a que el canal óptico, está sujeto a diversas limitaciones físicas, en relación con la atenuación en la fibra y demás efectos lineales y no lineales. 
+
+Es por ésto que, para el diseño y construcción de la arquitectura de red a nivel de simulación, se emplea una rejilla de compensación ideal, con el fin de minimizar los fenómenos que afectan las señales, y optimizar el rendimiento de las mismas. Este componente en visible en la Figura \ref{fig:Enlace}, en compañía del componente que relaciona la fibra óptica; en este caso, una fibra Corning SMF-28e con dispersión de 16 ps/nm/Km, una \acrshort{pmd} de \SI{0.1}{\pico\second\per\sqrt{\kilo\meter}}, y una atenuación menor a 0.20 dB/Km \cite{Corning_SMF28e}.
+
+ \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\linewidth]{img//Cap2/Enlace.PNG}
+        \caption{Medio o enlace.}
+        \label{fig:Enlace}
+    \end{figure}
+
+La ecuación \ref{eq:compensacion} \cite{Tatiana}, hace posible la compensación gracias al parámetro de dispersión de la fibra empleada, que es multiplicado por la distancia de la fibra en el instante de simulación y multiplicado también por el porcentaje a compensar. Valor que debe ser negativo, puesto que, esta técnica busca neutralizar o compensar la dispersión acumulada en el medio. Este valor calculado debe ser especificado en el módulo compensador, dentro de sus parámetros, como se observa en la Figura \ref{fig:ParametrosRejilla}.
+
+\begin{equation}
+        \text{Compensación}_{\text{Total}} = -\text{Dispersión}_{\text{de la Fibra}} \times \text{Distancia}_{\text{de la Fibra}} \times \% \text{Compensación}
+    \label{eq:compensacion}
+    \end{equation}
+   
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.65\linewidth]{img//Cap2/CompensacionModulo.PNG}
+        \caption{Parámetros de la rejilla de compensación ideal.}
+        \label{fig:ParametrosRejilla}
+    \end{figure}
+
+
+
+
+\subsubsection*{\acrfull{onu}:}%-------------------------------------------------------------->
+
+El receptor de sensibilidad óptica es un componente de vital importancia en la arquitectura de red diseñada, puesto que desempeña un papel fundamental para garantizar la correcta detección y decodificación de las señales ópticas transmitidas a través del enlace de fibra. Es por esto que, su correcta configuración radica en una recepción óptima en términos de rendimiento. En la Figura \ref{fig:rx_CH1}, es posible ver la configuración en la recepción de uno los canales implementados, en su última milla por su naturaleza \acrshort{ftth}, donde conviven distinto elementos que permiten finalizan la comunicación óptica. 
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\linewidth]{img//Cap2/Rx_CH1.PNG}
+            \caption{Configuración para la recepción óptica.}
+            \label{fig:rx_CH1}
+        \end{figure}
+
+En las Figuras \ref{fig:Rxs}, se muestra la configuración de los parámetros de recepción para las distintas tasas de transmisión empleadas en la arquitectura de red. Donde la Figura \ref{fig:Rx_sensi_RZ}, expone los parámetros definidos para el módulo de recepción de sensibilidad óptica, para las tasas de transmisión 2.5, y 10 Gbps que emplean \acrshort{NRZ-OOK} y \acrshort{RZ-OOK}, respectivamente. A su vez, la Figura \ref{fig:Rx_DPSK} muestra la configuración del receptor óptico para la modulación \acrshort{dpsk}, donde se define la tasa de trasmisión, en este caso de 40 Gbps. 
+
+Al establecer una sensibilidad de -30 dBm en la recepción óptica de la arquitectura de red, es posible facilitar la detección y procesamiento de las señales transmitidas, a una potencia relativamente baja. Además, siguiendo las recomendaciones de la ITU-T \cite{ITUG697}, en relación al \acrfull{opm}, los valores de sensiblidad son definidos en términos de potencia mínima requerida para alcanzar una \acrshort{ber} de \(10^{-12}\).
+
+        \begin{figure}[H]
+            \centering
+            % Fila 1: Imagen 1
+            \begin{subfigure}{0.7\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap2/Rx_sensi_RZ.PNG}
+                \caption{Configuración del receptor de sensibilidad óptica.}
+                \label{fig:Rx_sensi_RZ}
+            \end{subfigure}
+            % Fila 1: Imagen 2
+            \begin{subfigure}{0.7\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap2/Rx_DPSK.PNG}
+                \caption{Configuración del receptor \acrshort{dpsk} óptico.}
+                \label{fig:Rx_DPSK}
+            \end{subfigure}
+            \caption{Receptores ópticos de la arquitectura de red, a nivel de simulación.}
+            \label{fig:Rxs}
+        \end{figure}
+
+A manera de resumen, se muestra en la Tabla \ref{tab:ComponentesSistema} la recopilación de parámetros y aspectos propios de la arquitectura de red diseñada a nivel de simulación, expresada en su naturaleza \acrshort{pon}. Esta tabla caracteriza al escenario de simulación incial de la arquitectura de red visible en la Figura \ref{fig:ArqRedInicial}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|>{\centering\arraybackslash}m{6cm}|>{\raggedright\arraybackslash}m{9cm}|}
+        \hline
+        \textbf{\acrfull{olt}} & 
+        \begin{tabular}[t]{@{}l@{}}
+            Láser CW de Onda Continua \\
+            Modulador MZ de Seno Cuadrado \\
+            Modulación: NRZ-OOK, RZ-OOK y RZ-DPSK \\
+            Acceso Nominal: 2.5 Gbps, 10 Gbps, 40 Gbps \\
+            Espaciado de Grillas: 100, 50 y 25 GHz
+        \end{tabular} \\
+        \hline
+        \textbf{\acrfull{odn}} & 
+        \begin{tabular}[t]{@{}l@{}}
+            Distancia del enlace: 60 a 100 Km \\
+            Fibra Corning SMF-28e de 1550 nm \\
+            Rejilla de Compensación Ideal\\
+            Amplificación EDFA\\
+            Combinador 3:1
+        \end{tabular} \\
+        \hline
+        \textbf{\acrfull{onu}} & 
+        \begin{tabular}[t]{@{}l@{}}
+            \acrfull{ftth} \\
+            Distancia última milla de 0.1 Km\\
+            Sensibilidad receptor de -30 dBm\\
+            Filtro Óptico de Coseno Rizado, Filtro Bessel
+        \end{tabular} \\
+        \hline
+    \end{tabular}
+    \caption{Características y aspectos generales de la arquitectura de red \acrshort{MLR-PON}.}
+    \label{tab:ComponentesSistema}
+\end{table}
+
+%A PARTIR DE AQUÍ SE GUARDAN LAS IMÁGENES DE SIMULACIÓN EN CARPETAS
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{img//Cap2/ArqRedInicial.PNG}
+    \caption{Arquitectura de red inicial, a nivel de simulación.}
+    \label{fig:ArqRedInicial}
+\end{figure}
+
+
+%-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+\subsection{Resultados de simulación de la arquitectura de red}
+
+Partiendo del diseño y la construcción de la arquitectura de red establecida, se procede a simular el escenario incial, con la finalidad de obtener valores base que faciliten el planteamiento de casos de estudio y escenarios de simulación, en el análisis del algoritmo para la asignación de canales desigualmente espaciados. Para iniciar, es importante observar el comportamiento de la configuración \textit{Back To Back}, puesto que, permite validar la correcta configuración en la construcción de la red, y el buen planteamiento en el diseño de la misma.  
+
+Las Figuras \ref{fig:B2BSimu} muestran los diagramas de ojo correspondientes a las modulaciones establecidas en los canales ópticos, los cuales emplean distintas tasas de transmisión. Estos diagramas permiten validar la configuración definida en el diseño y construcción, gracias al configuración \textit{Back To Back}, en relación a la transmisión óptica; donde en todos los diagramas, se obtuvo valores máximos de \acrshort{ber} y Factor de calidad Q, como se observa en la Tabla \ref{tab:QyBERB2B}. 
+
+\begin{figure}[H]
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/B4B_NRZ_OOK.PNG}
+        \caption{NRZ-OOK a 2.5 Gbps.}
+        \label{fig:B2B_NRZ}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/B4B_RZ_OOK.PNG}
+        \caption{RZ-OOK a 10 Gbps.}
+        \label{fig:B2B_RZ}
+    \end{subfigure}
+    \hfill
+    % Imagen 3
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/B4B_RZ_DPSK.PNG}
+        \caption{RZ-DPSK a 40 Gbps.}
+        \label{fig:B2B_DPSK}
+    \end{subfigure}
+    \caption{Configuración \textit{Back to Back} de los canales ópticos.}
+    \label{fig:B2BSimu}
+\end{figure}
+
+    \begin{table}[H] 
+            \centering
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                \textbf{Tasa de Tx} & \textbf{Esquema de Modulación} & \textbf{Factor Q}& \textbf{BER}\\ \hline
+                     \textbf{2.5 Gbps}& NRZ-OOK& 40 dB & 1e-40\\ \hline 
+                     \textbf{10 Gbps} & RZ-OOK & 40 dB & 1e-40\\ \hline
+                     \textbf{40 Gbps} & RZ-DPSK& 40 dB & 1e-40\\ \hline
+            \end{tabular}
+            \caption{Valores de Factor Q y BER de la configuración \textit{Back to Back}.}
+            \label{tab:QyBERB2B}
+        \end{table}
+
+Con el objetivo de obtener valores coherentes en base a la configuración preestablecida, se procede a simular la arquitectura de red. En base a la recomendación de la ITU-T G.989.1 \cite{ITUG989_1}, que establece los requisitos generales para las redes \acrshort{pon} de nueva generación con capacidad de 40 Gbps y su alcance, se define un rango de distancia de 60 a 100 Km, que aborda la naturaleza \acrshort{ftth} de la red y su última milla. 
+
+%Además, se establece una post-compensación ideal incial del 100\%, y una ganancia del amplificador \acrshort{EDFA} que inicialmente es 0 dBm. ATENUACIÓN BAJA DEBIDO atenuación fibra 0.20 dB/Km.
+
+En cuanto a la compensación ideal empleada, es necesario tener conocimiento de qué tipo de compensación emplear, y de si realizar una pre-compensación es más conveniente que la post-compensación. Ante la duda, se realizó una comparativa en los resultados de simulación para ambos formas de compensación, donde la post-compensación obtuvo mejores resultados en cuanto a parámetros \acrshort{opm}, específicamente, en los valores de \acrshort{ber}, Factor Q y \acrshort{osnr} (ver \textit{\textbf{ANEXO}}). Por lo que, en busca de una señal robusta, se establece la post-compensación como característica propia de la arquitectura de red. En cuanto al porcentaje de compensación (ver Ecuación \ref{eq:compensacion} y la relación con las tasas de transmisión, se recomienda que \cite{GustavoMaster}: 
+
+    \begin{itemize}
+        \item Para 2.5 Gbps, a una ditancia mínima de 40 Km, se compense en el rango de 20\%-50\%.
+        \item Para 10 Gbps, a una distancia mínima de 50 Km, se compense con el 75\%.
+        \item Para 40 Gbps, a una distancia mínima de 60 Km, se compense al 100\%.
+    \end{itemize}
+
+Por lo anterior, en la Tabla \ref{tab:compensacionInicial} muestra los resultados al variar el porcentaje único de compensación en el medio o enlace de la arquitectura de red. En donde se observa es necesario compensar al 100\%, para garantizar que la dispersión cromática y el ensanchamiento de la señal, se reduzca en gran medida y haya una mejora en la integridad de la señal. Además, este porcentaje de compensación maximiza el Factor Q, que deriva en una mejora en la calidad de la señal, y minimiza el \acrshort{ber}, facilitando la comunicación óptica. Lo anterior, es posible observalo en la Figura \ref{fig:100Comp}, que corresponde al diagrama del ojo del canal con tasa de tranmisión de 40 Gbps, compensada al 100\% a una distancia de 100 Km; y su contraste con los diagramas del ojo previos (\ref{fig:0_5Comp}, \ref{fig:0_75Comp}).
+
+\begin{table}[H]
+\centering
+\scriptsize % Tamaño reducido
+\begin{tabular}{|l|c|c|c|} % Añadimos líneas verticales
+\hline
+\textbf{Canal/Tasa Tx} & \textbf{Compensación [\%]} & \textbf{Factor Q [dB]} & \textbf{BER} \\ \hline
+\multirow{3}{*}{CH1/10 Gbps} & 50  & 10.0649 & 7.00E-04 \\ \cline{2-4}
+                              & 75  & 19.5054 & 5.62E-21 \\ \cline{2-4}
+                              & 100 & 23.525  & 1.00E-40 \\ \hline
+\multirow{3}{*}{CH2/2.5 Gbps} & 50 & 28.5903 & 1.00E-40 \\ \cline{2-4}
+                              & 75  & 28.6522 & 1.00E-40 \\ \cline{2-4}
+                              & 100 & 28.6065 & 1.00E-40 \\ \hline
+\multirow{3}{*}{CH3/40 Gbps}  & 50 & 6.0206  & 2.27E-02 \\ \cline{2-4}
+                              & 75  & 6.0206  & 2.27E-02 \\ \cline{2-4}
+                              & 100 & 33.6218 & 1.00E-40 \\ \hline
+\end{tabular}
+\caption{Resultados al variar el porcentaje de compensación ideal, a una ditancia de 100 Km.}
+\label{tab:compensacionInicial}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/0_5.PNG}
+        \caption{Compensación al 50\%.}
+        \label{fig:0_5Comp}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/0_75.PNG}
+        \caption{Compensación al 75\%.}
+        \label{fig:0_75Comp}
+    \end{subfigure}
+    \hfill
+    % Imagen 3
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/100.PNG}
+        \caption{Compensación al 100\%.}
+        \label{fig:100Comp}
+    \end{subfigure}
+    \caption{Variación en el porcentaje de compensación del canal a 40 Gbps, a una distancia de 100 Km.}
+    \label{fig:Com40Gbps100Km}
+\end{figure}
+
+
+
+
+En la Tabla \ref{tab:parametrosOPMInicial} se muestran los resultados obtenidos de los parámetros \acrshort{opm}, del escenario de simulación inicial. Donde es posible observar dos conceptos de OSNR, real y falsa; ésto es debido a que, la herramienta Optsim mide este parámetro de manera errónea. La OSNR falsa corresponde a la medición desde el piso de ruido, hasta el valor de sensiblidad Rx establecido, en este caso de -30 dBm, lo que deriva en valores altos de OSNR; a su vez, la OSNR real se determina a partir del valor de potencia obtenido en recepción, menos la sensibilidad de -30 dBm. Un ejemplo de ésto está en el primer resultado de la tabla, correspondiente al canal de 10 Gbps a una distancia de 60 Km, donde la potencia Rx es restada con la sensiblidad Rx de -30 dB, obteniendo como resultado una OSNR real de 7.37 dBm. 
+
+        \begin{table}[H]
+        \centering
+        \scriptsize % Tamaño reducido
+        \begin{tabular}{|l|c|c|c|c|c|c|} % Añadimos líneas verticales
+        \hline
+        \textbf{Canal/Tasa Tx} & \textbf{Distancia [Km]} & \textbf{Potencia Rx [dBm]} & \textbf{BER} & \textbf{Factor Q [dB]} & \textbf{OSNR Falsa [dB]} & \textbf{OSNR Real [dB]} \\ \hline
+        \multirow{5}{*}{CH1/10 Gbps} & 60  & -22.6349 & 1e-40 & 36.1405 & 52.395 & 7.37 \\ \cline{2-7}
+                                       & 70  & -24.6117 & 1e-40 & 34.3969 & 48.154 & 5.39 \\ \cline{2-7}
+                                       & 80  & -26.5742 & 1e-40 & 31.3611 & 46.380 & 3.43 \\ \cline{2-7}
+                                       & 90  & -28.4449 & 1e-40 & 27.8330 & 47.873 & 1.56 \\ \cline{2-7}
+                                       & 100 & -30.3052 & 1e-40 & 23.9569 & 48.440 & -0.31 \\ \hline
+        \multirow{5}{*}{CH2/2.5 Gbps} & 60  & -14.3954 & 1e-40 & 32.3243 & 56.677 & 15.60 \\ \cline{2-7}
+                                        & 70  & -16.2886 & 1e-40 & 31.7438 & 56.561 & 13.71 \\ \cline{2-7}
+                                        & 80  & -18.1717 & 1e-40 & 31.7378 & 56.489 & 11.83 \\ \cline{2-7}
+                                        & 90  & -20.0584 & 1e-40 & 29.0730 & 56.436 & 9.94 \\ \cline{2-7}
+                                        & 100 & -21.9480 & 1e-40 & 29.5943 & 56.388 & 8.05 \\ \hline
+        \multirow{5}{*}{CH3/40 Gbps} & 60  & -21.6112 & 1e-40 & 32.0304 & 49.576 & 8.39 \\ \cline{2-7}
+                                       & 70  & -23.6165 & 1e-40 & 32.2678 & 48.124 & 6.38 \\ \cline{2-7}
+                                       & 80  & -25.5375 & 1e-40 & 32.7084 & 49.301 & 4.46 \\ \cline{2-7}
+                                       & 90  & -27.4521 & 1e-40 & 33.2408 & 48.322 & 2.55 \\ \cline{2-7}
+                                       & 100 & -29.3446 & 1e-40 & 33.6339 & 48.512 & 0.66 \\ \hline
+        \end{tabular}
+        \caption{Resultados de los parámetros \acrshort{opm} del escenario inicial de simulación al variar la distancia del enlace.}
+        \label{tab:parametrosOPMInicial}
+        \end{table}
+
+No obstante, este valor de \acrshort{osnr} real para las distintas tasas de transmisión es crítico para ciertas distancias del enlace, especificamente a la distancia de 100 Km. En donde, la \acrshort{osnr} real cae por muy debajo de los 10 dB para los canales 1 (10 Gbps) y 3 (40 Gbps), lo que indica un deterioro significativo de la calidad de la señal.
+Lo anterior se debe a la atenuación presente en la fibra, en donde por cada kilómetro la señal se atenúa apróximadamente 0.20 dB (características fibra Corning SMF-28e \cite{Corning_SMF28e}). Por tanto, es necesario hallar el valor de ganancia permitente del amplificador \acrshort{EDFA}, con el fin de aumentar el valor de \acrshort{osnr} en distancias críticas, y mantenero dentro de un margen aceptable. 
+
+En la Tabla \ref{tab:parametros_desempeno_edfa_actualizados}, se exponen los resultados al variar el valor de ganancia del amplificador \acrshort{EDFA}, dentro del rango de 12 dB hasta los 20 dB. En donde se determina que, implementar un \acrshort{EDFA} post-fibra con una ganancia de 20 dB, mejora sustancialmente el valor de \acrshort{osnr}, en los valores de distancia críticos; reduciendo y mejorando la sensibilidad al ruido en la recepción óptica.
+
+\begin{table}[H]
+\centering
+\scriptsize % Tamaño reducido
+\begin{tabular}{|l|c|c|c|c|c|} % Añadimos líneas verticales
+\hline
+\textbf{Canal/Tasa Tx} & \textbf{Ganancia EDFA [dB]} & \textbf{Potencia Rx [dBm]} & \textbf{Factor Q [dB]} & \textbf{BER} & \textbf{OSNR Real [dB]} \\ \hline
+\multirow{5}{*}{CH1/10 Gbps} & 12 & -18.3169 & 30.5600 & 1e-40 & 11.6831 \\ \cline{2-6}
+                              & 14 & -16.2804 & 31.9832 & 1e-40 & 13.7196 \\ \cline{2-6}
+                              & 16 & -14.3147 & 31.5425 & 1e-40 & 15.6853 \\ \cline{2-6}
+                              & 18 & -12.2725 & 29.8548 & 1e-40 & 17.7275 \\ \cline{2-6}
+                              & 20 & -10.2974 & 31.1407 & 1e-40 & 19.7026 \\ \hline
+\multirow{5}{*}{CH2/2.5 Gbps} & 12 & -9.9510  & 32.1981 & 1e-40 & 20.0490 \\ \cline{2-6}
+                              & 14 & -7.9283  & 31.2408 & 1e-40 & 22.0717 \\ \cline{2-6}
+                              & 16 & -5.9504  & 32.5417 & 1e-40 & 24.0496 \\ \cline{2-6}
+                              & 18 & -3.9541  & 31.8140 & 1e-40 & 26.0459 \\ \cline{2-6}
+                              & 20 & -1.9377  & 31.8819 & 1e-40 & 28.0623 \\ \hline
+\multirow{5}{*}{CH3/40 Gbps} & 12 & -17.3384 & 28.9106 & 1e-40 & 12.6616 \\ \cline{2-6}
+                              & 14 & -15.3459 & 28.7381 & 1e-40 & 14.6541 \\ \cline{2-6}
+                              & 16 & -13.2913 & 29.1707 & 1e-40 & 16.7087 \\ \cline{2-6}
+                              & 18 & -11.3697 & 28.6398 & 1e-40 & 18.6303 \\ \cline{2-6}
+                              & 20 & -9.3362  & 28.6775 & 1e-40 & 20.6638 \\ \hline
+\end{tabular}
+\caption{Resultados de los parámetros \acrshort{opm} del escenario inicial de simulación al variar la ganancia \acrshort{EDFA} del enlace, a 100 Km de distancia.}
+\label{tab:parametros_desempeno_edfa_actualizados}
+\end{table}
+
+Sin embargo, existe una reducción considerable en los valores de Factor Q, que puede estar relacionado con la amplificación de ruido \acrshort{ASE} que genera el \acrshort{EDFA}, que aunque mejora la potencia relativa de la señal y aumenta la OSNR Real, el ruido amplificado puede afectar negativamente el parámetro de Factor Q, incrementando la interferencia en el receptor. No obstante, estas reducciones no se ven reflejadas físicamente en las señales moduladas en la recepción óptica presentes en las Figuras \ref{fig:EnRx}.
+
+\begin{figure}[H]
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/Rx_CH1_2_5Gbps.PNG}
+        \caption{NRZ-OOK a 2.5 Gbps en recepción.}
+        \label{fig:diagramaNRZRx}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/Rx_CH10Gbps.PNG}
+        \caption{RZ-OOK a 10 Gbps en recepción.}
+        \label{fig:B2B_RZ}
+    \end{subfigure}
+    \hfill
+    % Imagen 3
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/Rx_CH3_40Gbps.PNG}
+        \caption{RZ-DPSK a 40 Gbps en recepción.}
+        \label{fig:brere1}
+    \end{subfigure}
+    \caption{Señales moduladas con compensación al 100\%, enlace de 100 Km y amplificación \acrshort{EDFA} de 20 dB.}
+    \label{fig:EnRx}
+\end{figure}
+
+Estas adaptaciones en la red \acrshort{dwdm} son completamente necesarias, puesto que, al no implementarlas la arquitectura se ve afectada en su mayoría por fenóminos del tipo lineal como dispersión, \acrfull{pmd}, atenuación, entre otros. Como el objetivo es visualizar en gran medida el efecto no lineal de \acrfull{fwm}, es necesario contar con una red robusta frente a los fenómenos lineales, por esta razón, emplear un rejillas de compensación ideal y una amplificación en la ganancia de potencia post-compensación, facilita el análisis de \acrshort{fwm} al momento de visualizar de manera comparativa los escenarios de simulación a plantear. 
+
+
+Finalmente, en las Figuras \ref{fig:brere} son expuestos los diagramas del espectro óptico en el dominio de la frecuencia, donde la Figura \ref{fig:PostFibra} representa al espectro a la salida del enlace de fibra óptica y la Figura \ref{fig:PostCompenEdfa} representa al espectro de señal amplificada y compensada con los valor definidos respectivamente. Antes de la compensación, es decir, justo después del enlace de fibra, el espectro es más ruidoso con una distribución espectral difusa y presenta pérdidas de potencia evidente, debido a la técnica de multiplexación \acrshort{wdm} empleada. Después de la compensación, el espectro mejora significativamente, con mayor potencia en las portadoras principales y menos ruido en las frecuencias adyacentes. Ésto indica que las técnicas de mitigación utilizadas, en este caso compensación y amplificación \acrshort{EDFA}, han logrado recuperar gran parte de la señal óptica original, mejorando el parámetro \acrshort{osnr} y permitiendo una transmisión más eficiente en un enlace con distancia de 100 km.
+
+Tras lo propuesto en la Tabla \ref{tab:planFrec1}, donde el espaciado es de 50 y 100 GHz entre los canales, buscando un enfoque en el espaciado desigual, se tiene que con el espaciado de 50 GHz entre los canales de 10 y 2.5 Gbps, es probable que los productos o componentes \acrshort{fwm} generados caigan dentro del espectro del canal de 2.5 Gbps. Lo anterior, debido a que es un canal que presenta niveles inferiores de potencia (ver Tabla \ref{tab:parametrosOPMInicial}) en comparación con los demás canales, lo que genera un degradación en la integridad de la señal en su diagrama de ojo en recepción (ver \ref{fig:diagramaNRZRx}). 
+
+\begin{figure}[H]
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/EspectroPostFibra.PNG}
+        \caption{Espectro óptico a la salida de la fibra óptica.}
+        \label{fig:PostFibra}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/SimulacionInicial/EspectroPostCompen.PNG}
+        \caption{Espectro post compensación y amplificación.}
+        \label{fig:PostCompenEdfa}
+    \end{subfigure}
+    \hfill
+    \caption{Espectros ópticos del escenario inicial de simulación, enlace de 100 Km.}
+    \label{fig:brere}
+\end{figure}
+
+Asimismo, el espaciado más amplio de 100 GHz entre los canales de 2.5 y 40 Gbps, reduce considerablemente la propabilidad de interferencia directa de \acrshort{fwm} entre ellos; no obstante, aún es posible que productos secundarios o componentes del efecto caigan dentro de las bandas útiles del espectro óptico. A pesar del espaciado, el canal con la tasa de transmisión mayor, 40 Gbps, sigue siendo vulnerable a productos \acrshort{fwm}, debido a su alta densidad espectral. Este efecto de \acrshort{xpm} del canal de 40 Gbps podría seguir afectando la calidad de la señal, especialmente si los niveles de potencia son altos, y no hay debida compesanción de dispersión.
+
+Por lo anterior, es pertinente plantear escenarios de simulación que permitan el análisis respectivo del comportamiento y rendimiento de la arquitectura de red, en cuanto a parámetros \acrshort{opm} y efectos lineales como no lineales. Cuando ésta, presenta una asignación de canales desigualmente espaciados, en comparativa, a una asignación de canales tradicional (espaciado simétrico). En busca de contrarrestar el fenómeno de mezcla de cuarta onda \acrshort{fwm}, cuando en la red se presentan múltiples canales con un ensanchamiento varible. Con el fin de dinamizar el proceso de asignación, es propuesto un algoritmo que sea capaz de trabajar en co-simulación con la herramienta OptSim, y que permita la asignación de canales desigualmente espaciados en base a la reglas de Golomb.
+
+\subsection{Diseño y construcción del algoritmo para la asignación de canales desigualmente espaciados} %-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->>>>>>>>>>>>>>>
+Para la elaboración de un algoritmo que permita una asignación de canales desigualmente espaciado, primero se deben tener en claro los aspectos teóricos que fundamentarán la estructura del mecanismo. Para ésto, se retoma la definición sobre las \emph{reglas de Golomb}, abordada en el capítulo uno del presente trabajo. A su vez, se plantea la relación del fenómeno no lineal de \acrfull{fwm} y su relación con las \emph{reglas de Golomb}, con la finalidad de plantear un algoritmo que permita juntar estas dos definiciones para la creación de un mecanismo dinámico en la asignación de canales desigualmente espaciados.
+
+Una \emph{regla de Golomb} puede verse como un tipo especial de regla, donde cada distancia entre dos números, o marcas, es distinta a todas las demás. cuando ésto se cumple para un número determinado de marcas o números, entonces se tiene una \emph{regla de Golomb}. Es decir, cuando un marca se encuentra en la posición 2 y otra en la posición 5, de una \emph{regla de Golomb}, ningún otro par de marcas debe estar separado por una distancia de 3 \cite{Apostolos}. Esta propiedad matématica particular de estos conjuntos de enteros positivos desigualmente espaciados es planteable en la resolución de problemas asociados a la interferencia de señales ópticas \cite{Bansal2021}.
+
+En cuanto al fenómeno no lineal de \acrfull{fwm}, en los sistemas de \acrfull{wdm} cuando las señales a frecuencias \(f_i\), \(f_j\) y \(f_k\) se propagan en la fibra, la interacción no lineal generará nuevos componentes en las frecuencias \((f_i \pm f_j \mp f_k)\) \cite{Singh2013}. Donde,    
+        \begin{equation}
+             f_{ijk} = f_i \pm f_j \mp f_k \quad (i, j \neq k).
+            \label{eq:frequencies1}
+        \end{equation}
+
+Por lo cual, cuando en un sistema \acrshort{wdm} se encuentran presentes \(n\) canales, con \(n\) frecuencias distintas, el número de nuevas componentes en la señal que podrán aparecer estará dado por la ecuación \ref{eq:FWMmin} \cite{Glopez2011}:
+        \begin{equation}
+        NIM = \frac{1}{2}(M^3 - M^2)
+        \label{eq:FWMmin1}
+        \end{equation}
+Donde,
+        \begin{itemize}
+          \item $N_{IM}$: Número máximo posible de componentes FWM generados.
+          \item $M$: Número de señales que se propagan en la fibra.
+        \end{itemize}
+
+        %fin cita MODELAMIENTO
+
+Asimismo, la Tabla \ref{table:fwml} muestra el número total de componentes FWM que pueden aparecer en un sistema \acrshort{dwdm}, cuando son empleados múltiples canales.  %1. Giovanni y Toledo Efectos no lineales en WDMR
+
+        \begin{table}[H]   %1. Giovanni y Toledo Efectos no lineales en WDMR 
+        \centering
+        \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Número de Señales (M)} & \textbf{Nuevas componentes \acrshort{fwm} (NIM)} \\ \hline
+            2 & 2 \\ \hline
+            3 & 9 \\ \hline
+            4 & 24 \\ \hline
+            8 & 224 \\ \hline
+            16 & 1920 \\ \hline
+            32 & 15872 \\ \hline
+            40 & 31200 \\ \hline
+            80 & 252800 \\ \hline
+            160 & 2035200 \\ \hline
+        \end{tabular}
+        \caption{Número de posibles componentes FWM para sistemas DWDM, adaptada de \cite{Glopez2011}.}
+        \label{table:fwml}
+        \end{table}
+
+Lo anterior supone la necesidad de emplear un mecanismo que defina y asigne un plan de frecuencias con un espaciado de canales desigual, en redes \acrshort{dwdm}, basado en las ya estudiadas \textit{reglas de Golomb}. Con el fin de contrarrestar las posibles nuevas componntes por el fenónmeno no lineal de \acrfull{fwm}, cuando el sistema de comuncación óptica presenta un espaciado simétrico. 
+
+En \cite{molina2024}, el autor estudia la relación entre \textit{reglas de Golomb} y la eliminación de la diafonía \acrshort{fwm} en la fibra óptica, planteando un algoritmo para esta elminiación. El algoritmo determina el número de frecuencias que se generan por el efecto no lineal \acrshort{fwm} a partir del número de canales, la \textit{regla de Golomb}, la frecuencia de anclaje y la separación entre canales; además, plantea nuevas frecuencias que se deben asignar en el sistema \acrshort{wdm} en relación a las reglas. Finalmente, realiza una comparación que confirma si existen o no, coincidencias entre las señales del plan y las generadas por \acrshort{fwm}.
+
+Este algoritmo fue adaptado y mejorado, y es visible en las Figuras \ref{fig:algoritmomejorado}; permitiendo ahora crear un plan de frecuencias con espaciado desigual basado en \textit{regla de Golomb}, pero con la nueva característica de que el plan de frecuencias se crea en relación a la frecuencia central 193,1 THz, que supone el estándar ITU-T \cite{itu2020recommendation}. Es decir, el algoritmo adaptado centra las frecuencias asignadas alrededor de la frecuencia central usando las \textit{reglas de Golomb}, para un número de (\( n \)). Además, se han implementado todas las 28 \textit{reglas de Golomb} óptimas que existen, a partir de la tabla \ref{table:OGRs}, del capítulo 1. El algoritmo completo se encuentra en el \textit{\textbf{ANEXO}} del presente trabajo.
+
+\begin{figure}[H]
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/Algoritmo/Diseño/AlgoritmoA.PNG}
+        \caption{Primera parte del algoritmo.}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap2/Algoritmo/Diseño/AlgoritmoB.PNG}
+        \caption{Segunda parte del algoritmo.}
+    \end{subfigure}
+    \hfill
+    \caption{Algoritmo para el espaciamiento desigual del plan de frecuencias a partir de \textit{reglas de golomb}, adaptado de \cite{molina2024}.}
+    \label{fig:algoritmomejorado}
+\end{figure}
+
+El algoritmo presenta una complejidad básica, y tiene como objetivo asignar frecuencias ópticas a los canales en un sistema de comunicaciones basado en la \textit{regla de Golomb}, utilizando espaciados desiguales que minimicen la interferencia causada por el fenómeno no lineal \acrshort{fwm}. Es decir, según el número de canales \( n \), se selecciona la secuencia óptima de Golomb, que define espaciados únicos y desiguales. Además, presenta una función adicional, que calcula y visualiza las frecuencias generadas por FWM (ecuación \ref{eq:frequencies1}), a partir del nuevo plan de frecuencias con \textit{reglas de Golomb}; comparando el nuevo plan con las posible frecuencias \acrshort{fwm} generadas, con el fin de comprobar sí hay coincidencias que puedan causar degradación del sistema. 
+
+Como ejercicio práctico, la Figura \ref{fig:GraficoCoincidencias} muestra en azul el número total de componentes FWM (ecuación \ref{eq:FWMmin1}) que se pueden generar al tener sólo 6 canales ópticos, espaciados a 100 GHz. En rojo, se encuentra el plan de frecuencias definido por el algoritmo en relación a la \textit{regla de Golomb} óptima de 6 marcas (\textit{0, 1, 4, 10, 12 y 17}). Este gráfico permite corroborar la no coincidencia de componentes \acrshort{fwm} en comparación con el plan de frecuencias Golomb generado por el algoritmo de asingación desigualmente espaciado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{img//Cap2//Algoritmo//Diseño/GraficoCoincidencias.PNG}
+    \caption{Frecuencias Golomb vs Frecuencias FWM}
+    \label{fig:GraficoCoincidencias}
+\end{figure}
+
+El desarrollo de este algoritmo inicial adaptado de \cite{molina2024}, permite tener en claro el concepto principal en la definición de un mecanismo que de igual manera permita la asignación de canales desigualmente espaciados, pero con dinamicidad, siendo adaptable a cualquier arquitectura de red de naturaleza o características \acrshort{dwdm}. Por lo pronto, es necesario realizar la configuración previa para la co-simulación entre el software OptSim empleado en la contrucción de la red, y la herramienta Matlab, que tras bambalinas, permite a través de líneas de código dinamizar la interacción del algoritmo y la arquitectura de red, a nivel de simulación. 
+
+
+\subsubsection{Configuración previa para la Co-Simulación entre las herramientas OptSim y Matlab} %-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->>>>>>>>>>>>>>>
+
+Para establecer la co-simulación entre las herramientas OptSim y Matlab se deben tener presentes varios aspectos importantes, entre ellos, la versionamiento de los softwares. La Universidad del Cauca cuenta con la licencia 2010 de la herramienta OptSim, lo que conlleva a tener que trabajar con versiones de Matlab anteriores a las del 2010b, incluyendo esta última. En el presente trabajo se empleó la versión 2007b de Matlab, de 32 bits, el cual es otro aspecto importante a tener en cuenta. Cuando se trabaja con versiones de Matlab de 64 bits, al momento de simular indica que el software Matlab no se encuentra instalado; lo que supone su incompatibilidad. A su vez, la Universidad del Cauca y su licenciamiento de la herramienta MAtlab, facilita la obstención de cualquiera de las versiones que se requieran para el desarrollo investigativo y educativo.
+
+Según la guía usuario de OptSim \cite{OptSimUserGuide}, la herramienta permite la personalización de componentes extendiendo la biblioteca de componentes; donde un programa ejecutable externo, como Matlab, tiene la posibilidad de convertirse en un componente propio de OptSim, siendo gestionable para todas las capacidades del editor y simulador de la herramienta. Esta sección describe cómo realizar la configuración previa del \acrfull{ccm} para la creación del mecanismo dinámico para la asignación de canales desigualmente espaciados. En base a la guía presentada por la herramienta, y al proceso de configuración en el anexo de \cite{Zemanate2018}, se procede a realizar la configuración del componente \acrshort{ccm}.
+
+A continuación, se describe el paso a paso de la configuración realizada para la co-simulación entre las herramientas OptSim y Matlab \cite{OptSimUserGuide}\cite{Zemanate2018}:
+
+\begin{enumerate}
+    \item El paso inicial a realizar, es definir y especificar a la versión de Matlab que se encuentra instalada en el equipo. Esto se realiza haciendo click en la pestaña "\textit{Options}", ubicada en la parte superior de la interfaz del programa, y luego seleccionando la única opción disponible "\textit{Preferences}". En el lado izquierdo de la ventana desplegada (Figura \ref{fig:paso1}), se selecciona el apartado \textit{Matlab setup}, donde se define la versión de Matlab que se desea trabajar en conjunto con OptSim.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.65\linewidth]{img/Cap2/Algoritmo/ConfCCM/1.jpg}
+            \caption{Paso 1: Selección de la versión de Matlab.}
+            \label{fig:paso1}
+        \end{figure}
+
+    \item Teniendo un proyecto (\textit{Sample-Mode o Block-Mode}) abierto, se procede a hacer la configuración del \acrfull{ccm}. Para ésto, se selecciona el botón \textit{CCM Wizard} en la parte superior de la interfaz, como se observa en la Figura \ref{fig:paso2}. 
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.65\linewidth]{img/Cap2/Algoritmo/ConfCCM/2.jpg}
+            \caption{Paso 2: Abrir \textit{CCM Wizard}.}
+            \label{fig:paso2}
+        \end{figure}
+
+    \item Con lo anterior, se despliega la ventana \textit{CCM Wizard} (Figura \ref{fig:paso3}) que contiene la configuración necesaria para la creación del módulo personalizable \acrshort{ccm}. Es importante que, se seleccione la opción \textit{Current} en el apartado \textit{Target Dictory}, ya que con ésto se indica que OptSim utilizará el directorio actual como el destino para guardar resultados, archivos intermedios o datos de salida generados durante la ejecución o simulación. Se dejan habilitados también ambos estilos de simulación \acrshort{spt} y \acrshort{vbs}. Finalmente, se recomienda dejar \textit{MATLAB} como prefijo, para diferenciarlo al momento de que se cree el archivo en la carpeta del proyecto. 
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.65\linewidth]{img/Cap2/Algoritmo/ConfCCM/3.jpg}
+            \caption{Paso 3: configuración general del módulo \acrshort{ccm}.}
+            \label{fig:paso3}
+        \end{figure}
+
+    \item La sección \textit{Sources} permite la generación en automático de los archivos necesarios para la simulación (\textit{Help file, SPT file, VBSp file y VBS file}, si la opción \textit{Generate} se encuentra seleccionada (Figura \ref{fig:paso4}). Siendo \textit{VBS file} el archivo madre de mayor importancia; si éste se deja en la opción \textit{Generate}, el archivo base en formato \textit{.m} de MATLAB para la simulación \acrshort{vbs} se generará a partir del asistente \textit{CCM Wizard}, utilizando una plantilla de OptSim.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.65\linewidth]{img/Cap2/Algoritmo/ConfCCM/4.jpg}
+            \caption{Paso 4: Generación automática de los archivos fuente.}
+            \label{fig:paso4}
+        \end{figure}
+
+    \item  Con la opción \textit{Import}, la rutina \textit{.m} de MATLAB que realiza la simulación \acrshort{vbs} se copiará desde el archivo que se importe y especifique en el campo ubicado a la derecha. Para ésto, es necesario seleccionar el archivo \textit{.m} que se desee implementar (Figura \ref{fig:paso5}), desde su ubicación exacta.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.65\linewidth]{img/Cap2/Algoritmo/ConfCCM/5.jpg}
+            \caption{Paso 5: Importación archivo \textit{.m} de Matlab.}
+            \label{fig:paso5}
+        \end{figure}
+
+    \item La sección \textit{IO Signals} permite configurar el tipo y la cantidad de conexiones de entrada y salida del \acrshort{ccm}. La Figura \ref{fig:paso6} muestra las conexiones realizadas. Para agregar una nueva conexión se hace click en el botón \textit{Add}, donde se debe elegir el tipo de señal (óptica o eléctrica) y definir el nombre de la conexión.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.65\linewidth]{img/Cap2/Algoritmo/ConfCCM/6.jpg}
+        \caption{Paso 6: Definición entradas y salidas del \acrshort{ccm}.}
+            \label{fig:paso6}
+        \end{figure}
+
+    \item La sección \textit{Parameters} permite configurar los parámetros del \acrshort{ccm}. Donde para cada parámetro es necesario especificar el nombre, el tipo de dato, la unidad y el valor predeterminado. El botón \textit{Add} (Figura \ref{fig:paso7}) desplega una ventana abre la ventana de diálogo que permite definir los parámetros del \acrshort{ccm}, donde también es posible eliminar (\textit{Remove}), modificar (\textit{Modify}) o cambiar de posición los parámetros (\textit{MoveUp-MoveDown}).
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.65\linewidth]{img/Cap2/Algoritmo/ConfCCM/7.jpg}
+        \caption{Paso 7: Definición de parámetros del \acrshort{ccm}.}
+            \label{fig:paso7}
+        \end{figure}
+
+    \item Una vez definido los códigos fuente, los parámetros y las señales de entrada y salida del \acrfull{ccm}, es seguro confirmar y aplicar la configuración; donde se desplegará una ventana mensaje confirmando la creación de los archivos de simulación necesarios. 
+
+    \item Ahora, es necesario cargar la configuración realizada en el módulo \acrshort{ccm} a nivel de interfaz. En los componentes \textit{Sample-Mode} es posible encontrar el módulo \acrshort{ccm}, especificamente en el partado de \textit{Custom Models}, como se observa la Figura \ref{fig:paso8}, se arrastra el componente a la interfaz del proyecto creado. 
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.55\linewidth]{img/Cap2/Algoritmo/ConfCCM/8.jpg}
+        \caption{Paso 8: Módulo \acrshort{ccm} en la interfaz del proyecto.}
+            \label{fig:paso8}
+        \end{figure}
+
+    \item Para cargar la configuración realizada al módulo \acrshort{ccm}, es necesario especificar el diseño realizado, de la misma manera en que se especifica el tipo de fibra a emplear. Es decir, al abrir las propiedades el \acrshort{ccm} se desplegará una ventana (Figura \ref{fig:paso9}), donde se debe cargar (\textit{Load}) el archivo recién creado, que es identificable gracias al pre-fijo MATLAB establecido. Posterior a ésto, se aplica y se confirma la configuración.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\linewidth]{img/Cap2/Algoritmo/ConfCCM/9.jpg}
+        \caption{Paso 9: Carga del archivo que contiene la configuración realizada.}
+            \label{fig:paso9}
+        \end{figure}
+
+    \item Finalmente, OptSim aplicará la configuración realizada. En la Figura \ref{fig:paso10} se visualizán las señales de entrada y salida previamente definidas, tanto en el módulo como en la ventana de configuración del \acrfull{ccm}.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.65\linewidth]{img/Cap2/Algoritmo/ConfCCM/10.jpg}
+        \caption{\acrfull{ccm}.}
+            \label{fig:paso10}
+        \end{figure}
+
+    \item \textit{\textbf{Opcional: }} La activación del \textit{console-mode} (Figura \ref{fig:paso10}) abre una consola de MATLAB y pausa la ejecución. De esta manera, es posible inspeccionar los valores de entrada de la señal, ejecutar la rutina o realizar otros cálculos, e inspeccionar los valores de salida de la señal antes de devolver el control al simulador de OptSim. Esta es una característica muy útil para depurar el CCM en las primeras etapas de desarrollo \cite{OptSimUserGuide}.
+
+\end{enumerate}
+
+El proceso de simulación de OptSim realiza la simulación del proyecto hasta que la señal en propagación alcanza el CCM. Después de esta acción, se inicia el motor de MATLAB, pasa la señal vectorial de entrada y ejecuta la rutina de MATLAB asociada con el componente. La rutina de MATLAB realiza la función de transferencia personalizada en la señal vectorial de entrada y escribe la señal vectorial de salida. Una vez que finaliza, el proceso de simulación de OptSim toma esta señal vectorial de salida y continúa la simulación del proyecto \cite{OptSimUserGuide}.
+
+
+
+\subsection{Mecanismo dinámico para la asignación de canales desigualmente espaciado} %-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->>>>>>>>>>>>>>>
+
+En esta sección, se describe el algoritmo utilizado para la asignación dinámica de canales en una red óptica DWDM utilizando un espaciado desigual entre canales, implementado mediante reglas de Golomb. A través de la integración entre MATLAB y OptSim, se ha logrado simular el comportamiento de los canales y estudiar los efectos de interferencia espectral, como el FWM (Four-Wave Mixing). Este mecanismo dinámico fue implementado en MATLAB y se integró con el entorno de simulación OptSim a través del módulo CCM. Para la implementación del mecanismo, se utilizó un código base proporcionado al inicio del desarrollo, el cual establece la estructura básica para la asignación dinámica de canales. A continuación, se detalla el proceso de adaptación y mejora del código para cumplir con los objetivos de esta tesis.
+
+\subsubsection{Definición de Parámetros Iniciales}
+
+El proceso comienza con la definición de parámetros esenciales como el número de canales, el espaciado entre ellos y la frecuencia central de la red óptica. Estos parámetros son recibidos desde OptSim y son utilizados para calcular las frecuencias de los canales según las reglas de Golomb. El siguiente fragmento de código muestra cómo se inicializan estos parámetros y se selecciona la secuencia adecuada de Golomb en función del número de canales:
+
+\section{ESCENARIOS DE SIMULACIÓN}
+
+El análisis del desempeño de la red se plantea bajo tres escenarios de simulación diseñados para evaluar la efectividad de diferentes estrategias de asignación de frecuencias en la reducción de la \acrfull{fwm}. Cada escenario incluye dos casos de estudio, diferenciados por la cantidad y las características de los canales ópticos utilizados. A continuación, de manera gráfica en la Figura \ref{fig:casosE}, se detallan los escenarios y casos de estudio planteados:
+%TEXTO CORTO
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.99\linewidth]{img//Cap2/Mapa conceptual642.png}
+    \caption{Escenarios de simulación y casos de estudio.}
+    \label{fig:casosE}
+\end{figure}
+
+
+%RESUMEN TALVEZ CAPÍTULO 

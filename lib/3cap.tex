@@ -1,0 +1,1075 @@
+\chapter[ANÁLISIS DEL DESEMPEÑO]{\Large ANÁLISIS DEL DESEMPEÑO DEL ALGORITMO PROPUESTO}
+\label{chap3:anailisis}
+
+
+El análisis comparartivo del efecto de \acrfull{fwm} concierne para tres escenarios de simulación en especial, con sus respectivos casos de estudio, como se planteó al final del capítulo anterior (ver Figura \ref{fig:casosE}). En donde prima el escenario que plantea la inclusión del mecanismo dinámico, en su objetivo de contrarrestar los efectos de \acrshort{fwm}. Sin embargo, los dos escenarios iniciales planteados permiten generar bases sólidas que facilitan el análisis comparativo, con la finalidad de observar cómo influye una asignación de canales desigualmente espaciados que genera el algoritmo con enfoque en las \textit{reglas de Golomb}, en una red de \acrfull{MLR-PON}.
+
+Los parámetros del \acrfull{opm} facilitan el análisis comparativo, al medir el rendimiento e integridad de las redes ópticas \acrshort{dwdm}; los resultados de éstos parámetros, tales como el Factor Q, la \acrshort{ber} y la \acrshort{osnr}, son cruciales para definir una postura frente a los escenarios de simulación. Además, cómo se estudió a lo largo del proyecto de investigación, es necesario analizar el efecto \acrshort{fwm} frente a los aspectos que lo deforman en gran medida, como el número de canales en la red \acrshort{dwdm}, la separación entre ellos, y los niveles de potencia en la transmisión. 
+
+
+\section{ESCENARIO 1, ASIGNACIÓN DE CANALES EQUIDISTANTES}
+
+En base al diseño y construcción de la arquitectura de red a nivel de simulación, son planteados, en la Tabla \ref{table:caractEsc1}, las características del escenario uno. El aspecto primordial de este escenario es su asignación de canales con espaciado equidistante, en una red de tipo \acrshort{MLR-PON}. Esta asignación es comúnmente implementada, siguiendo las recomendaciones de la ITU-T, que define los estándares para redes \acrshort{dwdm}, como en el caso en particular. La simplicidad de generar un plan de frecuencias con espaciado equidistante facilita la planificación y gestión de la red. 
+
+
+\begin{table}[H]   %1. Giovanni y Toledo Efectos no lineales en WDMR 
+        \centering
+        \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Características} & \textbf{Descripción} \\ \hline
+            Modulación - 2.5 Gbps & NRZ-OOK \\ \hline
+            Modulación - 10 Gbps  & RZ-OOK \\ \hline
+            Modulación - 40 Gbps  & RZ-DPSK \\ \hline
+            Canales - OLT         & 6 y 12 \\ \hline
+            Espaciado de Canal   & 25-50-100 GHz \\ \hline             
+            Distancia de Enlace   & 100 Km \\ \hline
+            Amplificación EDFA    & 20 dBm \\ \hline
+            Potencia Tx           & 0 dBm \\ \hline
+            Compensación          & Ideal \\ \hline
+            Fibra Corning SMF-28e & 1550 nm \\ \hline
+            
+        \end{tabular}
+        \caption{Características generales del \textit{Escenario Uno}.}
+        \label{table:caractEsc1}
+        \end{table}
+
+Para la definición de los planes de frecuencia del escenario en los diferentes casos de estudio, se recurre a la recomendación ITU-T G.694.1 \cite{itu2020recommendation}. Partiendo de una frecuencia central de 193.1 THz, y espaciamiento de 25, 50 y 100 GHZ, los planes de frecuencia estarán regidos por las siguientes ecuaciones:
+
+    \begin{align}
+        25 \, \text{[GHz]} &= 193.1 + n \times 0.025 \, \text{[THz]} \label{eq:25GHz} \\
+        50 \, \text{[GHz]} &= 193.1 + n \times 0.05 \, \text{[THz]} \label{eq:50GHz} \\
+        100 \, \text{[GHz]} &= 193.1 + n \times 0.1 \, \text{[THz]} \label{eq:100GHz}
+    \end{align}
+
+Donde \( n \) puede ser positivo o negativo (ej: \( n = -2, -1, 0, +1, +2 \)), y define el canal central cuando \( n = 0 \). Estas fórmulas se emplean para la asignación de canales con espaciado equidistante, a lo largo de todo el escenario de simulación, y sus respectivos casos de estudio.
+
+Asimismo, existen algunas consideraciones en relación a las opciones que brinda la herramienta a la hora de simular. Como el objetivo es un análisis comparativo los escenarios planteados en relación al efecto de \acrshort{fwm}, se tienen en cuento los siguientes aspesctos: 
+
+    \begin{itemize}
+        \item Inicialmente se realizan simulaciones iniciales con \textit{VBS Only Loss Fiber} para validar el diseño y comportamiento del sistema.
+        \item Luego, se utiliza \textit{VBS Full} para evaluar la efectividad del escenario, frente a fenómenos no lineales, en escenarios más realistas.
+    \end{itemize}
+
+Por lo anterior, este planteamiento es aplicable en todos los escenarios y casos de estudio planteados a lo largo de la investigación.
+
+
+
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection{Caso de estudio 1 - 6 canales: 2 canales de 40 Gbps, 2 canales de 10 Gbps y 2 canales de 2.5 Gbps}
+
+A partir de la ecuación \ref{eq:25GHz}, se realiza el plan de frecuencia para el presente caso de estudio. La asignación de frecuencias para distintos canales se muestra en la Tabla \ref{tab:planFrec1}, donde se especifican también las tasas de transmisión. La forma de dejar los canales de mayor capacidad y mayor tasa de trasmisión a los extremos del enlace óptico, es tomada de \cite{Tatiana}, donde definen que ubicar de esta forma evita deformarciones en la recepción óptica, y mantiene la integridad de la red \acrshort{dwdm}. Por lo que, para todos los casos de estudio emplea esta aplicación, para la ubicación de los canales con mayor tasa de transmisión a los estremos del espectro óptico. 
+
+    \begin{table}[H] 
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{Canal} & \textbf{Tasa de Tx [Gbps]} & \textbf{Frecuencia Central [THz]} \\ \hline
+            \textbf{CH1}   &  40                           & 192.8                            \\ \hline
+            \textbf{CH2}   &  10                           & 192.9                            \\ \hline
+            \textbf{CH3}   &  2.5                           & 193.0                            \\ \hline
+            \textbf{CH4}   &  2.5                           & 193.1                            \\ \hline
+            \textbf{CH5}   &  10                          & 193.2                            \\ \hline
+            \textbf{CH6}   &  40                           & 193.3                            \\ \hline
+        \end{tabular}
+        \caption{Plan de frecuencias inicial del Escenario 1 - Caso de estudio 1.}
+        \label{tab:planFrec1}
+    \end{table}
+
+Considerando que, según la teoría estudiada, existen cuatro aspectos de mayor incidencia en el efecto no lineal de \acrfull{fwm}, los cuales son: número de canales, separación de canales, niveles de potencia y coeficiente de dispersión cromática; se plantea basar el análisis en los primeros tres aspectos, pues se consideran los de mayor influencia cuando se trata de \acrshort{fwm}, y demás fenómenos no lineales. Asimismo, siguiendo la línea del estándar ITU-T \cite{ITU2016GSup39} \cite{ITUG697}, en cuanto a parámetros \acrshort{opm}, son definidos los valores de referencia para el factor Q y la \acrshort{ber}. Donde, la \acrshort{ber} debe ser menor o igual a \(10^{-12}\), y su correspondiente Factor Q \(\approx \) 7, siendo éstos, valores teóricos de referencia. Lo anterior, es replicado a lo largo del desarrollo de los casos de estudio para cada escenario planteado. 
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\linewidth]{img/Cap3/ESC_1/Caso_1/RED_Esc1Caso1.jpg}
+            \caption{Red del caso de estudio 1 - Escenario 1.}
+            \label{fig:RED_Esc1Caso1}
+        \end{figure}
+
+    
+
+\subsubsection{Desempeño del Caso de Estudio 1 - Escenario 1}
+
+Al tener un enfoque incial ajustando la simulación en \textit{VBS Only Loss Fiber}, se reduce la complejidad del modelo, considerando únicamente la atenuación de la fibra. Esto permite que, los resultados iniciales sean fáciles de interpretar, puesto que, no son tomados en cuenta efectos adicionales como dispersión y no linealidades. Este es un aspecto importante para detectar errores iniciales y ahorrar tiempo en ajustes posteriores.
+Dado que, lo que se busca es un análisis detallado de la asignación de canales utilizando reglas de Golomb para mitigar interferencias como FWM, esta etapa inicial asegura que los fundamentos del sistema (asignación de frecuencias y diseño general) estén correctos antes de avanzar a simulaciones más detalladas. 
+
+En la Tabla \ref{tab:parametros_desempeno_canales_Esc1_Cas1} se muestran los resultados del escenario uno de simulación, donde el espectro óptico está compartido por: 2 canales con una tasa de transmisión de 40 Gbps, y un esquema de modulación de RZ-DPSK; 2 canales a 10 Gbps y un esquema RZ-OOK; y por dos canales a 2.5 Gbps con NRZ-OOK. siendo en total 6 canales con espaciado entre frecuencias equidistantes. Para el análisis de resultados se ha planteado una distancia mínima de 60 Km, y una distancia máxima que sobrepasa los 100 Km; acorde a la compensación cromática del 100\% para el esquema de modulación RZ-DPSK. Lo anterior, busca plantear una distancia que permita facilitar el análisis comparativo entre los casos de estudio para cada escenario de simulación. Cabe mencionar que los resultados brindados a continuación, sólo se eligió un canal por cada tasa de transmisión, dependiendo de la información análitica que brindara (Tabla completa en \textbf{\textit{ANEXOS}}).
+
+\begin{table}[H]
+\centering
+\scriptsize % Tamaño reducido
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Canal/} & \textbf{Distancia} & \textbf{Potencia Rx} & \textbf{BER} & \textbf{Factor Q} & \textbf{OSNR Real} \\ 
+\textbf{Tasa Tx} & \textbf{[Km]} & \textbf{[dBm]} & & \textbf{[dB]} & \textbf{[dB]} \\ \hline
+\multirow{6}{*}{CH1/40 Gbps} & 60  & -4.8256  & 1e-40 & 32.6958 & 25.1744  \\ \cline{2-6}
+                              & 70  & -6.8836  & 1e-40 & 32.6513 & 23.1164 \\ \cline{2-6}
+                              & 80  & -8.9442  & 1e-40 & 29.8323 & 21.0558 \\ \cline{2-6}
+                              & 90  & -10.9999 & 1e-40 & 28.2938 & 19.0001 \\ \cline{2-6}
+                              & 100 & -13.0246 & 1e-40 & 26.3209 & 16.9754 \\ \cline{2-6}
+                              & 110 & -15.0496 & 1e-40 & 25.0673 & 14.9504 \\ \hline    
+                              
+\multirow{6}{*}{CH5/10 Gbps} & 60  & -6.6089  & 1,5922e-30 & 21.2562 & 23.3911 \\ \cline{2-6}
+                              & 70  & -8.6280  & 7,0184e-29 & 21.0053 & 21.3720 \\ \cline{2-6}
+                              & 80  & -10.7137 & 1,7869e-28 & 20.9393 & 19.2863 \\ \cline{2-6}
+                              & 90  & -12.7630 & 1,2341E-25 & 20.3560 & 17.2370 \\ \cline{2-6}
+                              & \textbf{100} & \textbf{-14.8115} & \textbf{5,4355E-20} & \textbf{19.1606} & \textbf{15.1885} \\ \cline{2-6}
+                              & 110 & -16.8491 & 3,8429E-18 & 18.9230 & 13.1509 \\ \hline
+
+\multirow{6}{*}{CH4/2.5 Gbps} & 60  & 1.6091   & 1e-40 & 40.0000 & 31.6091 \\ \cline{2-6}
+                               & 70  & -0.4429  & 1e-40 & 40.0000 & 29.5571 \\ \cline{2-6}
+                               & 80  & -2.5058  & 1e-40 & 38.5968 & 27.4942 \\ \cline{2-6}
+                               & 90  & -4.5765  & 1e-40 & 35.6574 & 25.4235 \\ \cline{2-6}
+                               & 100 & -6.6101  & 1e-40 & 35.4211 & 23.3899 \\ \cline{2-6}
+                               & 110 & -8.6209  & 1e-40 & 34.2651 & 21.3791 \\ \hline
+\end{tabular}
+\caption{Resultado de parámetros \acrshort{opm} al variar la distancia del enlace; caso de estudio 1 del escenario 1.}
+\label{tab:parametros_desempeno_canales_Esc1_Cas1}
+\end{table}
+
+La amplificación \acrshort{EDFA} de 20 dB según las especificaciones del escenario uno de simulacion, presenta un impacto en la reducción de la atenuación en la potencia de recepción. Se observa que, la potencia recibida para cada canal disminuye a medida que la distancia del enlace aumenta, debido a la atenuación de la fibra Corning implementada (apróximadamente 0.20 dB por kilómetro \cite{Corning_SMF28e}). Por ejemplo, para el canal 1 con una tasa de transmisión de 40 Gbps, la potencia varía de $-4.8256$ dBm a $-15.0496$ dBm al aumentar la distancia de 60 km a 110 km. Lo cual, refleja la capacidad del sistema para mantener las señales detectables para enlaces de grandes longitudes, a pesar de las pérdidas ópticas por atenuación. Asimismo, la \acrshort{osnr} decrece con la distancia debido al incremento relativo del ruido óptico con respecto a la señal. Esto parametro es importante para determinar el impacto del ruido óptico en la calidad de la señal en escenarios realistas. Estos valores serían críticos si no se compensara la atenuación con la técnica de amplificación de ganancia EDFA. Sin embargo, es importante no amplificar de más, implica también incrementar el ruido del sistema, siendo 20 dB un valor óptimo de amplificación. 
+
+En cuanto a los parámetros \acrshort{opm} de Factor Q y \acrshort{ber}, que reflejan la calidad del sistema, se observa que de manera general, se encuentran muy por éncima de los valores mínimos pactados teóricamente (\( Q \approx 7.03 \) y \acrshort{ber} de \(10^{-12}\)) por la recomendación ITU-T \cite{ITU2016GSup39} \cite{ITUG697}. Lo cual, denota que la degradación inducida por la atenuación y el ruido óptico no está cerca de superar el umbral de corrección del sistema. 
+
+Para los canales representados en la Tabla \ref{tab:parametros_desempeno_canales_Esc1_Cas1}, se presenta una tendencia decreciente significativa del Factor Q, siendo el canal con mayor tasa de transmisión (canal 1 - 40 Gbps) el que presenta una mayor afectación en relación a este parámetro, presentando una caída de más de 7 dBm, a lo largo de la variación en la distancia del enlace (60 a 110 Km). A su vez, un caso especial de análisis se presenta en el canal 5 de 10 Gbps, donde hay un incremento notable en la probabilidad de error de bit, en las distancias más largas. Especificamente hablando, el canal sufre un aumento importante en la \acrshort{ber} cuando el enlace pasa de 90 a 100 Km de distancia, lo que supone un punto a considerar cuando en la simulación sean tomados en cuenta todos los efectos lineal y no lineales en el enlace óptico. Este aumento puede estar relacionado la cercanía (ver Tabla \ref{tab:planFrec1}) que tiene el canal 5 (10 Gbps) con el canal 6 (40 Gbps); los canales con altas tasas de transmisión tienen una mayor densidad espectral de potencia, por lo que, es probable que se haya generado interferencia no deseada entre canales adyacentes, ya sea por la gran densidad espectral que aporta el canal 6 o por las diferencias en las velocidades de propagación pueden provocando el solapamiento de la señal del canal 5 (10 Gbps).
+
+En relación a lo sucedido con el canal de 10 Gbps y los resultados relacionados a los parámetros \acrshort{opm}, es importante el análisis del enlace a una distancia de 100 Km objetivo, con el fin de analizar los efectos no lineales, en especial la \acrshort{fwm}, cuando el sistema se simule con todas las mediciones posibles (\textit{VBS Full}). Asimismo, el estudio previo permitió definir una ganancia del amplificador \acrshort{EDFA} de 20 dBm, con tal de generar integridad en la red, al mejorar los valores reales de \acrshort{osnr}. Por último, tomando en cuenta que la potencia de transmisión es un aspecto que incide considerablemente en la \acrfull{fwm}, se procede a realizar variaciones simétricas en los niveles de potencia de transmisión, en conjunto con las variaciones en el espaciado de canal. Con el objetivo de validar el rendimiento de la red, con espaciado de canal equidistante, frente a este fenómeno. Por lo cuál, se plantea lo siguiente: 
+
+\begin{itemize}
+    \item Variación en los niveles de Potencia del sistema (PTx = 0, 5, 10, 15, 20, 25 dBm).
+    \item Variación en la separación entre canales (100, 50 y 25 GHz).
+\end{itemize}
+
+Sim enbargo, al realizar la simulación del esceneario en la configuración \textit{VBS Full}, se presentó una incosistencia notable en el canal 1 con esquema de modulación RZ-DPSK. En la Figura \ref{fig:0} se encuentra el diagrama del ojo para el mismo canal, pero en la frecuencia de 192.8 THz, con una disminución en la apertura del ojo notable, en conjunto con una mayor cantidad de ruido superpuesto, evidenciado por marcaciones más gruesas y un cruce menos definido en el centro. Por lo que, fue necesario analizar esta situación que no fue visible al emplear la configuración de simulación \textit{VBS Only Loss Fiber}, pudiendo deducir que, al estar mayormente alejado de la frecuencia de referencia de la fibra (1550 nm), el canal se encuentra más expuesto a fenómenos de tipo lineal y no lineal. Por consiguiente, resulta necesario adaptar el plan de frecuencias para que las grillas se encuentran alrededor de la longitud de onda de referencia, de la fibra Corning SMF-28e \cite{G652de2016} \cite{Corning_SMF28e}.
+
+\begin{figure}[H]
+        \centering
+        % Imagen 1
+        \begin{subfigure}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/0c.jpg}
+            \caption{Canal 1: 40 Gbps, RZ-DPSK en 192.8 THz.}
+            \label{fig:0}
+        \end{subfigure}
+        \hfill
+        % Imagen 2
+        \begin{subfigure}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/0cMejorada.jpg}
+            \caption{Canal 1: 40 Gbps, RZ-DPSK en 193.1 THz.}
+            \label{fig:00}
+        \end{subfigure}
+        \hfill
+        \caption{Diagrama del Ojo para variación en la asignación de frecuencia del canal 1.}
+        \label{fig:000}
+    \end{figure}
+
+Por consiguiente, al replantear el plan de frecuencias para el presente caso de estudio, se presenta una mejora en la visibilidad del diagrama de ojo para el canal 1 con esquema de modulación RZ-DPSK. En la Figura \ref{fig:00}, se acentúa al canal en la frecuencia 193.1 THz, que se encuentra más cercana a la longitud de onda de referencia para la atenuación de la fibra empleada; presentando mejoras notables en los niveles superiores e inferiores de la señal, estando más definido y con una mejor apertura que estando en la frecuencia 192.8 THz. Por lo anterior, en la Tabla \ref{tab:asdfasdf123} se especifica el nuevo plan de frecuencias para el caso de estudio, que presenta el mismo planteamiento, tenido únicamente variación en la asignación de frecuencias.
+
+\begin{table}[H] 
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{Canal} & \textbf{Tasa de Tx [Gbps]} & \textbf{Frecuencia Central [THz]} \\ \hline
+            \textbf{CH1}   &  40                           & 193.1                           \\ \hline
+            \textbf{CH2}   &  10                           & 193.2                           \\ \hline
+            \textbf{CH3}   &  2.5                           & 193.3                           \\ \hline
+            \textbf{CH4}   &  2.5                           & \textbf{193.4 }                          \\ \hline
+            \textbf{CH5}   &  10                          & 193.5                           \\ \hline
+            \textbf{CH6}   &  40                           & 193.6                           \\ \hline
+        \end{tabular}
+        \caption{Nuevo plan de frecuencias del Escenario 1 inicial - Caso de estudio 1.}
+        \label{tab:asdfasdf123}
+    \end{table}
+
+Asimismo, en las Figuras \ref{fig:Esc1C1_OJOScc} se exponen los diagramas de ojo de las señales moduladas en la recepción de la red. Ésto, con el objetivo de realizar comparaciones al momento de afectar la integridad de la señal, cuando sean variados aspectos como la potencia del láser en transmisión, y el espaciado entre canales. A su vez, estos diagramas del ojo son comparables con los diagramas de la configuración Back to Back (ver \ref{fig:B2BSimu}), en transmisión, validando el rendimiento para cada esquema de modulación. 
+
+\begin{figure}[H]
+    \centering
+    % Imagen 1
+    % Imagen 4
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/0a.jpg}
+        \caption{Canal 4 modulado, NRZ-OOK a 2.5 Gbps.}
+        \label{fig:RxCH4E1C1}
+    \end{subfigure}
+    \hfill
+    % Imagen 5
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/0b.jpg}
+        \caption{Canal 5 modulado, RZ-OOK a 10 Gbps.}
+        \label{fig:TxCH5E1C}
+    \end{subfigure}
+    \hfill
+    % Imagen 6
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/0cMejorada.jpg}
+        \caption{Canal 1 modulado, RZ-DPSK a 40 Gbps.}
+        \label{fig:TxCH1E1C}
+    \end{subfigure}
+    
+    \caption{Diagramas de ojo de señales moduladas en recepción.}
+    \label{fig:Esc1C1_OJOScc}
+\end{figure}
+
+
+
+
+
+
+
+
+
+%----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsubsection{Análisis de la \acrshort{fwm} al variar los niveles de potencia del sistema, espaciado de 100 GHz.}
+
+En los Gráficos \ref{fig:GraficosEsc1Cs1_100GHz} se muestran los resultados de simulación de los parámetros \acrshort{opm} \acrshort{ber} y Factor Q (\textit{\textbf{ANEXO}}). Estos resultados están ligados al escenario uno de simulación, para el caso en el que se tienen 6 canales ópticos de naturaleza \acrshort{MLR-PON}; espaciados simétricamente a 100 GHz.  
+
+
+    \begin{figure}[H]
+        \centering
+        % Imagen 1
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/100GHz/BERvsPTx.PNG}
+            \caption{BER vs PTx.}
+            \label{fig:Caso_1/100GHz/BERvsPTx}
+        \end{subfigure}
+        \hfill
+        % Imagen 2
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/100GHz/QvsPTx.PNG}
+            \caption{Factor Q vs PTx.}
+            \label{fig:Caso_1/100GHz/QvsPTx}
+        \end{subfigure}
+        \hfill
+        \caption{Gráficos de parámetros \acrshort{opm} (\acrshort{ber} y Factor Q), variación de la potencia del láser; espaciado 100 GHz, Escenario 1 - Caso 1.}
+        \label{fig:GraficosEsc1Cs1_100GHz}
+    \end{figure}
+
+A través de los gráficos de línea, es posible ver la tendecia y relación entre la variación de los niveles de potencia del láser y la integridad de la señal en cuanto a parámetros \acrshort{opm}. A pesar de que, los niveles de potencia aumentan de manera simétrica, se observa que el sistema se ve realmente afectado cuando el umbral de potencia en transmisión sobrepasa los 20 dBm; es aquí donde ambos canales con tasa de transmisión de 2.5 Gbps (líneas amarilla y verde) decaen por debajo de los valores óbjetivo de \acrshort{ber} y Factor Q (1e-12 y 16.94 dB, respectivamente). Ésto supone el deterioro de la los canales con menor tasa de transmisión cuando un sistema presenta excesivos niveles de potencia. Asimismo, al amplificar la potencia del láser se amplifican los efectos no lineales, donde las frecuencias o componentes \acrshort{fwm} caen directamente sobre los canales 3 y 4, generando una interferencias notables; considerando a su vez, que estos canales se encuentran juntos. Sin embargo, para afirmar lo anterior, es pertienente analizar el espectro óptico, y considerar la generación o no de componentes por la \acrfull{fwm}.
+
+Si bien los canales a 2.5 Gbps son los más afectados al máximo nivel de potencia definido, los canales 1 y 6 a 40 Gbps, presentan disminuciones notorias en sus parámetros de Factor Q y \acrshort{ber}, aproximándose a los valores objetivo mínimos. En los diagramas de ojo de la Figura \ref{fig:Caso_1/100GHz/PTxDiagdeOJOasasas} se expone comparativamente el rendimiento del canal 1 a 40 Gbps cuando se estable una potencia del láser de 10 y 25 dBm, con el fin de analizar el deterioro de la señal. El la Figura \ref{fig:Caso_1/100GHz/25dBmPTxasas} el ojo se encuentra parcialmente cerrado, a diferencia de la Figura \ref{fig:Caso_1/100GHz/10dBmPTx}, mostrando un deterioro significativo en la calidad de la señal; además, las trayectorias del diagrama se encuentran dispersas, lo que deduce interferencia por efectos no lineales, como \acrshort{fwm}. Al tener una tasa de transmisión tan alta como 40 Gbps, se tiene a su vez una ancha densidad espectral en el dominio frecuencial, por lo que, los canales 1 y 6 son más suceptibles a caídas de componentes de interferencia \acrshort{fwm}.
+
+    \begin{figure}[H]
+        \centering
+        % Imagen 1
+        \begin{subfigure}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/100GHz/10dBmPTx.jpg}
+            \caption{Canal 1: 40 Gbps, RZ-DPSK, PTx = 10 dBm.}
+            \label{fig:Caso_1/100GHz/10dBmPTx}
+        \end{subfigure}
+        \hfill
+        % Imagen 2
+        \begin{subfigure}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/100GHz/25dBmPTx.jpg}
+            \caption{Canal 1: 40 Gbps, RZ-DPSK, PTx = 25 dBm.}
+            \label{fig:Caso_1/100GHz/25dBmPTxasas}
+        \end{subfigure}
+        \hfill
+        \caption{Diagramas de Ojo del canal 1 en la variación potencia del láser, espaciado 100 GHz, Escenario 1 - Caso 1.}
+        \label{fig:Caso_1/100GHz/PTxDiagdeOJOasasas}
+    \end{figure}
+
+No obstante, es necesario el análisis del espectro óptico para determinar afectaciones por la \acrfull{fwm}, y observar la generación, o no, de nuevas componentes generadas. En las Figuras \ref{fig:Caso_1/100GHz/espectro100GHzEsc16CHs} exponen el espectro óptico en el dominio de la frecuencia, donde se puede observar las nuevas componentes generadas \acrshort{fwm} a los estremos del ancho de banda de la red \acrshort{MLR-PON}. Las componentes generadas por el fenómeno FWM se superponen con la portadora transmitida, lo que ocasiona las interferencias observadas anteriormente. Además, ambos espectros muestran claramente cómo el incremento de la potencia del láser en transmisión intensifica el efecto no lineal \acrshort{fwm}, determinando su relación directamente proporcial; a mayor nivel de potencia en transmisión, mayor la interferencia por componentes \acrshort{fwm}. Lo anterior, justifica la degradación observada en los canales a 2.5 Gbps y 40 Gbps, específicamente la potencia del láser en 25 dBm, en los parámetros de desempeño \acrshort{opm}. 
+
+Hasta los 10 dBm (señal azul), la compensación oprime la generación visible de las componentes \acrshort{fwm}; sin embargo, cuando los niveles de potencia sobrepasan los 10 dBm, estas componentes se vuelven más pronunciadas, lo que hace más evidente la incidencia del efecto no lineal en las señales ópticas. Cable aclarar, que las anomalías observadas a los bordes del ancho del canal, no se consideran componentes generadas por \acrshort{opm}, puesto que son ensanchamientos propios del esquema de modulación empleado en estos canales, que es RZ-DPSK \cite{transmission_impairments_dw}. Este ensanchamiento o alteración del espectro es simétrica, por lo que en una análisis individual, se replica en ambos lados de la señal en el dominio de la frecuencia. 
+
+
+
+    
+    \begin{figure}[H]
+        \centering
+        % Imagen 1
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/100GHz/Precomp100GHzEsc1.PNG}
+            \caption{Espectro pre-compensación y pre-amplificación.}
+            \label{fig:Caso_1/100GHz/Precomp100GHzEsc110dBm6CHsss}
+        \end{subfigure}
+        \hfill
+        % Imagen 2
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/100GHz/POSTcomp100GHzEsc1.PNG}
+            \caption{Espectro post-compensación y post-amplificación.}
+            \label{fig:Caso_1/100GHz/POSTcomp100GHzEsc125dBm6CHs}
+        \end{subfigure}
+        \hfill
+        \caption{Espéctros ópticos en la variación de potencia del láser, espaciado 100 GHz, Escenario 1 - Caso 1.}
+        \label{fig:Caso_1/100GHz/espectro100GHzEsc16CHs}
+    \end{figure}
+
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsubsection{Análisis de la \acrshort{fwm} al variar los niveles de potencia del sistema, espaciado de 50 GHz.}
+
+La Tabla \ref{tab:planFrec1Esc1Caso1_50GHzasas} muestra el plan de frecuencias definido para la variación de los niveles de potencia, con un espaciado simétrico entre grillas de 50 GHz. Donde la frecuencia de 193.4 THz representa la asignación central por su cercanía a la longitud de onda de la fibra (1550 nm); lo que permite librar al análisis de afectaciones por frecuencias alejadas de esta longitud de referencia.
+
+
+\begin{table}[H] 
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Canal} & \textbf{Tasa de Tx [Gbps]} & \textbf{Frecuencia Central [THz]} \\ \hline
+        \textbf{CH1}   & 40                        & 192.25                            \\ \hline
+        \textbf{CH2}   & 10                        & 193.3                            \\ \hline
+        \textbf{CH3}   & 2.5                       & 193.35                            \\ \hline
+        \textbf{CH4}   & 2.5                       & 193.4                         \\ \hline
+        \textbf{CH5}   & 10                        & 193.45                            \\ \hline
+        \textbf{CH6}   & 40                        & 193.50                            \\ \hline
+    \end{tabular}
+    \caption{Plan de frecuencias con espaciado de 50 GHz centrado en 193.4 THz, Escenario 1 - Caso de estudio 1.}
+    \label{tab:planFrec1Esc1Caso1_50GHzasas}
+\end{table}
+
+Los gráficos de línea de la Figura \ref{fig:ESC_1/Caso_1/50GHz/BERvsPTx50GHz1234} muestran los resultados de los parámetros \acrshort{opm} (Factor Q y \acrshort{ber}), para la variación de potencia en transmisión, al espaciar a 50 GHZ. Donde son demarcados los valores mínimo objetivos (1e-12 para \acrshort{ber} y 16.94 dB para Factor Q), con la finalidad de observar qué canales caen por debajo de lo que dicta la recomendación ITU-T \cite{ITU2016GSup39}.
+
+\begin{figure}[H]
+        \centering
+        % Imagen 1
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/50GHz/BERvsPTx50GHz.PNG}
+            \caption{BER vs PTx.}
+            \label{fig:Caso_1/50GHz/BERvsPTx}
+        \end{subfigure}
+        \hfill
+        % Imagen 2
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/50GHz/QvsPTx50GHz.PNG}
+            \caption{Factor Q vs PTx.}
+            \label{fig:Caso_1/100GHz/QvsPTxqwer}
+        \end{subfigure}
+        \hfill
+        \caption{Graficos de parámetros \acrshort{opm} (\acrshort{ber} y Factor Q), variación de la potencia del láser; espaciado 50 GHz, Escenario 1 - Caso 1.}
+        \label{fig:ESC_1/Caso_1/50GHz/BERvsPTx50GHz1234}
+    \end{figure}
+
+Los resultados obtenidos muestran que el rendimiento de los canales, varía significativamente con el aumento de la potencia del láser. Se reitera lo anteriormente analizado, donde a medida que la potencia del láser en transmisión aumenta, los valores de \acrshort{ber} y Factor de Calidad Q siguen patrones distintos según la tasa de transmisión de cada canal. En el caso de los canales 1 y 6 a 40 Gbps, el aumento de la potencia del láser a 25 dBm genera una degradación significativa en el rendimiento e integridad de las señales. A esta potencia, la BER se incrementa considerablemente, superando ampliamente el valor objetivo de 1e-12 definido por la ITU-T. Además, el Factor de Calidad Q disminuye notablemente, lo que indica que la señal está siendo severamente afectada por los efectos no lineales, como la \acrfull{ICI} y la \acrfull{fwm}. Estos efectos no lineales provocan distorsiones que deterioran la calidad de la señal. Por otro lado, en los canales con menor tasa de transmisión, como CH2 (10 Gbps) y CH5 (2.5 Gbps), inicialmente los valores de \acrshort{ber} y Factor Q se mantienen dentro de los rangos; sin embargo, son suceptibles a los altos niveles de potencia establecidos, siendo los canales 2 y 5 a 10 Gbps, menos robustos en comparación con los canales 3 y 4 a 2.5 Gbps, que tienen parámetros realmente óptimos hasta 20 dBm. 
+
+Disminuir el espaciado entre canales a 50 GHz termina siendo un factor relevante en la contribución de \acrshort{ICI}, y el decaimiento en los parámetros \acrshort{opm}. A medida que la potencia del láser aumenta, la interferencia espectral \acrshort{ICI} entre los canales adyacentes se intensifica, especialmente en los canales 1 y 6 con alta tasa de transmisión (40 Gbps). Este efecto contribuye al deterioro de la señal y al aumento de la \acrshort{ber}, como se observa en los resultados. Aunque, los canales con menor tasa de transmisión muestran una tolerancia mayor a esta interferencia, los canales de mayor velocidad son más sensibles y experimentan un deterioro más pronunciado debido a la mayor densidad espectral. Para visualizar lo mencionado, en las Figuras \ref{fig:Caso_1/50GHz/5dBmPTx123345456}, se expone el comportamiento del canal 1 en representación del diagrama del ojo. Si bien, a los 5 dBm de potencia el ojo presenta una mayor apertura que corresponde a una \acrshort{ber} por encima del nivel objetivo ($5.32e-13$, en \textit{\textbf{ANEXO}}), cuando el nivel llega a 20 dBm, el diagrama de ojo muestra un cierre significativo, correspondiente a una \acrshort{ber} de $3.43e-4$ y un Factor Q de $10.6034$ dBm. Estos valores, se encuentran muy por debajo de los valores objetivo definidos por la ITU-T.
+
+
+\begin{figure}[H]
+    \centering
+    % Imagen 1
+    % Imagen 4
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/50GHz/0dBmCh1.jpg}
+        \caption{Canal 1: 40 Gbps, RZ-DPSK, PTx = 0 dBm.}
+        \label{fig:Caso_1/50GHz/0dBmPTx}
+    \end{subfigure}
+    \hfill
+    % Imagen 5
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/50GHz/5dBmCh1.jpg}
+        \caption{Canal 1: 40 Gbps, RZ-DPSK, PTx = 5 dBm.}
+        \label{fig:Caso_1/50GHz/5dBmPTx}
+    \end{subfigure}
+    \hfill
+    % Imagen 6
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/50GHz/20dBmPreDañoCh1.jpg}
+        \caption{Canal 1: 40 Gbps, RZ-DPSK, PTx = 20 dBm.}
+        \label{fig:Caso_1/50GHz/5dBmPTx123345456}
+    \end{subfigure}
+    
+    \caption{Diagramas de Ojo del canal 1, variación de potencia del láser, espaciado 50 GHz, Escenario 1 - Caso de estudio 1.}
+    \label{fig:ESC_1/Caso_1/50GHz/20dBmPreDañoCh1}
+\end{figure}
+
+Con la finalidad de corroborar lo mencionado anteriormente, en la Figura \ref{fig:Espcetrp260GHZ12312311}, se muestra el espectro post-compensación y post-amplificación, al sufrir las variaciones en los niveles de potencia del láser. Donde se observa un solapamiento entre canales en el ancho de banda del canal, especialmente en los canales de mayor densidad espectral (canal 1 y 6, a 40 Gbps). En este espectro óptico, se observa que, al reducir el espaciado entre canales a 50 GHz, no se visualizan a simple vista las componentes de \acrshort{fwm}. Sin embargo, ésto no significa que el FWM haya desaparecido, por el contrario, es posible que las componentes \acrshort{fwm} generadas se encuentren superpuestas o solapadas con las señales de los canales adyacentes, o dentro del ancho de banda de la red. Con un espaciado equidistante de 50 GHz, los picos de los canales se encuentran tan próximos, que los efectos por \acrfull{ICI} pueden volverse más prominentes que por \acrshort{fwm}. Además, a medida que se reduce el espaciado entre los canales, las posibles componentes \acrshort{fwm} generadas pueden no tener suficiente potencia para ser observados, puesto que, el grado de interacción entre las señales se ve afectado por la proximidad espectral de los canales.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{img/Cap3/ESC_1/Caso_1/50GHz/EspectroSalida50GHz.jpg}    
+    \caption{Espectro óptico post-compensación y post-amplificación, variación de la potencia del láser; espaciado 50 GHz, Escenario 1 - Caso 1.}
+    \label{fig:Espcetrp260GHZ12312311}
+\end{figure}
+
+
+
+
+
+
+\subsubsection{Análisis de la \acrshort{fwm} al variar los niveles de potencia del sistema, espaciado de 25 GHz.}
+
+La Tabla \ref{tab:planFrec25GHz25} muestra el plan de frecuencias definido para la variación de los niveles de potencia, con un espaciado equidistante entre grillas de ahora 25 GHz. Donde la frecuencia de 193.4 THz representa la asignación central por su cercanía a la longitud de onda de la fibra (1550 nm); lo que permite librar al análisis de afectaciones por frecuencias alejadas de esta longitud de referencia. 
+
+
+\begin{table}[H] 
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Canal} & \textbf{Tasa de Tx [Gbps]} & \textbf{Frecuencia Central [THz]} \\ \hline
+        \textbf{CH1}   & 40                        & 193.325                            \\ \hline
+        \textbf{CH2}   & 10                        & 193.35                            \\ \hline
+        \textbf{CH3}   & 2.5                       & 193.375                            \\ \hline
+        \textbf{CH4}   & 2.5                       & 193.4                         \\ \hline
+        \textbf{CH5}   & 10                        & 193.425                            \\ \hline
+        \textbf{CH6}   & 40                        & 193.45                           \\ \hline
+    \end{tabular}
+    \caption{Plan de frecuencias con espaciado de 25 GHz centrado en 193.4 THz, Escenario 1 - Caso de estudio 1.}
+    \label{tab:planFrec25GHz25}
+\end{table}
+
+Los gráficos de la Figura \ref{fig:ESC_1/Caso_1/50GHz/BERvsPTx50GHzzzzz} muestran los resultados de los parámetros \acrshort{opm} (Factor Q y \acrshort{ber}), en la variación de potencia del láser CW, al espaciar a 25 GHZ.  Donde se determina, que con este espaciado en particular, los canales 1 y 6 a 40 Gbps, experimentan una degradación enorme, con extremos valores de \acrshort{ber} altos y de Factor Q bajos, lo que indica que el efecto predominante es la \acrfull{ICI} con su ensanchamiento espectral. Los valores de los parámetros de desempeño definidos para medir la integridad de la señal, se encuentra muy por debajo de los valores objetivo definidos por la recomendación ITU-T. Si bien, los canales 3 y 4 a 2.5 Gbps son robustos frente a las menores variaciones en los niveles de potencia, los canales con mayor densidad espectral y mayor tasa de transmisión presentan desde un inicio degradaciones generales, que repercuten en parámetros \acrshort{opm} lejos de los valores objetivo; en consecuencia de una asignación con espaciado insuficiente.
+
+  \begin{figure}[H]
+        \centering
+        % Imagen 1
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/25GHz/BERvsPTx25GHz.PNG}
+            \caption{BER vs PTx.}
+            \label{fig:Caso_1/50GHz/BERvsPTx}
+        \end{subfigure}
+        \hfill
+        % Imagen 2
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/25GHz/FactorQvsPTx25GHz.PNG}
+            \caption{Factor Q vs PTx.}
+            \label{fig:Caso_1/100GHz/QvsPTx}
+        \end{subfigure}
+        \hfill
+        \caption{Graficos de parámetros \acrshort{opm} (\acrshort{ber} y Factor Q), variación de la potencia del láser; espaciado 25 GHz, Escenario 1 - Caso 1.}
+        \label{fig:ESC_1/Caso_1/50GHz/BERvsPTx50GHzzzzz}
+    \end{figure}
+
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.4\linewidth]{img/Cap3/ESC_1/Caso_1/25GHz/EspectroSalida25GHz.jpg}    
+        \caption{Espectro óptico post-compensación y post-amplificación, variación de la potencia del láser; espaciado 25 GHz, Escenario 1 - Caso 1.}
+        \label{fig:Espcetrp260GHZqwe}
+    \end{figure}
+
+Asimismo, como en el espaciado anteriormente analizado, se evidencia en el espectro de la Figura \ref{fig:Espcetrp260GHZqwe} canales completamente solapados por la \acrfull{ICI}. Este espectro óptico, esclarece la afectación o degradación especial propia de los canales a 2.5 Gbps, donde con una potencia de transmisión general a 25 dBm (señal roja) el ensanchamiento de las señales es excesivo, dificultando en gran medida la recepción óptica de la señal.
+    
+
+
+
+
+\begin{comment}
+      \begin{figure}[H]
+    \centering
+    % Imagen 1
+    % Imagen 4
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/25GHz/CH1_0dBm.jpg}
+        \caption{Canal 1: 40 Gbps, RZ-DPSK, PTx = 0 dBm.}
+        \label{fig:Caso_1/50GHz/0dBmPTx}
+    \end{subfigure}
+    \hfill
+    % Imagen 5
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/25GHz/CH2_10dBm.jpg}
+        \caption{Canal 2: 40 Gbps, RZ-OOK, PTx = 10 dBm.}
+        \label{fig:Caso_1/50GHz/5dBmPTx}
+    \end{subfigure}
+    \hfill
+    % Imagen 6
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_1/25GHz/CH3_20dBm.jpg}
+        \caption{Canal 3: 40 Gbps, NRZ-OOK, PTx = 20 dBm.}
+        \label{fig:Caso_1/50GHz/5dBmPTx}
+    \end{subfigure}
+    \caption{Diagramas de Ojo del canales de menor frecuencia, variación de potencia del láser, espaciado 25 GHz, Escenario 1 - Caso de estudio 1.}
+    \label{fig:ESC_1/Caso_1/50GHz/20dBmPreDañoCh1}
+\end{figure}
+\end{comment}
+
+
+
+
+
+%------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+\subsection{Caso de estudio 2 - 12 canales: 6 canales de 40 Gbps, 4 canales de 10 Gbps y 2 canales de 2.5 Gbps}
+
+En la Tabla \ref{tab:braoak} se define el plan de frecuencias para el presente caso de estudio, donde se especifican las tasas de transmisión para cada canal y su frecuencia asignada. Este plan de frecuencias se adapta a partir de la anomalía ocurrida en el caso anterior, por lo que, la frecuencia central para este plan se determina en 193.4 THz, con el fin de que los canales se encuentren cercanamente centrados alrededor de la longitud de onda de la fibra empleada. Asimismo, se continúa con la aplicación que consta en dejar en dejar los canales con mayor tasa de transmisión a los estremos del ancho de banda del canal, con la finalidad de evitar deformaciones en la recepción óptica que devíen el análisis del presente caso de estudio.
+
+\begin{table}[H] 
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Canal} & \textbf{Tasa de Tx [Gbps]} & \textbf{Frecuencia Central [THz]} \\ \hline
+        \textbf{CH1}   & 40                        & 192.8                             \\ \hline
+        \textbf{CH2}   & 10                        & 192.9                             \\ \hline
+        \textbf{CH3}   & 2.5                       & 193.0                             \\ \hline
+        \textbf{CH4}   & 2.5                       & 193.1                             \\ \hline
+        \textbf{CH5}   & 10                        & 193.2                             \\ \hline
+        \textbf{CH6}   & 40                        & 193.3                             \\ \hline
+        \textbf{CH7}   & 40                        & 193.4                             \\ \hline
+        \textbf{CH8}   & 10                        & 193.5                             \\ \hline
+        \textbf{CH9}   & 2.5                       & 193.6                             \\ \hline
+        \textbf{CH10}  & 2.5                       & 193.7                             \\ \hline
+        \textbf{CH11}  & 10                        & 193.8                             \\ \hline
+        \textbf{CH12}  & 40                        & 193.9                             \\ \hline
+    \end{tabular}
+    \caption{Plan de frecuencias con espaciado de 100 GHz centrado en el CH7 en 193.4 THz.}
+    \label{tab:braoak}
+\end{table}
+
+
+En la Figura \ref{fig:12CHsEquidistantes} se muestra el diseño de la red \acrshort{dwdm} con naturaleza \acrshort{MLR-PON}, la cual consta de 12 canales simétricamente espaciados, con 6 canales a 40 Gbps (RZ-DPSK), 4 canales a 10 Gbps (RZ-OOK) y 2 canales a 2.5 Gbps. Gracias a la descripción incial realizada con respecto al presente escenario, se procede a medir el desempeño del sistema, con el objetivo de formar bases claras que faciliten el análisis del efecto \acrshort{fwm} cuando el sistema presenta el doble de canales. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/Cap3/ESC_1/Caso_2/Desempeño/Red12Canales.jpg}
+    \caption{Red óptica para el caso de estudio 1 - Escenario 1.}
+    \label{fig:12CHsEquidistantes}
+\end{figure}
+
+\subsubsection{Desempeño del Caso de Estudio 2 - Escenario 1}
+
+Considerando únicamente las pérdidas por atenuación en la fibra (\textit{VBS Only Loss Fiber}), se muestran en la Tabla \ref{tab:12341234parametros_desempeno_canales} los resultados (ver \textit{\textbf{ANEXO}}) al variar la distancia del enlace, para un red que presenta un espaciado equidistante de 100 GHz, una compensación total de dispersión, una amplificación \acrshort{EDFA} de 20 dBm, y demás características defínidas en la Tabla \ref{table:caractEsc1}. Para este análisis inicial, se evidencian valores realmente óptimos para los parámetros \acrshort{opm} generales, y una disminución en el desempeño que está directamente relacionada con la atenuación propia de la fibra, como se ha analizado anteriormente. 
+
+Es necesario a su vez, continuar midiendo el rendimiento de los casos de estudio a una distancia de 100 Km, como lo fue el caso anterior, con el fin de facilitar el análisis comparativo al final de la sección, y medir el desempeño con la misma vara. De igual forma, a través de los resultados es posible definir que para distancias mayores a 100 Km, la atenuación degrada progresivamente la señal, lo que supone una afectación en mayor medida al momento de incluir en la simulación todos los fenónmenos ópticos. Por otro lado, al tener una densidad mayormente numérica de canales a 40 Gbps (6 en total), es importante establecer qué rango de frecuencia emplear para el filtro de coseno rizado empleado en la comunicación del esquema de modulación RZ-DPSK, puesto que, estos canales comparten su densidad espectral con espectros hermanos. 
+
+
+
+\begin{table}[H]
+\centering
+\scriptsize % Tamaño reducido
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Canal/} & \textbf{Distancia} & \textbf{Potencia Rx} & \textbf{BER} & \textbf{Factor Q} & \textbf{OSNR Real} \\ 
+\textbf{Tasa Tx} & \textbf{[Km]} & \textbf{[dBm]} & & \textbf{[dB]} & \textbf{[dB]} \\ \hline
+\multirow{6}{*}{CH3/40 Gbps} & 60  & -9.0145  & 1.00e-40 & 26.1918 & 20.9855 \\ \cline{2-6}
+                              & 70  & -11.0356 & 1.00e-40 & 25.4181 & 18.9644 \\ \cline{2-6}
+                              & 80  & -13.0663 & 1.00e-40 & 24.3913 & 16.9337 \\ \cline{2-6}
+                              & 90  & -15.0631 & 1.59e-38 & 23.8335 & 14.9369 \\ \cline{2-6}
+                              & 100 & -17.2039 & 2.12e-29 & 21.5874 & 12.7961 \\ \cline{2-6}
+                              & 110 & -19.2245 & 2.89e-21 & 20.3203 & 10.7755 \\ \hline    
+
+\multirow{6}{*}{CH4/10 Gbps} & 60  & -6.5094  & 1.00e-40 & 27.8884 & 23.4906 \\ \cline{2-6}
+                              & 70  & -8.5578  & 1.00e-40 & 27.5735 & 21.4422 \\ \cline{2-6}
+                              & 80  & -10.6062 & 1.00e-40 & 26.7876 & 19.3938 \\ \cline{2-6}
+                              & 90  & -12.6525 & 1.00e-40 & 25.9380 & 17.3475 \\ \cline{2-6}
+                              & 100 & -14.6802 & 1.00e-40 & 25.0283 & 15.3198 \\ \cline{2-6}
+                              & 110 & -16.7637 & 1.00e-40 & 23.9581 & 13.2363 \\ \hline    
+
+\multirow{6}{*}{CH5/10 Gbps} & 60  & -6.8196  & 1.00e-40 & 34.7889 & 23.1804 \\ \cline{2-6}
+                              & 70  & -8.9232  & 1.00e-40 & 32.8074 & 21.0768 \\ \cline{2-6}
+                              & 80  & -10.9735 & 1.00e-40 & 31.0478 & 19.0265 \\ \cline{2-6}
+                              & 90  & -13.0138 & 1.00e-40 & 29.2672 & 16.9862 \\ \cline{2-6}
+                              & 100 & -15.0752 & 1.00e-40 & 25.7985 & 14.9248 \\ \cline{2-6}
+                              & 110 & -17.1164 & 1.00e-40 & 24.8160 & 12.8836 \\ \hline    
+
+\multirow{6}{*}{CH10/40 Gbps} & 60  & -9.0173  & 1.00e-40 & 29.0595 & 20.9827 \\ \cline{2-6}
+                               & 70  & -11.0716 & 1.00e-40 & 28.1459 & 18.9284 \\ \cline{2-6}
+                               & 80  & -13.0854 & 1.00e-40 & 25.4453 & 16.9146 \\ \cline{2-6}
+                               & 90  & -15.1789 & 1.00e-40 & 24.7504 & 14.8211 \\ \cline{2-6}
+                               & 100 & -17.1589 & 1.00e-40 & 23.0640 & 12.8411 \\ \cline{2-6}
+                               & 110 & -19.2013 & 7.49e-31 & 21.3673 & 10.7987 \\ \hline    
+\end{tabular}
+\caption{Resultados de parámetros al variar las condiciones del enlace.}
+\label{tab:12341234parametros_desempeno_canales}
+\end{table}
+
+
+Las Figuras \ref{fig:espectrosqwefas} muestran los espectros ópticos de los canales 3 y 10 a 40 Gbps, con un filtrado óptico de 80 y 60 GHz, respectivamente. Esta comparación se realiza con el fin de determinar el rango de filtrado adecuado para estos enlaces, los cuales presentan una densidad espectral relativamente más ancha que las demás tasas de transmisión. Debido a su posicionamiento en el espectro óptico general, estos canales comparten la peculiaridad de tener adyacencia con canales a 10 Gbps y, a su vez, con canales a 40 Gbps. Por ello, es fundamental definir un rango de filtrado óptimo para no comprometer la integridad de las señales. En los espectros de la Figura \ref{fig:Casoxzzz}, con un filtrado de 80 GHz, la señal verde representa al espectro a una distancia de 60 km. En este caso, se observa que un rango de filtrado demasiado amplio facilita la detección de niveles de potencia no deseados provenientes de señales adyacentes. 
+
+Asimismo, el espectro rojo representa la señal a 110 km (Figura \ref{fig:Casoxzzz}), donde la sensibilidad del receptor de -30 dBm no logra detectarla debido a la atenuación acumulada a lo largo de más de cien kilómetros. Por otro lado, en la Figura \ref{fig:Cwera}, donde se utiliza un filtrado más específico y adaptado a la configuración de la red, se observa que la recepción se centra exclusivamente en la señal transmitida en la frecuencia específica. Esto garantiza una mejor discriminación de las señales y evita la interferencia de canales adyacentes, optimizando la calidad de transmisión y recepción. Por consiguiente, es oportuno realizar el análisis puesto que, para rangos de filtrado mayormente amplios, las señales son más propensas a afectación y degradaciones relacionadas con efectos no lineales, como la \acrfull{fwm}. 
+
+\begin{figure}[H]
+        \centering
+        % Imagen 1
+        \begin{subfigure}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/Desempeño/EspectroCH3LossFiber_60y110Km.jpg}
+            \caption{CH3, filtrado 80 GHz.}
+            \label{fig:Casoxzzz}
+        \end{subfigure}
+        \hfill
+        % Imagen 2
+        \begin{subfigure}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/Desempeño/EspectroCH10LossFiber_110Km.jpg}
+            \caption{CH10, filtrado 60 GHz.}
+            \label{fig:Cwera}
+        \end{subfigure}
+        \hfill
+        \caption{Espectro.}
+        \label{fig:espectrosqwefas}
+    \end{figure}
+
+
+
+
+En la Tabla \ref{tab:parametros_desempeno_canaleszzxxcc} se muestra los resultados al tomar en cuenta para la simulación todos los posibles efectos lineales y no lineales en la red óptica (\textit{VBS FULL}), a una distancia de 100 Km, una amplificación EDFA de 20 dB, y una incial potencia del láser de 0 dBm. 
+
+
+\begin{table}[H]
+\centering
+\scriptsize % Tamaño reducido
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Canal/} & \textbf{Tasa de Tx} & \textbf{Potencia Rx} & \textbf{BER} & \textbf{Factor Q} & \textbf{OSNR Real} \\ 
+\textbf{Tasa Tx} & \textbf{[Gbps]} & \textbf{[dBm]} & & \textbf{[dB]} & \textbf{[dB]} \\ \hline
+CH1 & 40   & -15.4125 & 7e-20 & 19.3147 & 14.5875 \\ \hline
+CH2 & 40   & -15.3490 & 5.69e-11 & 16.4295 & 14.6510 \\ \hline
+CH3 & 40   & -15.3633 & 1e-40 & 22.7733 & 14.6367 \\ \hline
+CH4 & 10   & -13.0270 & 1e-40 & 25.9886 & 16.9730 \\ \hline
+CH5 & 10   & -13.3276 & 1e-40 & 28.4714 & 16.6724 \\ \hline
+CH6 & 2.5  & -5.1936  & 1e-40 & 37.5070 & 24.8064 \\ \hline
+CH7 & 2.5  & -5.0262  & 1e-40 & 38.5616 & 24.9738 \\ \hline
+CH8 & 10   & -13.6859 & 1e-40 & 28.5898 & 16.3141 \\ \hline
+CH9 & 10   & -13.6101 & 1e-40 & 25.0148 & 16.3899 \\ \hline
+CH10 & 40  & -15.5501 & 1e-31 & 21.7284 & 14.4499 \\ \hline
+CH11 & 40  & -15.5880 & 8.47e-23 & 19.8794 & 14.4120 \\ \hline
+CH12 & 40  & -15.5807 & 2.37e-22 & 19.8547 & 14.4193 \\ \hline
+\end{tabular}
+\caption{Resultados de parámetros al variar las condiciones del enlace.}
+\label{tab:parametros_desempeno_canaleszzxxcc}
+\end{table}
+
+A partir de los resultados, se observan los indicios de afectaciones relacionadas con \acrshort{fwm}, mayormente incididas en los canales con mayor tasa de transmisión (40 Gbps). Donde los canales 3 y 10 tiene mejor rendimiento al compartir adyacencia con los canales 4 y 9 (10 Gbps), lo que supone una ventaja frente a los canales hermanos por compartir espectro junto a canales con una menor densidad espectral, como lo son los canales a 10 Gbps. Asimismo, esta consideración plantea el análisis de las posibles componentes que se generen por la \acrfull{fwm}, y la \acrshort{ICI}, para la concentración de canales a 40 Gbps presentes a los extremos del ancho de banda del enlace óptico. En la Figuras \ref{fig:Eaaasdw} se exponen los diagramas de ojo de los canales 1, 2 y 3, todos a 40 Gbps, con el fin de visualizar el comportamiento incial de los enlaces cuando el sistema presenta un distancia de enlace de 100 Km. Siendo el canal 2 (Figura \ref{fig:Cwwqwq}) el más afectado por la incidencia de los fenómenos ópticos; la característica de este canal es compartir adyacencia con ambos canales a 40 Gbps, que se refleja en datos de parámetros \acrshort{opm} (\acrshort{ber} y Factor Q) por debajo de los valores objetivo.  
+
+
+\begin{figure}[H]
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/Desempeño/DdeOCH1_100Km_FULL.jpg}
+        \caption{Canal 1.}
+        \label{fig:0o0}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/Desempeño/DdeOCH2_100Km_FULL.jpg}
+        \caption{Canal 2.}
+        \label{fig:Cwwqwq}
+    \end{subfigure}
+    \hfill
+    % Imagen 3
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/Desempeño/DdeOCH3_100Km_FULL.jpg}
+        \caption{Canal 3.}
+        \label{fig:Caso_1/50GHz/5dBmPTx}
+    \end{subfigure}
+    \caption{Diagramas de ojo señales moduladas, desempeño del caso de estudio 2 - Escenario 1.}
+    \label{fig:Eaaasdw}
+\end{figure}
+
+
+%-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Análisis de la \acrshort{fwm} al variar los niveles de potencia del sistema, espaciado de 100 GHz.}
+
+En los Gráficos 3.4 se muestran los resultados de simulación de los parámetros OPM BER y Factor Q (ANEXO). Estos resultados están ligados al escenario dos de simulación, para el caso en el que se tienen 12 canales ópticos de naturaleza MLR-PON; espaciados simétricamente a 100 GHz. Por lo que se espera un comportamiento con afectación en relación al fenómeno de carácter no lineal \acrshort{fwm}. El análisis de los resultados obtenidos, permite denotar la influencia de \acrfull{fwm} y otros efectos de degradación óptica, como la dispersión cromática, la atenuación y la \acrfull{ICI}). 
+
+
+    \begin{figure}[H]%RESULTADOS
+            \centering
+            % Imagen 1
+            \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/BERvsPTx100GHz.PNG}
+                \caption{BER vs PTx.}
+                \label{fig:Caso_1/50GHz/BERvsPTx}
+            \end{subfigure}
+            \hfill
+            % Imagen 2
+            \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/FactorQvsPTx100GHz.PNG}
+                \caption{Factor Q vs PTx.}
+                \label{fig:Caso_1/100GHz/QvsPTx}
+            \end{subfigure}
+            \hfill
+            \caption{Graficos de parámetros \acrshort{opm} (\acrshort{ber} y Factor Q), variación de la potencia del láser; espaciado 25 GHz, Escenario 1 - Caso 1.}
+            \label{fig:ESC_1/Caso_1/50GHz/BERvsPTx50GHz}
+        \end{figure}
+
+Se observa que los canales con tasa de transmisión a 40 Gbps son los más vulnerados por los efectos de degradación de señales ópticas, especialmente a potencias de transmisión que superen el rango de los 15 dBm. Estas degradaciones se reflejan en los parámetros \acrshort{opm} de \acrshort{ber} y Factor Q, que denotan un interacción fuerte con las señales adyacentes, en relación al aumento en los niveles de potencia. Estos parámetros caen cerca de los valores óbjetivo, suponiendo una alteración aún mayor cuando el espaciado de la señal se estreche aún más. Siendo los canales 2 y 11, los canales más afectados, puesto que comparten espectro y adyacencia con canales hermanos, con misma tasa de transmisión, y por ende una gran densidad espectral. Observando así, una \acrshort{ICI} y una relación directa con la generación de nuevas componentes \acrshort{fwm}. Por otro lado, se observa que los canales a 10 Gbps son más tolerantes a los fenómenos ópticos, para este caso en particular, al analizar que aunque existe cierta degradación en altos niveles de potencia, los canales 4, 5, 8 y 9 (10 Gbps) permanecen dentro de los objetivos de calidad y probabilidad de error en la variaciones establecidad. A su vez, los canales de en medio, (6 y 7 a 2.5 Gbps) son robustos frente anomalías por generación de nuevas componentes \acrshort{fwm} por su menor densidad espectral, experimentando degradaciones mínimas incluso al inducir altas potencias en la transmisión; no obstante, al momento de establecer la potencia del láser en 25 dBm, el sistema colapsa en general permitiendo así que ningún canal se libre de la incidencia en la caída de nuevas frecuencias \acrshort{fwm}.
+
+En las Figuras \ref{fig:E123123123123123} se exponen los diagramas de ojo para las distintas variaciones en los niveles de potencia del canal 3, el cual tiene un mejor rendimiendo frente a estas alteraciones, debido a que comparte adyacencia con el canal 4, de menor densidad espectral. Se observa que, en las primeras dos variaciones de potencia (0 y 15 dBm, respectivamente), los diagramas tienen una apertura de ojo óptima, replicado en los datos de los parámetros \acrshort{opm} \acrshort{ber} y Factor Q, que se encuentran considerablemente por arriba de los valores objetivo. Sin embargo, en la Figura \ref{fig:Caso_1/50GHz/5dBmPT121212} se observa un diagrama degradado por la el ruido, la atenuación y el sobrepotenciamiento inducido en la transmisión. 
+
+\begin{figure}[H]%CANAL CH3
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/AnaCH3_0dBm.jpg}
+        \caption{CH3, 0 dBm.}
+        \label{fig:0o0}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/AnaCH3_15dBm.jpg}
+        \caption{CH3, 15 dBm.}
+        \label{fig:Cw}
+    \end{subfigure}
+    \hfill
+    % Imagen 3
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/AnaCH3_25dBm.jpg}
+        \caption{CH3, 25 dBm.}
+        \label{fig:Caso_1/50GHz/5dBmPT121212}
+    \end{subfigure}
+    \caption{Diagramas de ojo del canal 3 en las distintas variaciones en los niveles de potencia.}
+    \label{fig:E123123123123123}
+\end{figure}
+
+Los diagramas de ojo de la Figura \ref{fig:E123332} exponen a los canales 1, 4 y 6 que representan los tres esquemas de modulación empleados, cuando son degradados al máximo nivel de potencia (25 dBm). De estos compartimientos, se extrae la afectación severa de los canales 6 y 7 a 2.5 Gbps, cuando el sistema es sobrepotenciado, lo que supone también un espectro solapado en el dominio de la frecuencia. Por el contrario, cuando se espacea a 100 GHz, los esquemas de modulación con tasas de transmisión mayores a 2.5 Gbps, evidencian un mejor rendimiento frente a niveles excesivos de potencia.
+
+\begin{figure}[H]%CANALES CH1 CH4 Y CH6
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/GeneCH1_25dBm.jpg}
+        \caption{CH1, RZ-DPSK a 40 Gbps.}
+        \label{fig:0o0}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/GeneCH4_25dBm.jpg}
+        \caption{CH4, RZ-OOK a 10 Gbps.}
+        \label{fig:Cw}
+    \end{subfigure}
+    \hfill
+    % Imagen 3
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/GeneCH6_25dBm.jpg}
+        \caption{CH6, NRZ-OOK a 2.5 Gbps}
+        \label{fig:Caso_1/50GHz/5dBmPTx}
+    \end{subfigure}
+    \caption{Diagramas de ojo de los esquemas de modulación empleados, al máximo nivel de potencia (25 dBm).}
+    \label{fig:E123332}
+\end{figure}
+
+
+En las Figuras \ref{fig:sssz12345666} representan los espectros ópticos de la red antes de la compensación de dispersión (Figura \ref{fig:Cas332ox1}) y a la salida de la amplificación (Figura \ref{fig:C12222}); cuando se inducen variaciones en los niveles de potencia. Al igual que en el caso anterior (Figura \ref{fig:Caso_1/100GHz/espectro100GHzEsc16CHs}) y con la misma distancia de separación (100 GHz), se observa la genreación de nuevas componentes \acrshort{fwm}, esta vez en mayor cantidad.  Estas componentes \acrshort{fwm} se superponen con las portadoras transmitidas, lo que ocasiona la interferencia presentadas, que se intensifican a medida que se elevan los niveles de potencia en transmisión; confirmando una vez más, la relación directamente proporcional de los niveles de potencia del sistema con la generación de componentes por la \acrfull{fwm}. Lo anterior, justifica la degradación observada en los canales a 2.5 Gbps y 40 Gbps, específicamente la potencia del láser en 25 dBm (espectro rojo), en los parámetros de desempeño \acrshort{opm}. Los espectros de la Figura \ref{fig:Cas332ox1} muestran la misma tendencia al aplicar las técnicas de compensación y amplificación (Figura \ref{fig:C12222}), con la diferencia de que, para un nivel de potencia de 10 dBm (señal azul), las componentes \acrshort{fwm} se observan menos pronunciadas frente a la compensación ideal de dispersión. 
+
+\begin{figure}[H] %ESPECTROS PRE Y POST
+        \centering
+        % Imagen 1
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/preCompensacion12CHs.jpg}
+            \caption{Espectro pre-compensación y pre-amplificación.}
+            \label{fig:Cas332ox1}
+        \end{subfigure}
+        \hfill
+        % Imagen 2
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/100GHz/postAmpliyCompensacion12CHs.jpg}
+            \caption{Espectro post-compensación y post-amplificación.}
+            \label{fig:C12222}
+        \end{subfigure}
+        \hfill
+        \caption{ Espéctros ópticos en la variación de potencia del láser, espaciado 100 GHz, Escenario 1 - Caso 2.}
+        \label{fig:sssz12345666}
+    \end{figure}
+
+
+
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Análisis de la \acrshort{fwm} al variar los niveles de potencia del sistema, espaciado de 50 GHz.}
+
+La Tabla \ref{tab:planFrec50GHzxx} muestra el plan de frecuencias definido para la variación de los niveles de potencia, con un espaciado simétrico entre grillas de 50 GHz. Donde la frecuencia de 193.4 THz representa la asignación central por su cercanía a la longitud de onda de la fibra (1550 nm); lo que permite librar al análisis de afectaciones por frecuencias alejadas de esta longitud de referencia
+
+\begin{table}[H] 
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Canal} & \textbf{Tasa de Tx [Gbps]} & \textbf{Frecuencia Central [THz]} \\ \hline
+        \textbf{CH1}   & 40                        & 192.1                             \\ \hline
+        \textbf{CH2}   & 10                        & 193.15                            \\ \hline
+        \textbf{CH3}   & 2.5                       & 193.2                             \\ \hline
+        \textbf{CH4}   & 2.5                       & 193.25                             \\ \hline
+        \textbf{CH5}   & 10                        & 193.3                             \\ \hline
+        \textbf{CH6}   & 40                        & 193.35                             \\ \hline
+        \textbf{CH7}   & 40                        & 193.4                             \\ \hline
+        \textbf{CH8}   & 10                        & 193.45                             \\ \hline
+        \textbf{CH9}   & 2.5                       & 193.5                             \\ \hline
+        \textbf{CH10}  & 2.5                       & 193.55                             \\ \hline
+        \textbf{CH11}  & 10                        & 193.6                             \\ \hline
+        \textbf{CH12}  & 40                        & 193.65                             \\ \hline
+    \end{tabular}
+    \caption{Plan de frecuencias con espaciado de 50 GHz centrado en el CH7 en 193.4 THz.}
+    \label{tab:planFrec50GHzxx}
+\end{table}
+
+Los gráficos de la Figura \ref{fig:ESC_1/Caso_1/50GHz/BERvsPTx50GHz11} exponen los resultados de los parámetros Factor Q y \acrshort{ber}, para la variación de potencia en transmisión, al espaciar a 50 GHZ. Donde son demarcados los valores mínimo objetivos, con la finalidad de observar qué canales caen por debajo de estos rangos.
+
+        \begin{figure}[H]%RESULTADOS
+            \centering
+            % Imagen 1
+            \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/50GHz/BERvsPTx50GHz.PNG}
+                \caption{BER vs PTx.}
+                \label{fig:Caso_2/50GHz/BERvsPTx}
+            \end{subfigure}
+            \hfill
+            % Imagen 2
+            \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/50GHz/FactorQvsPTx50GHz.PNG}
+                \caption{Factor Q vs PTx.}
+                \label{fig:Caso_2/50GHz/QvsPTx}
+            \end{subfigure}
+            \hfill
+            \caption{Graficos de parámetros \acrshort{opm} (\acrshort{ber} y Factor Q), variación de la potencia del láser; espaciado 50 GHz, Escenario 1 - Caso 2.}
+            \label{fig:ESC_1/Caso_1/50GHz/BERvsPTx50GHz11}
+        \end{figure}
+
+Los resultados muestran la tendencia negativa del parámetro de calidad frente al alza de los niveles de potencia. Tras pasar los 20 dBm, todos los canales caen estrepitosamente por debajo del rango objetivo (16.94 dBm). Asimismo, se muestran integros los canales con menor densidad espectral (2.5 y 10 Gbps) frente a las variaciones iniciales de potencia, sin embargo, tienden al mínimo en la máxima variación. Los canales a 10 Gbps como 5 y 8, que comparten adyacencia con los canales a 2.5 Gbps, presentan mejor rendimiento en comparación con sus canales hermanos que por el contrario, comparten adyacencia con los canales de 40 Gbps, de densidad espectral mucho mayor. Estos últimos, suponen una \acrshort{ICI}, debido a sus valores mínimo de Factor de calidad. La misma tendencia se observa para el parámetro \acrshort{ber}, donde los canales con menor densidad espectral presentan mejor rendimiento frente a los canales con mayor densidad, que caen muy por debajo del valor mínimo objetivo (\acrshort{ber} de 1e-12).
+
+Una tasa de transmisión que muestra robustez frente a al estrechamiento en el espaciado de canal, es la de 10 Gbps, presente en los canales 4, 5, 8 y 9. En la Figura \ref{fig:12312312322}, se estudia comparativamente el comportamiento de los canales que comparten adyacencia con 2.5 Gbps, y 40 Gbps; se observa, que para el nivel de potencia de 20 dBm donde la señal no se degenera por completo, el canal 8 que comparte adyacencia con el canal 7 a 2.5 Gbps, presenta un mejor rendimiento que el canal 9, el cual comparte adyacencia con el canal 10 a 40 Gbps. Lo anterior, permite que el canal 8 tenga una mejor apertura de ojo, reflejado en los valores de parámetros \acrshort{opm} muy por encima del rango objetivo.
+
+\begin{figure}[H]%análisis GENERAL de Ddel*
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/50GHz/CH8__BER_35.jpg}
+        \caption{Canal 8.}
+        \label{fig:0o0}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/50GHz/CH9__BER_12.jpg}
+        \caption{Canal 9.}
+        \label{fig:Cw}
+    \end{subfigure}
+    \hfill
+    \caption{Diagramas de ojo para comparación del rendimiento frente a distintas adyacencias de canales.}
+    \label{fig:12312312322}
+\end{figure}
+
+\begin{comment}
+    \begin{figure}[H]%análisis GENERAL de Ddel*
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/50GHz/Gene_CH1.jpg}
+        \caption{Canal 1.}
+        \label{fig:0o0}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/50GHz/Gene_CH4.jpg}
+        \caption{Cana.}
+        \label{fig:Cw}
+    \end{subfigure}
+    \hfill
+    % Imagen 3
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/50GHz/Gene_CH7.jpg}
+        \caption{100KmCh3.}
+        \label{fig:Caso_1/50GHz/5dBmPTx}
+    \end{subfigure}
+    \caption{D1.}
+    \label{fig:E}
+\end{figure}
+
+\end{comment}
+
+A partir del análisis realizado, se presenta en la Figura \ref{fig:Caso_2/50GHz/Caso2_12Canales_EspectroSalida50GHzadsfqq} el espectro de salida óptica del presente caso; se observa la fuerte incidencia de la \acrshort{ICI}, que solapa en gran medida a los canales de mayor densidad espectral (40 Gbps), en los 0 dBm (señal verde). Al incrementar los niveles de potencia se contínua viendo la tendencia en la \acrfull{ICI}, donde para niveles más alto, se presenta un ensanchamiento en los canales del centro, de menor tasa de tranmisión, que repercute en bajos valores en los parámetros \acrshort{opm} muy por debajo de los rangos objetivo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.44\linewidth]{img/Cap3/ESC_1/Caso_2/50GHz/Caso2_6Canales_EspectroSalida50GHz.jpg}
+    \caption{Caption}
+    \label{fig:Caso_2/50GHz/Caso2_12Canales_EspectroSalida50GHzadsfqq}
+\end{figure}
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Análisis de la \acrshort{fwm} al variar los niveles de potencia del sistema, espaciado de 25 GHz.}
+
+La Tabla \ref{tab:rere25ghz} muestra el plan de frecuencias definido para la variación de los niveles de potencia, con un espaciado equidistante entre grillas de ahora 25 GHz. Donde la frecuencia de 193.4 THz representa la asignación central por su cercanía a la longitud de onda de la fibra.
+
+\begin{table}[H] 
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Canal} & \textbf{Tasa de Tx [Gbps]} & \textbf{Frecuencia Central [THz]} \\ \hline
+        \textbf{CH1}   & 40                        & 193.25                             \\ \hline
+        \textbf{CH2}   & 10                        & 193.275                             \\ \hline
+        \textbf{CH3}   & 2.5                       & 193.3                             \\ \hline
+        \textbf{CH4}   & 2.5                       & 193.325                             \\ \hline
+        \textbf{CH5}   & 10                        & 193.35                             \\ \hline
+        \textbf{CH6}   & 40                        & 193.375                             \\ \hline
+        \textbf{CH7}   & 40                        & 193.4                             \\ \hline
+        \textbf{CH8}   & 10                        & 193.425                             \\ \hline
+        \textbf{CH9}   & 2.5                       & 193.45                            \\ \hline
+        \textbf{CH10}  & 2.5                       & 193.475                             \\ \hline
+        \textbf{CH11}  & 10                        & 193.5                             \\ \hline
+        \textbf{CH12}  & 40                        & 193.525                             \\ \hline
+    \end{tabular}
+    \caption{Plan de frecuencias con espaciado de 25 GHz centrado en el CH7 en 193.4 THz.}
+    \label{tab:rere25ghz}
+\end{table}
+
+En los resultados de los gráficos \ref{fig:ESC_1/Caso_1/50GHz/BERvsPTx50GHzzz} se evidencia un rendimiento de la red degradado en tu totalidad, con valores de los parámetros \acrshort{opm} \acrshort{ber} y Factor Q muy por debajo de los rangos objetivo. Los canales con tasas de transmisión más altas como 10 Gbps y 40 Gbps, son afectados seriamente por el espaciado tan estrecho implementado, lo que evidencia un solapamiento en los niveles de potencia de las señales, dificultando la comunicación en los receptores ópticos del sistema. Para este estrecho espaciamiento de 25 GHz, la tasa de 2.5 Gbps muestra cierta robustez frente a las variaciones en los niveles de potencia. Sin embargo, su degradación es completa a partir de los 20 dBm aproximadamente; para ambos canales.
+
+\begin{figure}[H]%RESULTADOS
+            \centering
+            % Imagen 1
+            \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/25GHz/BERvsPTx25GHz.PNG}
+                \caption{BER vs PTx.}
+                \label{fig:Caso_2/50GHz/BERvsPTx}
+            \end{subfigure}
+            \hfill
+            % Imagen 2
+            \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/25GHz/FactorQvsPTx25GHz.PNG}
+                \caption{Factor Q vs PTx.}
+                \label{fig:Caso_2/50GHz/QvsPTx}
+            \end{subfigure}
+            \hfill
+            \caption{Graficos de parámetros \acrshort{opm} (\acrshort{ber} y Factor Q), variación de la potencia del láser; espaciado 25 GHz, Escenario 1 - Caso 2.}
+            \label{fig:ESC_1/Caso_1/50GHz/BERvsPTx50GHzzz}
+        \end{figure}
+
+\begin{comment}
+    \begin{figure}[H]%análisis GENERAL de Ddel*
+    \centering
+    % Imagen 1
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/25GHz/CH1_0dBm.jpg}
+        \caption{Canal 1.}
+        \label{fig:0o0}
+    \end{subfigure}
+    \hfill
+    % Imagen 2
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/25GHz/CH5_0dBm.jpg}
+        \caption{Cana.}
+        \label{fig:Cw}
+    \end{subfigure}
+    \hfill
+    % Imagen 3
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/Cap3/ESC_1/Caso_2/25GHz/CH6_20dBm.jpg}
+        \caption{100KmCh3.}
+        \label{fig:Caso_1/50GHz/5dBmPTx}
+    \end{subfigure}
+    \caption{D1.}
+    \label{fig:E}
+\end{figure}
+\end{comment}
+
+El espectro óptico a la salida de la compensación y amplificación visible en la Figura \ref{fig:Caso_2/25GHz/Caso2_12Canales_aaEspectroSalida25GHz} justifica los resultados obtenidos en cuanto a parámetros \acrshort{opm} \acrshort{ber} y Factor Q. El solapamiento por \acrfull{ICI} es evidente en los canales de 40 Gbps, debido a que esta tasa de transmisión presenta un ancho espectral prominente en comparación con los espectros de las inferiores tasas de transmisión. Este caso en particular, clarifica el planteamiento en la asignación de frecuencias, puesto que un estrecho espaciado repercurte en degradaciones prominentes en los espectros y parámetros ópticos, que dificultan el análisis de las componente \acrshort{fwm}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{img/Cap3/ESC_1/Caso_2/25GHz/Caso2_6Canales_EspectroSalida25GHz.PNG}
+    \caption{Caption}
+    \label{fig:Caso_2/25GHz/Caso2_12Canales_aaEspectroSalida25GHz}
+\end{figure}
+
+
+
+
+%-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+\section{ESCENARIO 2}
+
+En la Tabla \ref{table:caractEsc2} se replican las características de simulación, ahora para el escenario dos planteado. La característica principal de este esceneario es la asignación de frecuencias con espaciado desigual, pero aún en base a la recomendación ITU-T G.694.1 \cite{itu2020recommendation}. Se realiza una adaptación de la norma, con el objetivo de tener un espaciado desigual de canales; empleando las separaciones de 12.5, 25, 50 y 100 GHz. Ésto, con el objetivo de realizar un análisis comparativo de los escenarios planteados, los cuales se enfocan en diferentes formas de asignar las frecuencias para un número de canales en los sistemas \acrshort{dwdm}, y su relación con el fenómeno no lineal de \acrfull{fwm}. 
+
+
+\begin{table}[H]   %1. Giovanni y Toledo Efectos no lineales en WDMR 
+        \centering
+        \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Características} & \textbf{Descripción} \\ \hline
+            Modulación - 2.5 Gbps & NRZ-OOK \\ \hline
+            Modulación - 10 Gbps  & RZ-OOK \\ \hline
+            Modulación - 40 Gbps  & RZ-DPSK \\ \hline
+            Canales - OLT         & 6 y 12 \\ \hline
+            Espaciado de Canal [GHz]  & 12.5-25-50-100 \\ \hline             
+            Distancia de Enlace   & 100 Km \\ \hline
+            Amplificación EDFA    & 20 dBm \\ \hline
+            Potencia Tx           & 0 dBm \\ \hline
+            Compensación          & Ideal \\ \hline
+            Fibra Corning SMF-28e & 1550 nm \\ \hline
+            
+        \end{tabular}
+        \caption{Características generales del \textit{Escenario Uno}.}
+        \label{table:caractEsc2}
+        \end{table}
+
+%-------------------------------------------------------------->
+\subsection{Caso de estudio 1 - 6 canales: 2 canales de 40 Gbps, 2 canales de 10 Gbps y 2 canales de 2.5 Gbps}
+
+
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+        \textbf{Canal} & \textbf{Tasa de Tx} & \textbf{Frecuencia} & \textbf{Espaciado} \\ 
+                        & \textbf{[Gbps]}    & \textbf{Asignada [THz]}&  \textbf{[GHz]} \\ \hline        
+        1              & 40                        & 193.225                           &                          \\ \cline{1-3}
+        2              & 10                        & 193.325                           &\multirow{2}{*}{100}     \\ \cline{1-3}
+        3              & 2.5                       & 193.375                           &\multirow{2}{*}{50}      \\ \cline{1-3}
+        4              & 2.5                       & 193.4                             &\multirow{2}{*}{25}     \\ \cline{1-3}
+        5              & 10                        & 193.45                            &                          \\ \cline{1-3}
+        6              & 40                        & 193.55                            &                          \\ \hline
+        \end{tabular}
+    \caption{Tabla de canales con frecuencias y espaciados combinados.}
+    \label{tab:Esc2PlandeFrec}
+    \end{table}
+
+
+
+
+\subsection{Caso de estudio 2 - 12 canales: 6 canales de 40 Gbps, 4 canales de 10 Gbps y 2 canales de 2.5 Gbps}
+
+
+
+
+
+
+
+\section{ESCENARIO 3}
+
+\subsection{Caso de estudio 1 - 6 canales: 2 canales de 40 Gbps, 2 canales de 10 Gbps y 2 canales de 2.5 Gbps}
+
+\subsection{Caso de estudio 2 - 12 canales: 6 canales de 40 Gbps, 4 canales de 10 Gbps y 2 canales de 2.5 Gbps}
+

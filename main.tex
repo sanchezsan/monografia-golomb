@@ -1,0 +1,102 @@
+\sloppy
+\documentclass[12pt,a4paper,twoside,spanish]{book} % oneside
+
+\usepackage{mypreamble} 
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+
+%numeración de subsubsecciones
+\setcounter{secnumdepth}{4}
+\renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
+
+\usepackage{amsmath}
+
+%espaciado mayor entre párrafos
+%\setlength{\parskip}{1.5em}
+
+\begin{document}
+    %\let\cleardoublepage\clearpage % Remove blank pages between chapters
+    \pagenumbering{roman}
+    \renewcommand{\refname}{}
+
+    %%--------------- TITLE PAGE ------------------%%
+    \input{lib/0-portada}
+    \input{lib/0.1-contraportada}
+
+    % Table of contents
+    \newpage
+    \pdfbookmark{\contentsname}{toc}
+    \renewcommand*\contentsname{\centering TABLA DE CONTENIDO}
+    \tableofcontents
+
+    % List of tables
+    \newpage
+    \renewcommand{\listtablename}{\centering LISTA DE TABLAS}
+    \listoftables
+    \addcontentsline{toc}{chapter}{LISTA DE TABLAS}
+
+    % List of figures
+    \newpage
+    \renewcommand{\listfigurename}{\Centering LISTA DE FIGURAS}
+    \listoffigures
+    \addcontentsline{toc}{chapter}{LISTA DE FIGURAS}
+
+    % List of acronyms
+    \clearpage
+    \renewcommand{\acronymname}{\centering LISTA DE ACRÓNIMOS}
+    \printglossary[type=\acronymtype, style=mystyle]
+    %\printglossary
+    \addcontentsline{toc}{chapter}{LISTA DE ACRÓNIMOS}
+
+
+    \newpage
+    \pagenumbering{arabic}
+
+    % Chapters
+    \mainmatter
+    \input{lib/0.1-intro}
+    \input{lib/1cap}
+    \input{lib/2cap}
+    \input{lib/3cap}
+    \input{lib/4cap}
+
+
+   
+
+    
+    % References 
+    \chapter*{REFERENCIAS}
+    \addcontentsline{toc}{chapter}{REFERENCIAS} % Agrega "REFERENCIAS" al índice
+    \printbibliography[heading=none]
+
+
+    
+    \begin{comment}
+
+    % Appendix
+    \appendix
+    \include{lib/appendix}
+
+    
+    \newpage
+    \justifying
+    \begin{center}
+        \chapter{REFERENCIAS}
+        %\printbibliography[]
+    \end{center}
+    %\printbibliography[]
+    \renewcommand*{\UrlFont}{\rmfamily}
+
+
+    
+        \begin{center}
+        \section{REFERENCIAS}
+         \addcontentsline{toc}{section}{Referencias} % Agrega "Referencias" al índice
+    \end{center}
+    \printbibliography[] % sin un título
+    \renewcommand*{\UrlFont}{\rmfamily}
+    \end{comment}
+     
+
+    \backmatter
+\end{document}
